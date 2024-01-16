@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "miappe-api"
+version = "0.1.0"
+description = "Python API for MIAPPE metadata dataset"
+authors = ["hoangson <lehoangsonsg@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.5.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
