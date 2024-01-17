@@ -42,5 +42,3 @@ Hierarchy:
   Person:
     Cardinality: "1+"
 
-
-
