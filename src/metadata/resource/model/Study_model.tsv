@@ -1,0 +1,24 @@
+MIAPPE Check list	Definition	Example	Format	Cardinality
+Study unique ID	Unique identifier comprising the name or identifier for the institution/database hosting the submission of the study data, and the identifier of the study in that institution.	"EBI:12345678
+http://phenome-fppn.fr/maugio/2013/t2351"	Unique identifier	0-1
+Study title	Human-readable text summarising the study	2002 evaluation of flowering time for a panel of 375 maize lines at the experimental station of Maugio (France). 	Free text (short)	1
+Study description	Human-readable text describing the study	2002 evaluation of male and female flowering time for a panel of 375 maize lines representing the worldwide genetic diversity at the experimental station of Maugio, France. 	Free text	0-1
+Start date of study	Date and, if relevant, time when the experiment started	"2002-04-04
+2006-09-27T10:23:21+00:00"	Date/Time (ISO 8601, optional time zone)	1
+End date of study	Date and, if relevant, time when the experiment ended	2002-11-27	Date/Time (ISO 8601, optional time zone)	0-1
+Contact institution	Name and address of the institution responsible for the study.	UMR de G�n�tique V�g�tale, INRA � Universit� Paris-Sud � CNRS, Gif-sur-Yvette, France	Free text (short)	1
+Geographic location (country)	The country where the experiment took place, either as a full name or preferably as a 2-letter code.	FR	Country name or 2-letter code (ISO 3166)	1
+Experimental site name	The name of the natural site, experimental field, greenhouse, phenotyping facility, etc. where the experiment took place.	INRA, UE Diascope - Chemin de Mezouls - Domaine exp�rimental de Melgueil - 34130 Mauguio - France	Free text (short)	1
+Geographic location (latitude)	Latitude of the experimental site in degrees, in decimal format.	+43.619264	Degrees in the decimal format (ISO 6709)	0-1 (1 if longitude is provided)
+Geographic location (longitude)	Longitude of the experimental site in degrees, in decimal format.	+3.967454	Degrees in the decimal format (ISO 6709)	0-1 (1 if latitude is provided)
+Geographic location (altitude)	Altitude of the experimental site, provided in metres (m).	100 m	Numeric + unit abbreviation	0-1
+Description of the experimental design	"Short description of the experimental design, possibly including statistical design. In specific cases, e.g. legacy datasets or data computed from several studies, the experimental design can be ""unknown""/""NA"", ""aggregated/reduced data"", or simply 'none'."	Lines were repeated twice at each location using a complete block design. In order to limit competition effects, each block was organized into four sub-blocks corresponding to earliness groups based on a priori information. 	Free text	1
+Type of experimental design	Type of experimental  design of the study, in the form of an accession number from the Crop Ontology.	CO_715:0000145	"Crop Ontology term (subclass of ""CO_715:0000003"")"	0-1
+Observation unit level hierarchy	Hierarchy of the different levels of repetitions between each others	block>rep>plot	Formatted text (level>level)	0-1
+Observation unit description	General description of the observation units in the study.	"Observation units consisted in individual plots themselves consisting of a row of 15 plants at a density of approximately six plants per square meter.
+NA"	Free text	1
+Description of growth facility	Short description of the facility in which the study was carried out.	"field environment condition
+NA"	Free text (short)	1
+Type of growth facility	Type of growth facility in which the study was carried out, in the form of an accession number from the Crop Ontology.	CO_715:0000162	"Crop Ontology term (subclass of ""CO_715:0000005"")"	0-1
+Cultural practices	General description of the cultural practices of the study.	Irrigation was applied according needs during summer to prevent water stress.	Free text	0-1
+Map of experimental design	Representation of the experimental design.	https://urgi.versailles.inra.fr/files/ephesis/181000503/181000503_plan.xls	URL or File name (of gis or tabular file like csv or tsv)	0+

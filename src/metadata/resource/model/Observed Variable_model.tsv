@@ -1,0 +1,17 @@
+MIAPPE Check list	Definition	Example	Format	Cardinality
+Variable ID	Code used to identify the variable in the data file. We recommend using a variable definition from the Crop Ontology where possible. Otherwise, the Crop Ontology naming convention is recommended: <trait abbreviation>_<method abbreviation>_<scale abbreviation>). A variable ID must be unique within a given investigation.	Ant_Cmp_Cday	Unique identifier	1
+Variable name	Name of the variable.	Anthesis computed in growing degree days	Free text	0-1
+Variable accession number	Accession number of the variable in the Crop Ontology	CO_322:0000794	Crop Ontology term	0-1
+Trait	Name of the (plant or environmental) trait under observation	"Anthesis time
+Reproductive growth time"	Free text	1
+Trait accession number	Accession number of the trait in a suitable controlled vocabulary (Crop Ontology, Trait Ontology).	"CO_322:0000030
+TO:0000366"	Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology	0-1
+Method	Name of the method of observation	Growing degree days to anthesis	Free text	1
+Method accession number	Accession number of the method in a suitable controlled vocabulary (Crop Ontology, Trait Ontology).	CO_322:0000189	Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology	0-1
+Method description	Textual description of the method, which may extend a method defined in an external reference with specific parameters, e.g. growth stage, inoculation precise organ (leaf number)	"Days to anthesis for male flowering was measured in thermal time (GDD: growing degree-days) according to Ritchie J, NeSmith D (1991;Temperature and crop development. Modeling plant and soil systems American Society of Agronomy Madison, Wisconsin USA) with TBASE=8�C and T0=30�C.
+Plant height was measured at 5 years with a ruler, one year after Botritis inoculation."	Free text	0-1
+Reference associated to the method	URI/DOI of reference describing the method.	http://doi.org/10.2134/agronmonogr31.c2	URI or DOI	0-1
+Scale	Name of the scale associated with the variable	�C day	Unique identifier	1
+Scale accession number	Accession number of the scale in a suitable controlled vocabulary (Crop Ontology).	CO_322:0000510	Crop Ontology term	0-1
+Time scale	Name of the scale or unit of time with which observations of this type were recorded in the data file (for time series studies).	"Growing degree day (GDD)
+Date/Time"	Free text	0+

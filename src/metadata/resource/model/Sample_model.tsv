@@ -1,0 +1,10 @@
+MIAPPE Check list	Definition	Example	Format	Cardinality
+Sample ID	Unique identifier for the sample.	CEA:BE00034067	Unique identifier	1
+Plant structure development stage	The stage in the life of a plant structure during which the sample was taken, in the form of an accession number to a suitable controlled vocabulary (Plant Ontology, BBCH scale)	"PO:0025094
+BBCH-17"	Plant Ontology term (subclass or PO:0009012) or BBCH scale term	0-1
+Plant anatomical entity	A description of  the plant part (e.g. leaf) or the plant product (e.g. resin) from which the sample was taken, in the form of an accession number to a suitable controlled vocabulary (Plant Ontology).	"PO:0000003
+PO:0025161"	"Plant Ontology term (subclass of PO:0025131)
+"	1
+Sample description	Any information not captured by the other sample fields, including quantification, sample treatments and processing.	Distal part of the leaf ; 100 mg of roots taken from 10 roots at 20�C, conserved in vacuum at 20 mM NaCl salinity, stored at -60 �C to -85 �C.	Free text	0-1
+Collection date	The date and time when the sample was collected / harvested	2005-08-15T15:52:01+00:00	Date/Time	1
+External ID	An identifier for the sample in a persistent repository, comprising the name of the repository and the accession number of the observation unit therein. Submission to the EBI Biosamples repository is recommended. URI are recommended when possible.	Biosamples:SAMEA4202911	Unique identifier	0+
