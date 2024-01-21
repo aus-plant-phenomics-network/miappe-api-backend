@@ -1,4 +1,9 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) where the event was recorded.
+"	study_1; study_2	List	1
+"Biological Material ID
+"	"Biological Material identifier (cross-referencing to Biological Material worksheet) corresponding to the organism(s) being observed.
+"	1; 2	List	1
 Observation unit ID	Identifier used to identify the observation unit in data files containing the values observed or measured on that unit. Must be locally unique. 	plot:894	Unique identifier	1
 Observation unit type	Type of observation unit in textual form, usually one of the following: study, block, sub-block, plot, sub-plot, pot, plant. Use of other observation unit types is possible but not recommended. The observation unit type cannot be used to indicate sub-plant levels. However, observations can still be made on the sub-plant level, as long as the details are indicated in the associated observed variable (see observed variables). Alternatively, it is possible to use samples for more detailed tracing of sub-plant units, attaching the observations to them instead.	plot	Free text	1
 External ID	Identifier for the observation unit in a persistent repository, comprises the name of the repository and the identifier of the observation unit therein. The EBI Biosamples repository can be used. URI are recommended when possible.	Biosamples:SAMEA4202911	Unique identifier	0+

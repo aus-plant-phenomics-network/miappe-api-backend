@@ -1,4 +1,8 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+"Observation unit ID
+"	"The identifier of the observation unit (cross-referencing to Observation Unit worksheet) from which this sample was extracted.
+"	"plot:894
+"	Unique identifier	1
 Sample ID	Unique identifier for the sample.	CEA:BE00034067	Unique identifier	1
 Plant structure development stage	The stage in the life of a plant structure during which the sample was taken, in the form of an accession number to a suitable controlled vocabulary (Plant Ontology, BBCH scale)	"PO:0025094
 BBCH-17"	Plant Ontology term (subclass or PO:0009012) or BBCH scale term	0-1

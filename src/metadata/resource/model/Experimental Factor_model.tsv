@@ -1,4 +1,8 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+"Study unique ID
+"	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) where the event was recorded.
+"	"study_1; study_2
+"	List	1
 Experimental Factor type	Name/Acronym of the experimental factor.	Watering	Free text (see Appendix II)	1
 Experimental Factor description	Free text description of the experimental factor. This includes all relevant treatments planification and protocol planned for all the plants targeted by a given experimental factor. 	Daily watering 1 L per plant. 	Free text	0-1
 Experimental Factor values	List of possible values for the factor.	Watered; Unwatered	Free text	2+ per factor

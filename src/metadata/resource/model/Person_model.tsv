@@ -1,4 +1,8 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+"Study unique ID 	"	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) in which the person was involved.
+"	"study_1; study_2
+"	"List
+"	0-1
 Person name	The name of the person (either full name or as used in scientific publications)	Ines Chaves	Name	1
 Person email	The electronic mail address of the person.	ichaves@itqb.unl.pt	email address	0-1
 Person ID	An identifier for the data submitter. If that submitter is an individual, ORCID identifiers are recommended.	orcid.org/0000-0001-6494-0008; orcid.org/0000-0002-7054-800X	Unique identifier	0-1

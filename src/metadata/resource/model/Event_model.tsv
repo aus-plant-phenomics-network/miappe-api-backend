@@ -1,4 +1,9 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) where the event was recorded.
+"	study_1; study_2	List	1
+Observation unit ID	"The identifier of the observation unit (cross-referencing to Observation Unit worksheet) for which the event was recorded. Fill only if the event happened at the observation unit level rather than the whole study level.
+"	"plot:894
+"	List	0-1
 Event type	Short name of the event.	"Planting
 Fertilizing"	Free text (short)	1
 Event accession number	Accession number of the event type in a suitable controlled vocabulary (Crop Ontology).	"CO_715:0000007

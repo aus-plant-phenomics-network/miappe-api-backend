@@ -1,4 +1,8 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
+Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) for which the variable was observed.
+"	"study_1; study_2
+"	"List
+"	1
 Variable ID	Code used to identify the variable in the data file. We recommend using a variable definition from the Crop Ontology where possible. Otherwise, the Crop Ontology naming convention is recommended: <trait abbreviation>_<method abbreviation>_<scale abbreviation>). A variable ID must be unique within a given investigation.	Ant_Cmp_Cday	Unique identifier	1
 Variable name	Name of the variable.	Anthesis computed in growing degree days	Free text	0-1
 Variable accession number	Accession number of the variable in the Crop Ontology	CO_322:0000794	Crop Ontology term	0-1
