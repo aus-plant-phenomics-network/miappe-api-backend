@@ -1,34 +1,33 @@
 import datetime
 import re
+
 import pycountry
 
 # List of REGEX
-DOI_REGEX = "/^10.\d{4,9}/[-._;()/:A-Z0-9]+$/i"  # DOI
+DOI_REGEX = r"""^10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+$"""  # DOI
 COUNTRY_NAME = [country.name for country in pycountry.countries]  # Country Name
 COUNTRY_CODE_2 = [country.alpha_2 for country in pycountry.countries]  # Country 2-letter codes
-LAT_LONG_REGEX = "^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,7})?$"  # Match up to 7 digits - lat long ISO std
-NUMERIC_UNIT_REGEX = "^[-+]?\d*\.?\d+\s?m?$"  # Number with an optional 'm'
-EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-FILENAME_REGEX = """\A(?!(?:COM[0-9]|CON|LPT[0-9]|NUL|PRN|AUX|com[0-9]|con|lpt[0-9]|nul|prn|aux)
-                |\s|[\.]{2,})[^\\\/:*"?<>|]{1,254}(?<![\s\.])\z"""  # Unix + Windows Filename
-URL_REGEX = """^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$"""  # URL based on RFC
-HIERARCHY_REGEX = "^[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)?(>[a-zA-Z0-9_]+(:[a-zA-Z0-9_]+)?)*$"  # str > str > str ...
-KEY_VALUE_REGEX = "(?:[a-zA-Z_]\w*):[^;]+;(?:[a-zA-Z_]\w*):[^;]+;(?:[a-zA-Z_]\w*):[^;]+"
+LAT_LONG_REGEX = r"^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,7})?$"  # Match up to 7 digits - lat long ISO std
+NUMERIC_UNIT_REGEX = r"^[-+]?\d*\.?\d+\s?m?$"  # Number with an optional 'm'
+EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
 
 # REGEX validators
 def _validate_regex(
-        pattern: str,
+        input_pattern: str,
         str_input: str,
         exception_message: str) -> str:
+    pattern = re.compile(input_pattern)
     if re.fullmatch(pattern, str_input) is None:
-        raise ValueError(exception_message)
+        raise ValueError(f"Fail to validate: {str_input}. {exception_message}")
     return str_input
 
 
 def _validate_country(name: str) -> str:
-    if (name not in COUNTRY_NAME) or (name not in COUNTRY_CODE_2):
-        raise ValueError("Invalid country name (ISO 3166-1 name) or 2 letter country code (ISO 3166-1 alpha 2)")
+    if (name not in COUNTRY_NAME) and (name not in COUNTRY_CODE_2):
+        raise ValueError(
+            f"""Fail to validate: {name}.
+            Invalid country name (ISO 3166-1 name) or 2 letter country code (ISO 3166-1 alpha 2)""")
     return name
 
 
@@ -46,11 +45,37 @@ def _validate_numeric(item: str) -> str:
 
 
 def _validate_url(url: str) -> str:
-    return _validate_regex(URL_REGEX, url, "Invalid url")
+    def is_valid_url(_url: str) -> bool:
+        regex = re.compile(
+            r'^https?://'  # http:// or https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        return _url is not None and regex.search(_url)
+
+    if not (is_valid_url(url)):
+        raise ValueError(f"{url}. Invalid URL")
+    return url
 
 
 def _validate_filename(url: str) -> str:
-    return _validate_regex(FILENAME_REGEX, url, "Invalid filename")
+    def is_valid_filename(filename):
+        # Define a regular expression for a valid filename
+        pattern = re.compile(r'^[a-zA-Z0-9_.\- ]+$')
+
+        # List of reserved keywords for both Unix and Windows
+        reserved_keywords = ['con', 'prn', 'aux', 'nul', 'com1', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8',
+                             'com9',
+                             'lpt1', 'lpt2', 'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9']
+
+        # Check if the filename matches the pattern, is not empty, and does not contain reserved keywords
+        return bool(pattern.match(filename)) and len(filename) > 0 and filename.lower() not in reserved_keywords
+
+    if not (is_valid_filename(url)):
+        raise ValueError(f"{url}. Invalid filename")
+    return url
 
 
 def _validate_email(email: str) -> str:
@@ -58,15 +83,14 @@ def _validate_email(email: str) -> str:
 
 
 def _validate_key_value_list(kv: str) -> dict:
-    try:
-        items = _validate_regex(KEY_VALUE_REGEX, kv, "Invalid Key Value format")
-        pairs = [{item.split(":")[0]: item.split(":")[1]} for item in items.split(":")]
-        merged_dict = {}
-        for pair in pairs:
-            merged_dict.update(pair)
-        return merged_dict
-    except ValueError as e:
-        raise e
+    pairs = kv.split(";")
+    merged_dict = {}
+    for pair in pairs:
+        group = pair.split(":")
+        if len(group) != 2:
+            raise ValueError(f"{kv}. Invalid key value list")
+        merged_dict.update({group[0].strip(): group[1].strip()})
+    return merged_dict
 
 
 def _validate_url_filename(item: str) -> str:
@@ -90,7 +114,9 @@ def _validate_url_doi(item: str) -> str:
 
 
 def _validate_hierarchy(item: str) -> str:
-    return _validate_regex(HIERARCHY_REGEX, item, "Item must be arranged in a hierarchy format")
+    if ">" in item:
+        return item
+    raise ValueError(f"{item}. Invalid Hierarchy format")
 
 
 # List of validators as regex functions
