@@ -1,6 +1,6 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
 Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) to which the environment parameter applies.
-"	"study_1; study_2	"	List	1
+"	"study_1; study_2	"	List	1+
 Environment parameter	Name of the environment parameter constant within the experiment. 	"sowing density
 rooting medium composition; pH"	Free text (see Appendix I)	1+
 Environment parameter value	Value of the environment parameter (defined above) constant within the experiment.	"300 seeds per m2

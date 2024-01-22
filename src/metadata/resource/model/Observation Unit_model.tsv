@@ -1,6 +1,6 @@
 MIAPPE Check list	Definition	Example	Format	Cardinality
 Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) where the event was recorded.
-"	study_1; study_2	List	1
+"	study_1; study_2	List	1+
 "Biological Material ID
 "	"Biological Material identifier (cross-referencing to Biological Material worksheet) corresponding to the organism(s) being observed.
 "	1; 2	List	1
