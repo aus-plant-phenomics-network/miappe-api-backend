@@ -1,4 +1,8 @@
+from pathlib import Path
+
 import pytest
+
+DATA = Path(__file__).parent / "data"
 
 
 @pytest.fixture(params=[
@@ -6,7 +10,8 @@ import pytest
     "10.1093/ajae/aaq063",
     "10.1371/journal.pgen.1001111",
     "10.37044/osf.io/ekhdw",
-    "10.37044/osf.io/eKhDw"
+    "10.37044/osf.io/eKhDw",
+    "10.1371/journal.pone.0071377"
 ])
 def valid_doi(request):
     return request.param
@@ -231,3 +236,40 @@ def valid_hierarchy(request):
 ])
 def invalid_hierarchy(request):
     return request.param
+
+
+@pytest.fixture(params=[
+    ("study_1; study_2", (1, None)),
+    ("study_1; study_2; study_3", (1, None)),
+    (None, (0, 1)),
+    ("", (0, 1)),
+    ("plot:894", (0, 1)),
+    ("Planting, Fertilizing", (1, 1)),
+    ("Planting, Fertilizing", (0, 1)),
+    ("CO_715:0000007\nCO_715:0000011", (0, 1)),
+    ("Sowing using seed drill\nFertilizer application: Ammonium nitrate at 3 kg/m2", (0, 1)),
+    ("2006-09-27T10:23:21+00:00;2006-10-27; 2006-11-13; 2016-11-21", (1, None)),
+    ("2006-09-27T10:23:21+00:00;2006-10-27; 2006-11-13; 2016-11-21", (2, None)),
+    ("2006-09-27T10:23:21+00:00;2006-10-27; 2006-11-13", (2, None)),
+])
+def valid_value_count(request):
+    return request.param
+
+
+@pytest.fixture(params=[
+    ("2006-09-27T10:23:21+00:00;2006-10-27; 2006-11-13; 2016-11-21", (0, 1)),
+    ("plot:894; plot:123", (0, 1)),
+    (None, (1, None)),
+    ("", (1, None)),
+    (None, (1, 1)),
+    ("", (1, 1)),
+    ("Planting, Fertilizing", (2, 2)),
+    ("2006-09-27T10:23:21+00:00;2006-10-27; 2006-11-13; 2016-11-21", (2, 2)),
+    ("2006-09-27T10:23:21+00:00,2006-10-27, 2006-11-13, 2016-11-21", (2, None)),
+])
+def invalid_value_count(request):
+    return request.param
+
+
+def miappe_example_default():
+    return DATA / "test_example.xlsx"
