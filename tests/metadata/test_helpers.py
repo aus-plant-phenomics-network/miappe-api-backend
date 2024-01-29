@@ -1,7 +1,8 @@
 import pytest
 
-from src.metadata.validator import _validate_doi, _validate_country, _validate_email, _validate_numeric, \
-    _validate_lat_long, _validate_filename, _validate_url, _validate_key_value_list, _validate_hierarchy
+from src.metadata.helpers import _validate_doi, _validate_country, _validate_email, _validate_numeric, \
+    _validate_lat_long, _validate_filename, _validate_url, _validate_key_value_list, _validate_hierarchy, \
+    _validate_value_count
 
 
 def test_validate_valid_doi(valid_doi):
@@ -92,3 +93,13 @@ def test_hierarchy(valid_hierarchy):
 def test_invalid_hierarchy(invalid_hierarchy):
     with pytest.raises(ValueError):
         _validate_hierarchy(invalid_hierarchy)
+
+
+def test_valid_value_count(valid_value_count):
+    assert valid_value_count[0] == _validate_value_count(valid_value_count[0], ";", valid_value_count[1][0],
+                                                         valid_value_count[1][1])
+
+
+def test_invalid_value_count(invalid_value_count):
+    with pytest.raises(ValueError):
+        _validate_value_count(invalid_value_count[0], ';', invalid_value_count[1][0], invalid_value_count[1][1])
