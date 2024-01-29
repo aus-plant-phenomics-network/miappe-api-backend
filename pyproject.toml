@@ -11,6 +11,7 @@ pydantic = "^2.5.3"
 pyyaml = "^6.0.1"
 pandas = "^2.1.4"
 pycountry = "^23.12.11"
+openpyxl = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"
