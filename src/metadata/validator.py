@@ -1,179 +1,127 @@
-import datetime
-import re
+import enum
+from functools import lru_cache
+from typing import Annotated, Type, Any, Callable
 
-import pycountry
+import pandas as pd
+from pydantic import BaseModel, create_model, Field
+from pydantic.functional_validators import AfterValidator
 
-# List of REGEX
-DOI_REGEX = r"""^10\.\d{4,9}\/[-._;()/:a-zA-Z0-9]+$"""  # DOI
-COUNTRY_NAME = [country.name for country in pycountry.countries]  # Country Name
-COUNTRY_CODE_2 = [country.alpha_2 for country in pycountry.countries]  # Country 2-letter codes
-LAT_LONG_REGEX = r"^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,7})?$"  # Match up to 7 digits - lat long ISO std
-NUMERIC_UNIT_REGEX = r"^[-+]?\d*\.?\d+\s?m?$"  # Number with an optional 'm'
-EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+from src.metadata.helpers import FORMAT_MAPPING, CARDINALITY_MAPPING, _validate_value_count, validation_sheets, \
+    MODEL_PATH
 
+# Type def
+VALIDATION_ENUMS = enum.Enum('Validation_Items', validation_sheets)
 
-# REGEX validators
-def _validate_regex(
-        input_pattern: str,
-        str_input: str,
-        exception_message: str) -> str:
-    pattern = re.compile(input_pattern)
-    if re.fullmatch(pattern, str_input) is None:
-        raise ValueError(f"Fail to validate: {str_input}. {exception_message}")
-    return str_input
+# MAPPING
+TITLE = "MIAPPE Check list"
+DEFINITION = "Definition"
+EXAMPLE = "Example"
+FORMAT = "Format"
+CARDINALITY = "Cardinality"
 
 
-def _validate_country(name: str) -> str:
-    if (name not in COUNTRY_NAME) and (name not in COUNTRY_CODE_2):
-        raise ValueError(
-            f"""Fail to validate: {name}.
-            Invalid country name (ISO 3166-1 name) or 2 letter country code (ISO 3166-1 alpha 2)""")
-    return name
+## Spreadsheet validator
+@lru_cache(maxsize=100)
+def _read_sheet_schema(
+        sheet_type: VALIDATION_ENUMS) -> None | pd.DataFrame:
+    """
+    TODO: raise exception for this method
+    Read schema tsv file. Schema is obtained from splitting sub-categories in MIAPPE_Checklist-Data-Model-vx.x.tsv.
+    Each sub category tsv file contains the following columns:
+        - MIAPPE Check List - validation fields - i.e event id, latitude, longitude
+        - Definition - definition for the corresponding field
+        - Example - example for the corresponding field
+        - Format - expected data type.
+        - Cardinality - expected number of user provided items
 
-
-def _validate_doi(doi: str) -> str:
-    return _validate_regex(DOI_REGEX, doi, "Invalid DOI format")
-
-
-def _validate_lat_long(degree: str) -> str:
-    return _validate_regex(LAT_LONG_REGEX, degree, "Invalid Lat/Long Degree (ISO 6709)")
-
-
-def _validate_numeric(item: str) -> str:
-    return _validate_regex(NUMERIC_UNIT_REGEX, item,
-                           "Invalid input, must be numeric with optional unit (m)")
-
-
-def _validate_url(url: str) -> str:
-    def is_valid_url(_url: str) -> bool:
-        regex = re.compile(
-            r'^https?://'  # http:// or https://
-            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'  # domain...
-            r'localhost|'  # localhost...
-            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
-            r'(?::\d+)?'  # optional port
-            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-        return _url is not None and regex.search(_url)
-
-    if not (is_valid_url(url)):
-        raise ValueError(f"{url}. Invalid URL")
-    return url
-
-
-def _validate_filename(url: str) -> str:
-    def is_valid_filename(filename):
-        # Define a regular expression for a valid filename
-        pattern = re.compile(r'^[a-zA-Z0-9_.\- ]+$')
-
-        # List of reserved keywords for both Unix and Windows
-        reserved_keywords = ['con', 'prn', 'aux', 'nul', 'com1', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8',
-                             'com9',
-                             'lpt1', 'lpt2', 'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9']
-
-        # Check if the filename matches the pattern, is not empty, and does not contain reserved keywords
-        return bool(pattern.match(filename)) and len(filename) > 0 and filename.lower() not in reserved_keywords
-
-    if not (is_valid_filename(url)):
-        raise ValueError(f"{url}. Invalid filename")
-    return url
-
-
-def _validate_email(email: str) -> str:
-    return _validate_regex(EMAIL_REGEX, email, "Invalid email address - RFC 5322")
-
-
-def _validate_key_value_list(kv: str) -> dict:
-    pairs = kv.split(";")
-    merged_dict = {}
-    for pair in pairs:
-        group = pair.split(":")
-        if len(group) != 2:
-            raise ValueError(f"{kv}. Invalid key value list")
-        merged_dict.update({group[0].strip(): group[1].strip()})
-    return merged_dict
-
-
-def _validate_url_filename(item: str) -> str:
+    :param sheet_type:  validation sub category - e.g. Event, Investigation, Observation Unit, Observed Variable etc
+    :return: pd.DataFrame of the schema
+    """
     try:
-        return _validate_url(item)
-    except ValueError:
-        try:
-            return _validate_filename(item)
-        except ValueError:
-            raise ValueError("Invalid URL or Filename")
+        return pd.read_csv(MODEL_PATH / f"{sheet_type}_model.tsv", sep='\t')
+    except Exception as e:
+        print(e)
+        return None
 
 
-def _validate_url_doi(item: str) -> str:
-    try:
-        return _validate_url(item)
-    except ValueError:
-        try:
-            return _validate_doi(item)
-        except ValueError:
-            raise ValueError("Invalid URL or DOI")
+def _create_count_validator(
+        min_count: int = 0,
+        max_count: int | None = None,
+        sep: str = ";") -> Callable:
+    def validate_value_count(value: Any = ...) -> Any:
+        return _validate_value_count(value, sep, min_count, max_count)
+
+    return validate_value_count
 
 
-def _validate_hierarchy(item: str) -> str:
-    if ">" in item:
-        return item
-    raise ValueError(f"{item}. Invalid Hierarchy format")
+def _create_type_annotation(
+        title: str,
+        definition: str,
+        example: str,
+        format_t: str,
+        cardinality: str
+) -> tuple[Type[Annotated], Any]:
+    """
+    Create pydantic compatible annotation for type checking and validation.
+    Field information is to be extracted from MIAPPE_Checklist-Data-Mode and used to create
+    annotation. The following actions are performed:
+    - Look up python type based on format. If the schema type requires extra-validations, a corresponding
+    validator will be provided. - i.e. if format is DOI, a validator to validate DOI syntax will be provided.
+    - Create a count validator based on cardinality. This validator is created for every field, and will check when
+    split by a separator, the resulting list will match the required cardinality.
+    - Set field alias to be the title
+
+    :param title: field title - equivalent to MIAPPE check list field
+    :param definition: field definition - provided in field schema
+    :param example: field example value - provided in field schema
+    :param format_t: field format - provided in field schema
+    :param cardinality: field cardinality - provided in field schema
+    :return: field annotation of typing_extra.Annotation type
+    """
+    json_schema_extra = {
+        'definition': definition,
+        'example': example,
+        'format': format_t,
+        'cardinality': cardinality
+    }
+    base_type, validator = FORMAT_MAPPING[format_t.strip()]
+    is_required, min_count, max_count = CARDINALITY_MAPPING[cardinality.split(" ")[0]]
+    count_validator = _create_count_validator(min_count, max_count)
+    default_value = Field(...) if is_required else None
+
+    field = Field(
+        default=default_value,  # Set to Field(...) to anotate the field being required
+        json_schema_extra=json_schema_extra,  # Add extra json schema info
+        alias=title)  # Validation alias
+    if validator:  # If the field requires extra validator, other than count validator
+        return Annotated[base_type, AfterValidator(validator), AfterValidator(count_validator), field], default_value
+    return Annotated[base_type, AfterValidator(count_validator), field], default_value
 
 
-# List of validators as regex functions
-DOI_VALIDATOR = _validate_doi
-COUNTRY_VALIDATOR = _validate_country
-DEGREE_VALIDATOR = _validate_lat_long
-NUMERIC_UNIT_VALIDATOR = _validate_numeric
-NUMERIC_UNIT_OPTIONAL_VALIDATOR = _validate_numeric
-URL_FILENAME_VALIDATOR = _validate_url_filename
-EMAIL_VALIDATOR = _validate_email
-KEY_VALUE_LIST_VALIDATOR = _validate_key_value_list
-URI_DOI_VALIDATOR = _validate_url_doi
-HIERARCHY_VALIDATOR = _validate_hierarchy
+@lru_cache(100)
+def create_sheet_validator(sheet_type: VALIDATION_ENUMS) -> Type[BaseModel]:
+    """
+    Create a pydantic BaseModel subclass based on sheet type/category.
+    This is a function that dynamically generates classes that are a sub-class
+    of pydantic BaseModel. The notable change is fields are lowered and have spaces
+    replaced with "_" for ease of indexing. For instance, "Study unique ID" is converted
+    to "study_unique_id". However, "Study unique ID" is still accepted for validation
 
-# Mapping from MIAPPE format to python data type - tuple of (pythonType, validator)
-FORMAT_MAPPING = {
-    "Free text (short)": (str, None),
-    "Free text": (str, None),
-    "Free text (see Appendix I)": (str, None),
-    "Free text (see Appendix II)": (str, None),
-    "Unique identifier": (str, None),
-    "Date/Time (ISO 8601, optional time zone)": (datetime.datetime, None),
-    "Version number": (str, None),
-    "DOI": (str, DOI_VALIDATOR),
-    "Country name or 2-letter code (ISO 3166)": (str, COUNTRY_VALIDATOR),
-    "Degrees in the decimal format (ISO 6709)": (str, DEGREE_VALIDATOR),
-    "Numeric + unit abbreviation": (str, NUMERIC_UNIT_VALIDATOR),
-    'Crop Ontology term (subclass of "CO_715:0000003")': (str, None),  # TODO: Add validator
-    'Crop Ontology term (subclass of "CO_715:0000005")': (str, None),  # TODO: Add validator
-    'Crop Ontology term (subclass of CO_715:0000006)': (str, None),  # TODO: Add validator
-    "URL or File name (of gis or tabular file like csv or tsv)": (str, URL_FILENAME_VALIDATOR),
-    "URL or File name": (str, URL_FILENAME_VALIDATOR),
-    "List": (str, None),
-    "Name": (str, None),
-    "email address": (str, EMAIL_VALIDATOR),
-    "Software version number": (str, None),
-    "Genus name": (str, None),
-    "Species name": (str, None),
-    "Free text, or key-value pair list, or MCPD-compliant format": (str, None),
-    "Numeric": (str, NUMERIC_UNIT_OPTIONAL_VALIDATOR),
-    "Plant Environment Ontology and/or free text": (str, None),
-    "Formatted text (Key:value)": (str, KEY_VALUE_LIST_VALIDATOR),
-    "Plant Ontology term (subclass of PO:0009012) or BBCH scale term": (str, None),  # TODO: Add validator
-    "Plant Ontology term (subclass of PO:0025131)": (str, None),  # TODO: Add validator
-    "Date/Time": (datetime.datetime, None),
-    "Crop Ontology term": (str, None),
-    "Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology": (str, None),
-    "URI or DOI": (str, URI_DOI_VALIDATOR),
-    "Formatted text (level>level)": (str, HIERARCHY_VALIDATOR)
-}
-
-# Number of required parameters - tuple of (isRequired, minCount, maxCount)
-CARDINALITY_MAPPING = {
-    "0-1": (False, 0, 1),
-    "0+": (False, 0, None),
-    "1": (True, 1, 1),
-    "1+": (True, 1, None),
-    "2": (True, 2, 2),
-    "2+": (True, 2, None)
-}
+    :param sheet_type: category -i.e Investigation, Study, Person, Sample, etc
+    :return: BaseModel subclass
+    """
+    schema = _read_sheet_schema(sheet_type)
+    field_definition = {}
+    for i in range(len(schema)):
+        canonical_title = schema.loc[i, TITLE].lower().replace(" ", "_")
+        field_definition[canonical_title] = _create_type_annotation(
+            schema.loc[i, TITLE],
+            schema.loc[i, DEFINITION],
+            schema.loc[i, EXAMPLE],
+            schema.loc[i, FORMAT],
+            schema.loc[i, CARDINALITY]
+        )
+    return create_model(
+        __model_name=sheet_type,
+        **field_definition
+    )
