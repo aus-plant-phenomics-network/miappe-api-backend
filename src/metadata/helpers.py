@@ -1,7 +1,7 @@
 import datetime
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 import pycountry
 import yaml
@@ -174,7 +174,7 @@ FORMAT_MAPPING = {
     "Free text (see Appendix I)": (str, None),
     "Free text (see Appendix II)": (str, None),
     "Unique identifier": (str, None),
-    "Date/Time (ISO 8601, optional time zone)": (datetime.datetime, None),
+    "Date/Time (ISO 8601, optional time zone)": (Union[datetime.datetime, datetime.date], None),
     "Version number": (str, None),
     "DOI": (str, DOI_VALIDATOR),
     "Country name or 2-letter code (ISO 3166)": (str, COUNTRY_VALIDATOR),
@@ -197,7 +197,7 @@ FORMAT_MAPPING = {
     "Formatted text (Key:value)": (str, KEY_VALUE_LIST_VALIDATOR),
     "Plant Ontology term (subclass of PO:0009012) or BBCH scale term": (str, None),  # TODO: Add validator
     "Plant Ontology term (subclass of PO:0025131)": (str, None),  # TODO: Add validator
-    "Date/Time": (datetime.datetime, None),
+    "Date/Time": (Union[datetime.datetime, datetime.date], None),
     "Crop Ontology term": (str, None),
     "Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology": (str, None),
     "URI or DOI": (str, URI_DOI_VALIDATOR),
