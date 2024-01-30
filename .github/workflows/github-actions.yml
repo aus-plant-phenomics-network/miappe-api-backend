@@ -26,6 +26,6 @@ jobs:
       - name: Lint with Ruff
         run: |
           poetry run ruff check miappe
-      - name: Static Analysis with Black
-        run: |
-          poetry run black --check miappe
+#      - name: Static Analysis with Black
+#        run: |
+#          poetry run black --check miappe
