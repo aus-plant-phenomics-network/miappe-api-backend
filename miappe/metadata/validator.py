@@ -6,7 +6,7 @@ import pandas as pd
 from pydantic import BaseModel, create_model, Field
 from pydantic.functional_validators import AfterValidator
 
-from src.metadata.helpers import FORMAT_MAPPING, CARDINALITY_MAPPING, _validate_value_count, validation_sheets, \
+from miappe.metadata.helpers import FORMAT_MAPPING, CARDINALITY_MAPPING, _validate_value_count, validation_sheets, \
     MODEL_PATH
 
 # Type def
