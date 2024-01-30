@@ -22,7 +22,7 @@ jobs:
           poetry install
       - name: Test with pytest
         run: |
-          poetry run pytest --cov-report term-missing --cov=src
+          poetry run pytest
       - name: Lint with Ruff
         run: |
           poetry run ruff check src
