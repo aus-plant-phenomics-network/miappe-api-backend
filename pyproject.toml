@@ -24,3 +24,16 @@ pre-commit = "^3.4.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "@(abc\\.)?abstractmethod",
+    "def __getattr__",
+    "if TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 88
+src = ["miappe"]
+target-version = "py311"
