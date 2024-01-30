@@ -1,2 +1,2 @@
-from src.metadata.io import MetadataIO
+from miappe.metadata.io import MetadataIO
 

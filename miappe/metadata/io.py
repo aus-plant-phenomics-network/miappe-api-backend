@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from src.metadata.helpers import validation_sheets
-from src.metadata.validator import create_sheet_validator
+from miappe.metadata.helpers import validation_sheets
+from miappe.metadata.validator import create_sheet_validator
 
 
 class MetadataIO:

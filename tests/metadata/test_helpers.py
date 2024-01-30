@@ -1,6 +1,6 @@
 import pytest
 
-from src.metadata.helpers import _validate_doi, _validate_country, _validate_email, _validate_numeric, \
+from miappe.metadata.helpers import _validate_doi, _validate_country, _validate_email, _validate_numeric, \
     _validate_lat_long, _validate_filename, _validate_url, _validate_key_value_list, _validate_hierarchy, \
     _validate_value_count
 

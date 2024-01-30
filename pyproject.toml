@@ -13,9 +13,27 @@ pandas = "^2.1.4"
 pycountry = "^23.12.11"
 openpyxl = "^3.1.2"
 
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"
+pytest-cov = "^4.1.0"
+ruff = "^0.1.15"
+black = "^23.9.0"
+pre-commit = "^3.4.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "@(abc\\.)?abstractmethod",
+    "def __getattr__",
+    "if TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 88
+src = ["miappe"]
+target-version = "py311"
