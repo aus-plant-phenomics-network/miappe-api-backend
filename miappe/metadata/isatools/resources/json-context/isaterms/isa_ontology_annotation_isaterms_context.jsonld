@@ -1,0 +1,24 @@
+{
+  "@context": {
+    "@language": "en",
+    "isa": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "OntologyAnnotation": "isa:descriptor_value",
+    	"annotationValue": {
+    		"@id": "isa:has_part",
+    		"@type": "xsd:string"
+    	},
+    	"termSource": {
+    		"@id": "isa:has_term_source",
+    		"@type": "isa:ontology"
+    	},
+    	"termAccession": {
+            "@id": "isa:identified_by",
+            "@type": "isa:identifier"
+    		},
+        "comments": {
+            "@id": "isa:is_described_by",
+            "@type": "isa:comment"
+        }
+    }
+}

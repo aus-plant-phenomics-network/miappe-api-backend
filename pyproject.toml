@@ -21,6 +21,14 @@ ruff = "^0.1.15"
 black = "^23.9.0"
 pre-commit = "^3.4.0"
 
+
+[tool.poetry.group.isa.dependencies]
+networkx = "^3.2.1"
+iso8601 = "^2.1.0"
+lxml = "^5.1.0"
+requests = "^2.31.0"
+graphene = "^3.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

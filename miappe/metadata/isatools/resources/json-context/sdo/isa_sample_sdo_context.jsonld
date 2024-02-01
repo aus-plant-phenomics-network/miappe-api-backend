@@ -1,0 +1,32 @@
+{
+  "@context": {
+    "@language": "en",
+    "sdo": "http://schema.org",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "Sample": "sdo:Product",
+    "identifier": {
+      "@id": "sdo:identifier",
+      "@type": "@id"
+    },
+    "name": {
+      "@id": "sdo:name",
+      "@type": "sdo:Text"
+    },
+    "characteristics": {
+      "@id": "sdo:Property",
+      "@type": "sdo:PropertyValue"
+    },
+    "roles": {
+      "@id": "sdo:potentialAction",
+      "@type": "sdo:Action"
+    },
+    "factorValues": {
+        "@id": "sdo:value",
+        "@type": "sdo:StructuredValue"
+    },
+    "derivesFrom": {
+      "@id": "sdo:isRelatedTo",
+      "@type": "sdo:Product"
+    }
+  }
+}

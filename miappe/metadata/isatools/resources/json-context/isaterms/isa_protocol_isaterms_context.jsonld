@@ -1,0 +1,48 @@
+{
+  "@context": {
+    "@language": "en",
+    "isa": "https://purl.org/isaterms",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "Protocol": "isa:protocol",
+    "identifier" : {
+        "@id": "isa:identified_by",
+        "@type": "@id"
+    }, 
+    "title": {
+        "@id": "isa:is_described_by",
+        "@type": "isa:title"
+    },
+    "description": {
+        "@id": "isa:is_described_by",
+        "@type": "isa:description"
+    },
+    "protocolType": {
+        "@id": "isa:is_described_by",
+        "@type": "isa:annotation"
+    },
+    "version": {
+        "@id": "isa:has_version",
+        "@type": "xsd:string"
+    },
+    "components": {
+        "@id": "isa:has_part",
+        "@type": "isa:instrument"
+    },
+    "parameters": {
+        "@id": "isa:has_part",
+        "@type": "isa:parameter"
+    },
+    "uri": {
+        "@id": "isa:is_described_by",
+        "@type": "xsd:anyURL"
+    },
+    "publications": {
+        "@id": "isa:has_part",
+        "@type": "isa:publication"
+    },
+    "comments": {
+        "@id": "isa:is_described_by",
+        "@type": "isa:comment"
+    }
+  }
+}
