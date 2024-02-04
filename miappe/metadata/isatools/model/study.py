@@ -47,7 +47,7 @@ class Study(Commentable, StudyAssayMixin, MetadataMixin, object):
             'sources', 'samples' and 'other_material'. DEPRECATED.
         sources: Sources associated with the study, is equivalent to
             materials['sources'].
-        samples: Samples associated with the study, is equivalent to
+        samples: Samples assocdiated with the study, is equivalent to
             materials['samples'].
         other_material: Other Materials associated with the study, is
             equivalent to materials['other_material'].
