@@ -71,7 +71,7 @@ def _create_type_annotation(
     split by a separator, the resulting list will match the required cardinality.
     - Set field alias to be the title
 
-    :param title: field title - equivalent to MIAPPE check list field
+    :param title: field title - snake-cased lowered field title
     :param definition: field definition - provided in field schema
     :param example: field example value - provided in field schema
     :param format_t: field format - provided in field schema
