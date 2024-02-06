@@ -32,7 +32,7 @@ class MetadataIO:
         Read investigation sheet structure and convert to dataframe
         :return: pd.DataFrame
         """
-        df = pd.read_excel(self.path, sheet_name="Investigation", index_col=0).T
+        df = pd.read_excel(self.path, sheet_name="Investigation", index_col=0, dtype=str).T
         return df.loc[["Value"], :]
 
     def _read_non_investigation(self, category: str) -> pd.DataFrame:
@@ -41,7 +41,7 @@ class MetadataIO:
         :param category: non investigation sheet - i.e. study, experimental factor
         :return: pd.DataFrame
         """
-        df = pd.read_excel(self.path, sheet_name=category)
+        df = pd.read_excel(self.path, sheet_name=category, dtype=str)
         df.drop(columns="Field", inplace=True)
         return df.iloc[self.value_index:, :]
 
@@ -59,7 +59,8 @@ class MetadataIO:
                     cat
                 ))
             df = df.replace(np.nan, None)
-            df.columns = [col.strip().replace('*', '') for col in df.columns]
+            df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+            df.columns = [col.lower().strip().replace('*', '').replace(" ", "_") for col in df.columns]
             frames[cat] = df
         return frames
 
