@@ -22,12 +22,17 @@ LAT_LONG_REGEX = r"^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,7})?$"  # Match up 
 NUMERIC_UNIT_REGEX = r"^[-+]?\d*\.?\d+\s?m?$"  # Number with an optional 'm'
 EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
+# Define Type
+NullableStr = str | None
+
 
 # REGEX validators
 def _validate_regex(
         input_pattern: str,
-        str_input: str,
-        exception_message: str) -> str:
+        str_input: NullableStr,
+        exception_message: str) -> NullableStr:
+    if str_input is None:
+        return None
     pattern = re.compile(input_pattern)
     if re.fullmatch(pattern, str_input) is None:
         raise ValueError(f"Fail to validate: {str_input}. {exception_message}")
@@ -169,39 +174,39 @@ HIERARCHY_VALIDATOR = _validate_hierarchy
 
 # Mapping from MIAPPE format to python data type - tuple of (pythonType, validator)
 FORMAT_MAPPING = {
-    "Free text (short)": (str, None),
-    "Free text": (str, None),
-    "Free text (see Appendix I)": (str, None),
-    "Free text (see Appendix II)": (str, None),
-    "Unique identifier": (str, None),
+    "Free text (short)": (NullableStr, None),
+    "Free text": (NullableStr, None),
+    "Free text (see Appendix I)": (NullableStr, None),
+    "Free text (see Appendix II)": (NullableStr, None),
+    "Unique identifier": (NullableStr, None),
     "Date/Time (ISO 8601, optional time zone)": (Union[datetime.datetime, datetime.date], None),
-    "Version number": (str, None),
-    "DOI": (str, DOI_VALIDATOR),
-    "Country name or 2-letter code (ISO 3166)": (str, COUNTRY_VALIDATOR),
-    "Degrees in the decimal format (ISO 6709)": (str, DEGREE_VALIDATOR),
-    "Numeric + unit abbreviation": (str, NUMERIC_UNIT_VALIDATOR),
-    'Crop Ontology term (subclass of "CO_715:0000003")': (str, None),  # TODO: Add validator
-    'Crop Ontology term (subclass of "CO_715:0000005")': (str, None),  # TODO: Add validator
-    'Crop Ontology term (subclass of CO_715:0000006)': (str, None),  # TODO: Add validator
-    "URL or File name (of gis or tabular file like csv or tsv)": (str, URL_FILENAME_VALIDATOR),
-    "URL or File name": (str, URL_FILENAME_VALIDATOR),
-    "List": (str, None),
-    "Name": (str, None),
-    "email address": (str, EMAIL_VALIDATOR),
-    "Software version number": (str, None),
-    "Genus name": (str, None),
-    "Species name": (str, None),
-    "Free text, or key-value pair list, or MCPD-compliant format": (str, None),
-    "Numeric": (str, NUMERIC_UNIT_OPTIONAL_VALIDATOR),
-    "Plant Environment Ontology and/or free text": (str, None),
-    "Formatted text (Key:value)": (str, KEY_VALUE_LIST_VALIDATOR),
-    "Plant Ontology term (subclass of PO:0009012) or BBCH scale term": (str, None),  # TODO: Add validator
-    "Plant Ontology term (subclass of PO:0025131)": (str, None),  # TODO: Add validator
+    "Version number": (NullableStr, None),
+    "DOI": (NullableStr, DOI_VALIDATOR),
+    "Country name or 2-letter code (ISO 3166)": (NullableStr, COUNTRY_VALIDATOR),
+    "Degrees in the decimal format (ISO 6709)": (NullableStr, DEGREE_VALIDATOR),
+    "Numeric + unit abbreviation": (NullableStr, NUMERIC_UNIT_VALIDATOR),
+    'Crop Ontology term (subclass of "CO_715:0000003")': (NullableStr, None),  # TODO: Add validator
+    'Crop Ontology term (subclass of "CO_715:0000005")': (NullableStr, None),  # TODO: Add validator
+    'Crop Ontology term (subclass of CO_715:0000006)': (NullableStr, None),  # TODO: Add validator
+    "URL or File name (of gis or tabular file like csv or tsv)": (NullableStr, URL_FILENAME_VALIDATOR),
+    "URL or File name": (NullableStr, URL_FILENAME_VALIDATOR),
+    "List": (NullableStr, None),
+    "Name": (NullableStr, None),
+    "email address": (NullableStr, EMAIL_VALIDATOR),
+    "Software version number": (NullableStr, None),
+    "Genus name": (NullableStr, None),
+    "Species name": (NullableStr, None),
+    "Free text, or key-value pair list, or MCPD-compliant format": (NullableStr, None),
+    "Numeric": (NullableStr, NUMERIC_UNIT_OPTIONAL_VALIDATOR),
+    "Plant Environment Ontology and/or free text": (NullableStr, None),
+    "Formatted text (Key:value)": (NullableStr, KEY_VALUE_LIST_VALIDATOR),
+    "Plant Ontology term (subclass of PO:0009012) or BBCH scale term": (NullableStr, None),  # TODO: Add validator
+    "Plant Ontology term (subclass of PO:0025131)": (NullableStr, None),  # TODO: Add validator
     "Date/Time": (Union[datetime.datetime, datetime.date], None),
-    "Crop Ontology term": (str, None),
-    "Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology": (str, None),
-    "URI or DOI": (str, URI_DOI_VALIDATOR),
-    "Formatted text (level>level)": (str, HIERARCHY_VALIDATOR)
+    "Crop Ontology term": (NullableStr, None),
+    "Term from Plant Trait Ontology, Crop Ontology, or XML Environment Ontology": (NullableStr, None),
+    "URI or DOI": (NullableStr, URI_DOI_VALIDATOR),
+    "Formatted text (level>level)": (NullableStr, HIERARCHY_VALIDATOR)
 }
 
 # Number of required parameters - tuple of (isRequired, minCount, maxCount)
