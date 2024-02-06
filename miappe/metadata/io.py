@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import pathlib
 from miappe.metadata.helpers import validation_sheets
 from miappe.metadata.validator import create_sheet_validator
 
@@ -9,7 +9,7 @@ class MetadataIO:
     categories = validation_sheets
     validation_models = {cat: create_sheet_validator(cat) for cat in categories}
 
-    def __init__(self, path: str, value_index: int = 3, validate: bool = True):
+    def __init__(self, path: str | pathlib.Path, value_index: int = 3, validate: bool = True):
         """
         Metadata class representing metadata read from a MIAPPE metadata file.
 
@@ -32,7 +32,10 @@ class MetadataIO:
         Read investigation sheet structure and convert to dataframe
         :return: pd.DataFrame
         """
-        df = pd.read_excel(self.path, sheet_name="Investigation", index_col=0, dtype=str).T
+        try:
+            df = pd.read_excel(self.path, sheet_name="Investigation", index_col=0, dtype=str).T
+        except Exception:
+            raise ValueError(f"Invalid path or file does not exist: self.path")
         return df.loc[["Value"], :]
 
     def _read_non_investigation(self, category: str) -> pd.DataFrame:
