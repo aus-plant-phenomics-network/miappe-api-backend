@@ -1,6 +1,8 @@
 import pandas as pd
 
-from miappe.metadata.isatools.model import *
+from miappe.metadata.isatools.model import Investigation, Person, Publication, Comment, Study, StudyFactor, \
+    Characteristic, Protocol, ProtocolParameter, Sample, FactorValue, Extract, ParameterValue, Source, \
+    OntologyAnnotation
 
 
 class ISATabConverter:
@@ -304,7 +306,7 @@ class ISATabConverter:
         ids = self.get_study_ids(miappe_person['Study unique ID'])
         for id_ in ids:
             associated_study = self.isa_studies[id_]
-            associated_study.contacts.append(person)
+            associated_study.contacts.append(new_person)
 
     def add_data_file(self, miappe_data_file: pd.Series) -> None:
         new_data_file = self.create_data_file(miappe_data_file)

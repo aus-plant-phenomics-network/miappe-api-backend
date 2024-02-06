@@ -12,7 +12,7 @@ app = typer.Typer()
 @app.command()
 def validate(path: pathlib.Path, value_index: int = 3):
     try:
-        df = MetadataIO(path, value_index)
+        MetadataIO(path, value_index)
     except ValueError:
         raise
 

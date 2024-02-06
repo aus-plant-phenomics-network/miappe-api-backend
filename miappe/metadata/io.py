@@ -35,7 +35,7 @@ class MetadataIO:
         try:
             df = pd.read_excel(self.path, sheet_name="Investigation", index_col=0, dtype=str).T
         except Exception:
-            raise ValueError(f"Invalid path or file does not exist: self.path")
+            raise ValueError(f"Invalid path or file does not exist: {self.path}")
         return df.loc[["Value"], :]
 
     def _read_non_investigation(self, category: str) -> pd.DataFrame:
