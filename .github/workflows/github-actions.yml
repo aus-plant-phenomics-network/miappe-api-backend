@@ -25,7 +25,7 @@ jobs:
           poetry run pytest
       - name: Lint with Ruff
         run: |
-          poetry run ruff check miappe
+          poetry run ruff check miappe --exclude miappe/metadata/isatools
 #      - name: Static Analysis with Black
 #        run: |
 #          poetry run black --check miappe

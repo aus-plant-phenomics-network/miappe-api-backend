@@ -1,0 +1,21 @@
+{
+  "@context": {
+    "@language": "en",
+    "isa": "https://purl.org/isaterms",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "ProtocolParameter": "isa:protocol_parameter",
+    "parameterName": {
+      "@id": "isa:is_described_by",
+      "@type":  "isa:name"
+    },
+    "type" : {
+        "@id": "isa:identified_by",
+        "@type": "isa:identifier"
+    },
+  "comments": {
+     "@id": "isa:is_described_by",
+     "@type": "isa:comment"
+    }
+  }
+}
+

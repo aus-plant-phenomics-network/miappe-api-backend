@@ -1,0 +1,14 @@
+{
+  "@context": {
+    "@language": "en",
+    "obo": "http://purl.obolibrary.org/obo/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "MaterialAttribute": {
+      "@id": "obo:OBI_0001933"
+    },
+    "characteristicType": {
+      "@id": "obo:IAO_0000590",
+      "@type": "obo:BFO_0000019"
+    }
+  }
+}

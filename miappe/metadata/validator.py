@@ -55,11 +55,10 @@ def _create_count_validator(
 
 
 def _create_type_annotation(
-        title: str,
         definition: str,
         example: str,
         format_t: str,
-        cardinality: str
+        cardinality: str,
 ) -> tuple[Type[Annotated], Any]:
     """
     Create pydantic compatible annotation for type checking and validation.
@@ -71,7 +70,7 @@ def _create_type_annotation(
     split by a separator, the resulting list will match the required cardinality.
     - Set field alias to be the title
 
-    :param title: field title - equivalent to MIAPPE check list field
+    :param title: field title - snake-cased lowered field title
     :param definition: field definition - provided in field schema
     :param example: field example value - provided in field schema
     :param format_t: field format - provided in field schema
@@ -90,9 +89,9 @@ def _create_type_annotation(
     default_value = Field(...) if is_required else None
 
     field = Field(
-        default=default_value,  # Set to Field(...) to anotate the field being required
-        json_schema_extra=json_schema_extra,  # Add extra json schema info
-        alias=title)  # Validation alias
+        default=default_value,  # Set to Field(...) to annotate the field being required
+        json_schema_extra=json_schema_extra
+    )  # Add extra json schema info)
     if validator:  # If the field requires extra validator, other than count validator
         return Annotated[base_type, AfterValidator(validator), AfterValidator(count_validator), field], default_value
     return Annotated[base_type, AfterValidator(count_validator), field], default_value
@@ -113,13 +112,12 @@ def create_sheet_validator(sheet_type: VALIDATION_ENUMS) -> Type[BaseModel]:
     schema = _read_sheet_schema(sheet_type)
     field_definition = {}
     for i in range(len(schema)):
-        canonical_title = schema.loc[i, TITLE].lower().replace(" ", "_")
+        canonical_title = schema.loc[i, TITLE].lower().replace(" ", "_").replace("\n","")
         field_definition[canonical_title] = _create_type_annotation(
-            schema.loc[i, TITLE],
-            schema.loc[i, DEFINITION],
-            schema.loc[i, EXAMPLE],
-            schema.loc[i, FORMAT],
-            schema.loc[i, CARDINALITY]
+            schema.loc[i, DEFINITION].strip(),
+            schema.loc[i, EXAMPLE].strip(),
+            schema.loc[i, FORMAT].strip(),
+            schema.loc[i, CARDINALITY].strip(),
         )
     return create_model(
         __model_name=sheet_type,

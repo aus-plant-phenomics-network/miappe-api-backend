@@ -1,0 +1,32 @@
+{
+  "@context": {
+    "@language": "en",
+    "isa": "http://purl.org/isaterms",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "OntologySourceReference": "isa:ontology",
+    "title" : {
+        "@id": "isa:is_described_by",
+        "@type":"isa:title"
+    },
+    "description" : {
+         "@id": "isa:is_described_by",
+         "@type":"isa:description"
+    } ,
+    "name": {
+      "@id": "isa:is_described_by",
+      "@type":"isa:name"
+    },
+    "file" :  {
+         "@id" : "isa:available_from",
+         "@type": "isa:file"
+    },  
+    "version" : {
+         "@id": "isa:has_version",
+         "@type": "xsd:string"
+         },
+    "comments" : {
+         "@id":"isa:is_described_by",
+         "@type":"isa:comment"
+    }
+  }
+}
