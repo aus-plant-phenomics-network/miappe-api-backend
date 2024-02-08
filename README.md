@@ -1,6 +1,21 @@
-Python MIAPPE APIs
+## Python MIAPPE APIs
 
-Currently supported features:
+A python CLI tool/library to manage and validate metadata that conforms to the [MIAPPE](https://www.miappe.org/)
+format. MIAPPE APIs work with metadata stored as xlsx file, similar to this
+[MIAPPE example](https://github.com/MIAPPE/MIAPPE/blob/master/MIAPPE_Checklist-Data-Model-v1.1/MIAPPE_templates/MIAPPEv1.1_training_spreadsheet.xlsx)
+(you may need to download the xlsx sheet as github does not support viewing xlsx files). 
 
-- validate: read in a MIAPPE metadata file in excel format similar to [this](https://github.com/MIAPPE/MIAPPE/blob/master/MIAPPE_Checklist-Data-Model-v1.1/MIAPPE_templates/MIAPPEv1.1_training_spreadsheet.xlsx)
-- convert: convert MIAPPE to ISA 
+### To install miappe: 
+```commandline
+pip install miappe-api
+```
+
+### To export MIAPPE metadata schema as Json schema:
+```commandline
+miappe export --path <schema-path>
+```
+
+### To validate MIAPPE xlsx metadata file: 
+```commandline
+miappe validate <xlsx-file>
+```
