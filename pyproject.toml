@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "Python API for MIAPPE metadata dataset"
 authors = ["hoangson <lehoangsonsg@gmail.com>"]
 readme = "README.md"
+repository = "https://github.com/haryle/MIAPPE_API"
+packages = [
+    { include = "miappe" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -42,6 +46,10 @@ exclude_also = [
     "def __getattr__",
     "if TYPE_CHECKING:"
 ]
+
+[tool.poetry.scripts]
+miappe = "miappe.cli.main:app"
+
 
 [tool.ruff]
 line-length = 88
