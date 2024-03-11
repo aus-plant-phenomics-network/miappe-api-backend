@@ -1,14 +1,12 @@
-from typing import TYPE_CHECKING, Sequence
+from typing import Sequence
+from uuid import UUID
 
 from litestar import Controller, get, post
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Vocabulary
-
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
-    from uuid import UUID
 
 
 class VocabularyReadDTO(SQLAlchemyDTO[Vocabulary]):

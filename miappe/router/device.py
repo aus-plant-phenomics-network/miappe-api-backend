@@ -1,13 +1,12 @@
-from typing import TYPE_CHECKING, Sequence
+from typing import Sequence
+from uuid import UUID
 
 from litestar import Controller, get
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 from sqlalchemy import select
-from miappe.model import Device
+from sqlalchemy.ext.asyncio import AsyncSession
 
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
-    from uuid import UUID
+from miappe.model import Device
 
 
 class DeviceReadDTO(SQLAlchemyDTO[Device]):
