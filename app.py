@@ -9,8 +9,10 @@ from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.status_codes import HTTP_409_CONFLICT
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from miappe.model import Base
 from miappe.router import VocabularyController, DeviceController
+
 
 async def provide_transaction(
         db_session: AsyncSession,
