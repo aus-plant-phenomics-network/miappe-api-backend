@@ -7,12 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pydantic = "^2.5.3"
-pyyaml = "^6.0.1"
-pandas = "^2.1.4"
-pycountry = "^23.12.11"
-openpyxl = "^3.1.2"
-typer = {extras = ["all"], version = "^0.9.0"}
+litestar = {extras = ["standard"], version = "^2.7.0"}
+aiosqlite = "^0.20.0"
+sqlalchemy = "^2.0.28"
+advanced-alchemy = "^0.7.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -24,12 +22,6 @@ pre-commit = "^3.4.0"
 typer = "^0.9.0"
 
 
-[tool.poetry.group.isa.dependencies]
-networkx = "^3.2.1"
-iso8601 = "^2.1.0"
-lxml = "^5.1.0"
-requests = "^2.31.0"
-graphene = "^3.3"
 
 [build-system]
 requires = ["poetry-core"]

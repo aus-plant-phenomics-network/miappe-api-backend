@@ -1,9 +1,0 @@
-MIAPPE Check list	Definition	Example	Format	Cardinality
-Study unique ID	"Semicolon-separated list of (internal) study identifiers (cross-referencing to study worksheet) to which the file belongs.
-"	"study_1; study_2
-"	"List	"	1+
-Data file link	Link to the data file (or digital object) in a public database or in a persistent institutional repository; or identifier of the data file when submitted together with the MIAPPE submission.	http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-32551/	URL or File name	1
-Data file description	Description of the format of the data file. May be a standard file format name, or a description of organization of the data in a tabular file.	"FASTA
-tab-delimited
-column headers headers: 1. A 2. B 3. C"	Free text (short)	1
-Data file version	The version of the dataset (the actual data).	1.0	Software version number	1
