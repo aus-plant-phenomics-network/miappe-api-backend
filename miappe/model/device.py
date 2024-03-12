@@ -27,7 +27,7 @@ class Device(Base):
     removal_date: Mapped[Optional[datetime.datetime]]
 
     # Relationships:
-    device_type: Mapped["Vocabulary"] = relationship(back_populates="device")
+    device_type: Mapped["Vocabulary"] = relationship(back_populates="device", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"id: {self.id}, name: {self.name}, description: {self.description}"
