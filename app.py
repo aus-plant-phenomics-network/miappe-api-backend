@@ -7,11 +7,20 @@ from litestar import Litestar
 from litestar.exceptions import ClientException
 from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
 from litestar.status_codes import HTTP_409_CONFLICT, HTTP_404_NOT_FOUND
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Base
 from miappe.router import VocabularyController, DeviceController
+
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 async def provide_transaction(
