@@ -22,7 +22,7 @@ class Device(Base):
     removal_date: Mapped[Optional[datetime.datetime]]
 
     # Relationships:
-    device_type_id: Mapped[UUID] = mapped_column(ForeignKey("vocabulary_table.id"))
+    device_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
     device_type: Mapped["Vocabulary"] = relationship(back_populates="device", lazy="selectin")
 
     method: Mapped[list["Method"]] = relationship(back_populates="device", lazy="selectin")

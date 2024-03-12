@@ -2,8 +2,8 @@ import datetime
 from typing import Sequence
 from uuid import UUID
 
-from litestar import Controller, get, post
-from sqlalchemy import select
+from litestar import Controller, get, post, put
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Device, Vocabulary
@@ -53,3 +53,18 @@ class DeviceController(Controller):
     async def add_device(self, transaction: AsyncSession, data: Device) -> Device:
         transaction.add(data)
         return data
+
+    @put("/{id:uuid}", dto=DeviceWriteDTO, return_dto=DeviceReadDTO)
+    async def update_device(self,
+                            transaction: AsyncSession,
+                            id: UUID,
+                            data: Device) -> Device:
+        data.updated_at = datetime.datetime.now(datetime.timezone.utc)
+        update_data = {k: v for k, v in data.to_dict().items() if v}
+        stmt = update(Device).where(Device.id == id).values(update_data)
+        await transaction.execute(stmt)
+
+        stmt = select(Device).where(Device.id == id)
+        result = await transaction.execute(stmt)
+
+        return result.scalars().one()
