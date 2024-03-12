@@ -13,8 +13,16 @@ class VocabularyController(Controller):
     path = "/vocabulary"
 
     @get(return_dto=VocabularyReadDTO)
-    async def get_vocabulary(self, transaction: AsyncSession) -> Sequence[Vocabulary]:
-        result = await transaction.execute(select(Vocabulary))
+    async def get_vocabulary(self,
+                             transaction: AsyncSession,
+                             namespace: str | None = None,
+                             external_reference: str | None = None) -> Sequence[Vocabulary]:
+        stmt = select(Vocabulary)
+        if namespace:
+            stmt = stmt.where(Vocabulary.namespace == namespace)
+        if external_reference:
+            stmt = stmt.where(Vocabulary.external_reference == external_reference)
+        result = await transaction.execute(stmt)
         return result.scalars().all()
 
     @get("/{id:uuid}", return_dto=VocabularyReadDTO)
