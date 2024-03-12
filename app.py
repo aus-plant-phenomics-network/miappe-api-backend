@@ -6,8 +6,8 @@ from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import (
 from litestar import Litestar
 from litestar.exceptions import ClientException
 from litestar.plugins.sqlalchemy import SQLAlchemyAsyncConfig, SQLAlchemyPlugin
-from litestar.status_codes import HTTP_409_CONFLICT
-from sqlalchemy.exc import IntegrityError
+from litestar.status_codes import HTTP_409_CONFLICT, HTTP_404_NOT_FOUND
+from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Base
@@ -25,6 +25,11 @@ async def provide_transaction(
             status_code=HTTP_409_CONFLICT,
             detail=str(exc),
         ) from exc
+    except NoResultFound as exc:
+        raise ClientException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail="No database result matching query"
+        )
 
 
 db_config = SQLAlchemyAsyncConfig(
