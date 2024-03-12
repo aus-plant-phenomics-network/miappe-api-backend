@@ -21,7 +21,7 @@ class Vocabulary(Base):
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 
     # Relationships
-    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="immediate")
+    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"id: {self.id}, name: {self.name}, description: {self.description}"
