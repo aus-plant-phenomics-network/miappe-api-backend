@@ -1,5 +1,4 @@
 from typing import Optional, TYPE_CHECKING
-from uuid import UUID, uuid4
 
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
@@ -7,14 +6,12 @@ from miappe.model.base import Base
 
 if TYPE_CHECKING:
     from miappe.model.device import Device
+    from miappe.model.method import Method
 
 
 class Vocabulary(Base):
     __tablename__ = "vocabulary_table"
 
-    id: Mapped[UUID] = mapped_column(default=uuid4, primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(nullable=False)
     external_reference: Mapped[Optional[str]]
     symbol: Mapped[Optional[str]]
     namespace: Mapped[Optional[str]] = mapped_column(default="APPN")  # Todo: Make namespace a separate entity?
@@ -22,6 +19,4 @@ class Vocabulary(Base):
 
     # Relationships
     device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="selectin")
-
-    def __repr__(self) -> str:
-        return f"id: {self.id}, name: {self.name}, description: {self.description}"
+    method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy="selectin")
