@@ -1,8 +1,11 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from miappe.model.base import Base
+
+if TYPE_CHECKING:
+    from miappe.model.device import Device
 
 
 class Vocabulary(Base):
@@ -16,5 +19,5 @@ class Vocabulary(Base):
     namespace: Mapped[Optional[str]] = mapped_column(default="APPN")  # Todo: Make namespace a separate entity?
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 
-    # Defining relationship
-    device: Mapped["Device"] = relationship(back_populates="device_type")
+    # Relationships
+    device: Mapped["Device"] = relationship(back_populates="device_type", lazy="immediate")

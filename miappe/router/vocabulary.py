@@ -25,8 +25,8 @@ class VocabularyController(Controller):
         result = await transaction.execute(select(Vocabulary))
         return result.scalars().all()
 
-    @get("/{id:UUID}, return_dto=DeviceReadDTO")
-    async def get_vocabulary_by_id(self, transaction: AsyncSession, id: UUID) -> Vocabulary:
+    @get("/{id:uuid}", return_dto=VocabularyReadDTO)
+    async def get_vocabulary_by_id(self,  id: UUID, transaction: AsyncSession) -> Vocabulary:
         result = await transaction.execute(select(Vocabulary).where(Vocabulary.id == id))
         return result.scalars().one()
 
