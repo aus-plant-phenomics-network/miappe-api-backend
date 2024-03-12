@@ -1,21 +1,12 @@
-import pdb
 from typing import Sequence
 from uuid import UUID
 
 from litestar import Controller, get, post
-from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Device
-
-
-class DeviceReadDTO(SQLAlchemyDTO[Device]):
-    config = SQLAlchemyDTOConfig(exclude={"device_type"})
-
-
-class DeviceWriteDTO(SQLAlchemyDTO[Device]):
-    config = SQLAlchemyDTOConfig(exclude={"id", "device_type", "created_at", "updated_at"})
+from miappe.router.DTO import DeviceReadDTO, DeviceWriteDTO
 
 
 class DeviceController(Controller):

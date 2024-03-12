@@ -1,14 +1,15 @@
 import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import Optional, TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from miappe.model.base import Base
+from miappe.model.vocabulary import Vocabulary
 
 if TYPE_CHECKING:
-    from miappe.model.vocabulary import Vocabulary
+    from miappe.model import Vocabulary
 
 
 class Device(Base):
@@ -27,3 +28,6 @@ class Device(Base):
 
     # Relationships:
     device_type: Mapped["Vocabulary"] = relationship(back_populates="device")
+
+    def __repr__(self) -> str:
+        return f"id: {self.id}, name: {self.name}, description: {self.description}"

@@ -2,6 +2,7 @@ from typing import Optional, TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+
 from miappe.model.base import Base
 
 if TYPE_CHECKING:
@@ -20,4 +21,7 @@ class Vocabulary(Base):
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 
     # Relationships
-    device: Mapped["Device"] = relationship(back_populates="device_type", lazy="immediate")
+    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="immediate")
+
+    def __repr__(self) -> str:
+        return f"id: {self.id}, name: {self.name}, description: {self.description}"
