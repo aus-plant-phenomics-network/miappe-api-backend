@@ -1,24 +1,28 @@
 import datetime
-from typing import Sequence
+from typing import Sequence, TYPE_CHECKING
 from uuid import UUID
 
-from litestar import Controller, get, post, put
-from sqlalchemy import select, update
+from litestar import Controller, get, post, put, delete
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Device, Vocabulary
-from miappe.router.DTO import DeviceReadDTO, DeviceWriteDTO
+from miappe.router.utils.CRUD import create_item, read_item_by_id, update_item, delete_item
+from miappe.router.utils.DTO import DeviceDTO
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import DeclarativeBase
 
 
 class DeviceController(Controller):
     path = "/device"
+    table: "DeclarativeBase" = Device
 
-    @get("/{id:uuid}", return_dto=DeviceReadDTO)
+    @get("/{id:uuid}", return_dto=DeviceDTO.read_dto)
     async def get_device_by_id(self, id: UUID, transaction: AsyncSession) -> Device | None:
-        result = await transaction.execute(select(Device).where(Device.id == id))
-        return result.scalars().one()
+        return await read_item_by_id(session=transaction, table=self.table, id=id)
 
-    @get(return_dto=DeviceReadDTO)
+    @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(self,
                           transaction: AsyncSession,
                           name: str | None = None,
@@ -49,22 +53,18 @@ class DeviceController(Controller):
         items = await transaction.execute(stmt)
         return items.scalars().all()
 
-    @post(dto=DeviceWriteDTO, return_dto=DeviceWriteDTO)
+    @post(dto=DeviceDTO.write_dto, return_dto=DeviceDTO.read_dto)
     async def add_device(self, transaction: AsyncSession, data: Device) -> Device:
-        transaction.add(data)
-        return data
+        return await create_item(session=transaction, data=data)
 
-    @put("/{id:uuid}", dto=DeviceWriteDTO, return_dto=DeviceReadDTO)
+    @put("/{id:uuid}", dto=DeviceDTO.update_dto, return_dto=DeviceDTO.read_dto)
     async def update_device(self,
                             transaction: AsyncSession,
                             id: UUID,
                             data: Device) -> Device:
-        data.updated_at = datetime.datetime.now(datetime.timezone.utc)
-        update_data = {k: v for k, v in data.to_dict().items() if v}
-        stmt = update(Device).where(Device.id == id).values(update_data)
-        await transaction.execute(stmt)
+        result = await update_item(session=transaction, id=id, data=data, table=self.table)
+        return result
 
-        stmt = select(Device).where(Device.id == id)
-        result = await transaction.execute(stmt)
-
-        return result.scalars().one()
+    @delete("/{id:uuid}")
+    async def delete_device(self, transaction: AsyncSession, id: UUID) -> None:
+        await delete_item(session=transaction, id=id, table=self.table)
