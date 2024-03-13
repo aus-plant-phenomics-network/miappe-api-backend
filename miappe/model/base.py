@@ -8,7 +8,9 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(CommonTableAttributes, DeclarativeBase):
-    id: Mapped[UUID] = mapped_column(default=uuid4, primary_key=True)
+    id: Mapped[UUID] = mapped_column(
+        default=uuid4, primary_key=True, info=dto_field("read-only")
+    )
     name: Mapped[str] = mapped_column(nullable=True)
     description: Mapped[str] = mapped_column(nullable=True)
 
