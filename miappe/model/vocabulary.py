@@ -7,7 +7,7 @@ from miappe.model.base import Base
 if TYPE_CHECKING:
     from miappe.model.device import Device
     from miappe.model.method import Method
-
+    from miappe.model.unit import Unit
 
 class Vocabulary(Base):
     __tablename__ = "vocabulary_table"
@@ -20,3 +20,4 @@ class Vocabulary(Base):
     # Relationships
     device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="selectin")
     method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy="selectin")
+    unit: Mapped[list["Unit"]] = relationship(back_populates="unit_type", lazy="selectin")
