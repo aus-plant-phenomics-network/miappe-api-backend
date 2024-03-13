@@ -18,4 +18,4 @@ class Unit(Base):
 
     # Relationships:
     unit_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-    unit_type: Mapped["Vocabulary"] = relationship(back_populates="unit", lazy="selectin")
+    unit_type: Mapped[Optional["Vocabulary"]] = relationship(back_populates="unit", lazy="selectin")

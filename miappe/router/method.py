@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, TYPE_CHECKING
 from uuid import UUID
 
 from litestar import Controller, get, post, put, delete
@@ -9,10 +9,13 @@ from miappe.model import Vocabulary, Method
 from miappe.router.utils.CRUD import read_item_by_id, create_item, update_item, delete_item
 from miappe.router.utils.DTO import MethodDTO
 
+if TYPE_CHECKING:
+    from sqlalchemy.orm import DeclarativeBase
+
 
 class MethodController(Controller):
     path = "/method"
-    table: Method
+    table: "DeclarativeBase" = Method
 
     @get(return_dto=MethodDTO.read_dto)
     async def get_method(self,

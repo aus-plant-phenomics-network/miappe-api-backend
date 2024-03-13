@@ -13,7 +13,7 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Base
-from miappe.router import VocabularyController, DeviceController, MethodController, UnitController
+from miappe.router import VocabularyController, DeviceController, MethodController, UnitController, VariableController
 
 
 @event.listens_for(Engine, "connect")
@@ -49,7 +49,13 @@ db_config = SQLAlchemyAsyncConfig(
 )
 
 app = Litestar(
-    [DeviceController, VocabularyController, MethodController, UnitController],
+    [
+        DeviceController,
+        VocabularyController,
+        MethodController,
+        UnitController,
+        VariableController
+    ],
     dependencies={"transaction": provide_transaction},
     plugins=[SQLAlchemyPlugin(db_config)],
 )

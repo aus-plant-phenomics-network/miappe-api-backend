@@ -10,6 +10,7 @@ from miappe.model.base import Base
 if TYPE_CHECKING:
     from miappe.model.method import Method
     from miappe.model.vocabulary import Vocabulary
+    from miappe.model.variable import Variable
 
 
 class Device(Base):
@@ -22,7 +23,12 @@ class Device(Base):
     removal_date: Mapped[Optional[datetime.datetime]]
 
     # Relationships:
+    # With vocabulary
     device_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-    device_type: Mapped["Vocabulary"] = relationship(back_populates="device", lazy="selectin")
+    device_type: Mapped[Optional["Vocabulary"]] = relationship(back_populates="device", lazy="selectin")
 
-    method: Mapped[list["Method"]] = relationship(back_populates="device", lazy="selectin")
+    # With method
+    method: Mapped[Optional[list["Method"]]] = relationship(back_populates="device", lazy="selectin")
+
+    # With variable
+    variable: Mapped[Optional[list["Variable"]]] = relationship(back_populates="device", lazy="selectin")

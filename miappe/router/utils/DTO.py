@@ -3,7 +3,7 @@ from typing import Any
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 
-from miappe.model import Device, Vocabulary, Method, Unit
+from miappe.model import Device, Vocabulary, Method, Unit, Variable
 
 
 class DTOGenerator:
@@ -44,12 +44,13 @@ DeviceDTO = DTOGenerator(table=Device,
                                        "device_type.relationship_type",
                                        "device_type.symbol",
                                        "device_type.id",
-                                       "method"},
-                         write_exclude={"device_type", "method"})
+                                       "method",
+                                       "variable"},
+                         write_exclude={"device_type", "method", "variable"})
 
 VocabularyDTO = DTOGenerator(table=Vocabulary,
-                             read_exclude={"device", "method", "unit"},
-                             write_exclude={"device", "method", "unit"})
+                             read_exclude={"device", "method", "unit", "variable"},
+                             write_exclude={"device", "method", "unit", "variable"})
 
 MethodDTO = DTOGenerator(table=Method,
                          read_exclude={"device",
@@ -66,13 +67,28 @@ MethodDTO = DTOGenerator(table=Method,
 
 UnitDTO = DTOGenerator(table=Unit,
                        read_exclude={
-                                     "unit_type.description",
-                                     "unit_type.namespace",
-                                     "unit_type.created_at",
-                                     "unit_type.updated_at",
-                                     "unit_type.external_reference",
-                                     "unit_type.relationship_type",
-                                     "unit_type.symbol",
-                                     "unit_type.id",
-                                     },
+                           "unit_type.description",
+                           "unit_type.namespace",
+                           "unit_type.created_at",
+                           "unit_type.updated_at",
+                           "unit_type.external_reference",
+                           "unit_type.relationship_type",
+                           "unit_type.symbol",
+                           "unit_type.id",
+                       },
                        write_exclude={"unit_type"})
+
+VariableDTO = DTOGenerator(table=Variable,
+                           read_exclude={
+                               "variable_type.description",
+                               "variable_type.namespace",
+                               "variable_type.created_at",
+                               "variable_type.updated_at",
+                               "variable_type.external_reference",
+                               "variable_type.relationship_type",
+                               "variable_type.symbol",
+                               "variable_type.id",
+                               "device"
+                           },
+                           write_exclude={"variable_type", "device"}
+                           )

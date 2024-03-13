@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from miappe.model.device import Device
     from miappe.model.method import Method
     from miappe.model.unit import Unit
+    from miappe.model.variable import Variable
 
 
 class Vocabulary(Base):
@@ -18,6 +19,7 @@ class Vocabulary(Base):
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 
     # Relationships
-    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy="selectin")
-    method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy="selectin")
-    unit: Mapped[list["Unit"]] = relationship(back_populates="unit_type", lazy="selectin")
+    device: Mapped[Optional[list["Device"]]] = relationship(back_populates="device_type", lazy="selectin")
+    method: Mapped[Optional[list["Method"]]] = relationship(back_populates="method_type", lazy="selectin")
+    unit: Mapped[Optional[list["Unit"]]] = relationship(back_populates="unit_type", lazy="selectin")
+    variable: Mapped[Optional[list["Variable"]]] = relationship(back_populates="variable_type", lazy="selectin")

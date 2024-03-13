@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, TYPE_CHECKING
 from uuid import UUID
 
 from litestar import Controller, get, post, put, delete
@@ -8,11 +8,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from miappe.model import Vocabulary, Unit
 from miappe.router.utils.CRUD import read_item_by_id, create_item, update_item, delete_item
 from miappe.router.utils.DTO import UnitDTO
-
+if TYPE_CHECKING:
+    from sqlalchemy.orm import DeclarativeBase
 
 class UnitController(Controller):
     path = "/unit"
-    table: Unit
+    table: "DeclarativeBase" = Unit
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(self,
