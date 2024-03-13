@@ -1,4 +1,5 @@
 import datetime
+import pdb
 from typing import Sequence, TYPE_CHECKING
 
 from sqlalchemy import select, delete
@@ -61,5 +62,6 @@ async def delete_item(
         id: "UUID",
         table: "DeclarativeBase"
 ) -> "Any":
-    stmt = delete(table).where(table.__table__.c.id == id).returning(table)
-    return await session.execute(stmt)
+    stmt = delete(table).where(table.__table__.c.id == id)
+    await session.execute(stmt)
+    return
