@@ -14,7 +14,7 @@ class Vocabulary(Base):
 
     external_reference: Mapped[Optional[str]]
     symbol: Mapped[Optional[str]]
-    namespace: Mapped[Optional[str]] = mapped_column(default="APPN")  # Todo: Make namespace a separate entity?
+    namespace: Mapped[Optional[str]] = mapped_column(server_default="APPN")  # Todo: Make namespace a separate entity?
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 
     # Relationships
