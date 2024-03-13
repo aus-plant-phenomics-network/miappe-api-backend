@@ -29,13 +29,13 @@ class VocabularyController(Controller):
         return await read_item_by_id(session=transaction, table=self.table, id=id)
 
     @post(dto=VocabularyDTO.write_dto, return_dto=VocabularyDTO.read_dto)
-    async def add_vocabulary_item(self, transaction: AsyncSession, data: Vocabulary) -> Vocabulary:
+    async def add_vocabulary(self, transaction: AsyncSession, data: Vocabulary) -> Vocabulary:
         return await create_item(session=transaction, data=data)
 
     @put("/{id:uuid}", dto=VocabularyDTO.update_dto, return_dto=VocabularyDTO.read_dto)
-    async def update_vocabulary_item(self, transaction: AsyncSession, data: Vocabulary, id: "UUID") -> Vocabulary:
+    async def update_vocabulary(self, transaction: AsyncSession, data: Vocabulary, id: "UUID") -> Vocabulary:
         return await update_item(session=transaction, id=id, table=self.table, data=data)
 
     @delete("/{id:uuid}")
-    async def delete_item(self, transaction: AsyncSession, id: "UUID") -> None:
+    async def delete_vocabulary(self, transaction: AsyncSession, id: "UUID") -> None:
         return await delete_item(session=transaction, id=id, table=self.table)

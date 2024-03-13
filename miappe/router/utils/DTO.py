@@ -1,9 +1,9 @@
+from copy import deepcopy
 from typing import Any
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 
 from miappe.model import Device, Vocabulary, Method
-from copy import deepcopy
 
 
 class DTOGenerator:
@@ -52,5 +52,14 @@ VocabularyDTO = DTOGenerator(table=Vocabulary,
                              write_exclude={"device", "method"})
 
 MethodDTO = DTOGenerator(table=Method,
-                         read_exclude={"device", "method_type"},
+                         read_exclude={"device",
+                                       "method_type.description",
+                                       "method_type.namespace",
+                                       "method_type.created_at",
+                                       "method_type.updated_at",
+                                       "method_type.external_reference",
+                                       "method_type.relationship_type",
+                                       "method_type.symbol",
+                                       "method_type.id"
+                                       },
                          write_exclude={"device", "method_type"})

@@ -1,16 +1,18 @@
 from typing import Sequence
 from uuid import UUID
 
-from litestar import Controller, get, post
+from litestar import Controller, get, post, put, delete
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Vocabulary, Method
 from miappe.router.utils.DTO import MethodDTO
+from miappe.router.utils.CRUD import read_item_by_id, read_items_by_attrs, create_item, update_item, delete_item
 
 
 class MethodController(Controller):
     path = "/method"
+    table: Method
 
     @get(return_dto=MethodDTO.read_dto)
     async def get_method(self,
@@ -29,10 +31,16 @@ class MethodController(Controller):
 
     @get("/{id:uuid}", return_dto=MethodDTO.read_dto)
     async def get_method_by_id(self, id: UUID, transaction: AsyncSession) -> Method:
-        result = await transaction.execute(select(Method).where(Method.id == id))
-        return result.scalars().one()
+        return await read_item_by_id(session=transaction, id=id, table=self.table)
 
     @post(dto=MethodDTO.write_dto, return_dto=MethodDTO.read_dto)
-    async def add_method_item(self, transaction: AsyncSession, data: Method) -> Method:
-        transaction.add(data)
-        return data
+    async def add_method(self, transaction: AsyncSession, data: Method) -> Method:
+        return await create_item(session=transaction, data=data)
+
+    @put("/{id:uuid}", dto=MethodDTO.update_dto, return_dto=MethodDTO.read_dto)
+    async def update_method(self, transaction: AsyncSession, data: Method, id: "UUID") -> Method:
+        return await update_item(session=transaction, id=id, table=self.table, data=data)
+
+    @delete("/{id:uuid}")
+    async def delete_method(self, transaction: AsyncSession, id: "UUID") -> None:
+        return await delete_item(session=transaction, id=id, table=self.table)
