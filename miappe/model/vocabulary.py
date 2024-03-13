@@ -23,3 +23,4 @@ class Vocabulary(Base):
     method: Mapped[Optional[list["Method"]]] = relationship(back_populates="method_type", lazy="selectin")
     unit: Mapped[Optional[list["Unit"]]] = relationship(back_populates="unit_type", lazy="selectin")
     variable: Mapped[Optional[list["Variable"]]] = relationship(back_populates="variable_type", lazy="selectin")
+    

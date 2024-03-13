@@ -3,7 +3,7 @@ from typing import Any
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 
-from miappe.model import Device, Vocabulary, Method, Unit, Variable
+from miappe.model import Device, Vocabulary, Method, Unit, Variable, BiologicalMaterial
 
 
 class DTOGenerator:
@@ -25,7 +25,7 @@ class DTOGenerator:
             config = SQLAlchemyDTOConfig(exclude=post_exclude)
 
         put_exclude = deepcopy(self.write_exclude)
-        put_exclude = put_exclude | {"id", "created_at"}
+        put_exclude = put_exclude | {"id", "created_at", "updated_at"}
 
         class PutDTO(SQLAlchemyDTO[table]):
             config = SQLAlchemyDTOConfig(exclude=put_exclude)
@@ -92,3 +92,7 @@ VariableDTO = DTOGenerator(table=Variable,
                            },
                            write_exclude={"variable_type", "device"}
                            )
+
+BiologicalMaterialDTO = DTOGenerator(table=BiologicalMaterial,
+                                     read_exclude={'preprocessing_method'},
+                                     write_exclude={'preprocessing_method'})

@@ -4,6 +4,7 @@ from miappe.model.vocabulary import Vocabulary
 from miappe.model.method import Method
 from miappe.model.unit import Unit
 from miappe.model.variable import Variable
+from miappe.model.biological_material import BiologicalMaterial
 
 __all__ = [
     "Base",
@@ -11,5 +12,6 @@ __all__ = [
     "Vocabulary",
     "Method",
     "Unit",
-    "Variable"
+    "Variable",
+    "BiologicalMaterial"
 ]
