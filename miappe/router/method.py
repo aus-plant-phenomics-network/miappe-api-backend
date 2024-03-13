@@ -6,8 +6,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Vocabulary, Method
+from miappe.router.utils.CRUD import read_item_by_id, create_item, update_item, delete_item
 from miappe.router.utils.DTO import MethodDTO
-from miappe.router.utils.CRUD import read_item_by_id, read_items_by_attrs, create_item, update_item, delete_item
 
 
 class MethodController(Controller):
@@ -33,7 +33,7 @@ class MethodController(Controller):
     async def get_method_by_id(self, id: UUID, transaction: AsyncSession) -> Method:
         return await read_item_by_id(session=transaction, id=id, table=self.table)
 
-    @post(dto=MethodDTO.write_dto, return_dto=MethodDTO.read_dto)
+    @post(dto=MethodDTO.write_dto, return_dto=MethodDTO.write_dto)
     async def add_method(self, transaction: AsyncSession, data: Method) -> Method:
         return await create_item(session=transaction, data=data)
 

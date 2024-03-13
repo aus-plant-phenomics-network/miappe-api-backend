@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     from miappe.model.method import Method
     from miappe.model.unit import Unit
 
+
 class Vocabulary(Base):
     __tablename__ = "vocabulary_table"
 
     external_reference: Mapped[Optional[str]]
-    symbol: Mapped[Optional[str]]
     namespace: Mapped[Optional[str]] = mapped_column(server_default="APPN")  # Todo: Make namespace a separate entity?
     relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
 

@@ -53,7 +53,7 @@ class DeviceController(Controller):
         items = await transaction.execute(stmt)
         return items.scalars().all()
 
-    @post(dto=DeviceDTO.write_dto, return_dto=DeviceDTO.read_dto)
+    @post(dto=DeviceDTO.write_dto, return_dto=DeviceDTO.write_dto)
     async def add_device(self, transaction: AsyncSession, data: Device) -> Device:
         return await create_item(session=transaction, data=data)
 

@@ -3,7 +3,7 @@ from typing import Any
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 
-from miappe.model import Device, Vocabulary, Method
+from miappe.model import Device, Vocabulary, Method, Unit
 
 
 class DTOGenerator:
@@ -45,11 +45,11 @@ DeviceDTO = DTOGenerator(table=Device,
                                        "device_type.symbol",
                                        "device_type.id",
                                        "method"},
-                         write_exclude={"device", "method"})
+                         write_exclude={"device_type", "method"})
 
 VocabularyDTO = DTOGenerator(table=Vocabulary,
-                             read_exclude={"device", "method"},
-                             write_exclude={"device", "method"})
+                             read_exclude={"device", "method", "unit"},
+                             write_exclude={"device", "method", "unit"})
 
 MethodDTO = DTOGenerator(table=Method,
                          read_exclude={"device",
@@ -63,3 +63,16 @@ MethodDTO = DTOGenerator(table=Method,
                                        "method_type.id"
                                        },
                          write_exclude={"device", "method_type"})
+
+UnitDTO = DTOGenerator(table=Unit,
+                       read_exclude={
+                                     "unit_type.description",
+                                     "unit_type.namespace",
+                                     "unit_type.created_at",
+                                     "unit_type.updated_at",
+                                     "unit_type.external_reference",
+                                     "unit_type.relationship_type",
+                                     "unit_type.symbol",
+                                     "unit_type.id",
+                                     },
+                       write_exclude={"unit_type"})
