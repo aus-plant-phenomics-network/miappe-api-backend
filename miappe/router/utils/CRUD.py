@@ -6,7 +6,6 @@ from sqlalchemy import select, delete
 if TYPE_CHECKING:
     from uuid import UUID
     from sqlalchemy.ext.asyncio import AsyncSession
-    from sqlalchemy.orm import DeclarativeBase
     from advanced_alchemy.base import CommonTableAttributes
 
 
@@ -46,7 +45,7 @@ async def update_item(
     return result
 
 
-async def delete_item(session: "AsyncSession", id: "UUID", table: type[Any]) -> "Any":
+async def delete_item(session: "AsyncSession", id: "UUID", table: type[Any]) -> Any:
     stmt = delete(table).where(table.__table__.c.id == id)
     await session.execute(stmt)
     return
