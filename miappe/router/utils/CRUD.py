@@ -6,6 +6,7 @@ from sqlalchemy import select, delete
 if TYPE_CHECKING:
     from uuid import UUID
     from sqlalchemy.ext.asyncio import AsyncSession
+    from sqlalchemy.orm import DeclarativeBase
     from advanced_alchemy.base import CommonTableAttributes
 
 
