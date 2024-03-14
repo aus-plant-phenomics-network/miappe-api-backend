@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Vocabulary(Base):
-    __tablename__ = "vocabulary_table"  # type: ignore
+    __tablename__: str = "vocabulary_table"  # type: ignore
 
     external_reference: Mapped[Optional[str]]
 

@@ -2,6 +2,7 @@ import datetime
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
+from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class Device(Base):
-    __tablename__: str = "device_table"
+    __tablename__: str = "device_table"  # type: ignore
 
     brand: Mapped[Optional[str]]
     serial_number: Mapped[Optional[str]]
@@ -28,15 +29,15 @@ class Device(Base):
         ForeignKey("vocabulary_table.id")
     )
     device_type: Mapped[Optional["Vocabulary"]] = relationship(
-        back_populates="device", lazy="selectin"
+        back_populates="device", lazy="selectin", info=dto_field("read-only")
     )
 
     # With method
-    method: Mapped[Optional[list["Method"]]] = relationship(
-        back_populates="device", lazy="selectin"
+    method: Mapped[list["Method"]] = relationship(
+        back_populates="device", lazy="selectin", info=dto_field("read-only")
     )
 
     # With variable
-    variable: Mapped[Optional[list["Variable"]]] = relationship(
-        back_populates="device", lazy="selectin"
+    variable: Mapped[list["Variable"]] = relationship(
+        back_populates="device", lazy="selectin", info=dto_field("read-only")
     )
