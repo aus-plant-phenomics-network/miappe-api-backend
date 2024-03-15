@@ -1,4 +1,4 @@
-from typing import Sequence, TYPE_CHECKING
+from typing import Sequence, TYPE_CHECKING, Any
 
 from litestar import get
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,16 +12,20 @@ if TYPE_CHECKING:
 from miappe.router.base import BaseController
 
 
-class VocabularyController(BaseController):
+class VocabularyController(BaseController[Vocabulary]):
     path = "/vocabulary"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(Vocabulary, VocabularyDTO, *args, **kwargs)
-
     @get(return_dto=VocabularyDTO.read_dto)
-    async def get_vocabulary(self,
-                             transaction: "AsyncSession",
-                             namespace: str | None = None,
-                             external_reference: str | None = None) -> Sequence[Vocabulary]:
-        return await read_items_by_attrs(session=transaction, table=self.table, namespace=namespace,
-                                         external_reference=external_reference)
+    async def get_vocabulary(
+        self,
+        transaction: "AsyncSession",
+        table: Any,
+        namespace: str | None = None,
+        external_reference: str | None = None,
+    ) -> Sequence[Vocabulary]:
+        return await read_items_by_attrs(
+            session=transaction,
+            table=table,
+            namespace=namespace,
+            external_reference=external_reference,
+        )

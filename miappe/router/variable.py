@@ -12,14 +12,12 @@ if TYPE_CHECKING:
 from miappe.router.base import BaseController
 
 
-class VariableController(BaseController):
+class VariableController(BaseController[Variable]):
     path = "/variable"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(Variable, VariableDTO, *args, **kwargs)
-
     @get(return_dto=VariableDTO.read_dto)
-    async def get_variable(self,
-                           transaction: AsyncSession,
-                           ) -> Sequence[Variable]:
-        return await read_items_by_attrs(session=transaction, table=self.table)
+    async def get_variable(
+        self,
+        transaction: AsyncSession,
+    ) -> Sequence[Variable]:
+        return await read_items_by_attrs(session=transaction, table=Variable)
