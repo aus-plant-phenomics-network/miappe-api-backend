@@ -1,111 +1,87 @@
-from copy import deepcopy
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
+from litestar.exceptions import InvalidAnnotationException
+from litestar.typing import FieldDefinition
+from sqlalchemy.orm import DeclarativeBase
 
-from miappe.model import Device, Vocabulary, Method, Unit, Variable, BiologicalMaterial
+from miappe.model import BiologicalMaterial, Device, Method, Unit, Variable, Vocabulary
+
+T = TypeVar("T", bound=DeclarativeBase)
 
 
-class DTOGenerator:
+class DTOGenerator(Generic[T]):
+    model_type: type[T]
+    base_read_kwargs: dict[str, Any] = {"max_nested_depth": 1}
+    base_write_kwargs: dict[str, Any] = {"max_nested_depth": 0, "partial": True}
+
+    def __class_getitem__(cls, model_type: type[T]):
+        field_definition = FieldDefinition.from_annotation(model_type)
+
+        if (field_definition.is_optional and len(field_definition.args) > 2) or (
+            field_definition.is_union and not field_definition.is_optional
+        ):
+            raise InvalidAnnotationException(
+                "Unions are currently not supported as type argument to DTOs."
+            )
+
+        if field_definition.is_forward_ref:
+            raise InvalidAnnotationException(
+                "Forward references are not supported as type argument to DTO"
+            )
+
+        cls_dict: dict[str, Any] = {}
+        if not field_definition.is_type_var:
+            cls_dict.update(model_type=field_definition.annotation)
+
+        return type(
+            f"DTOGen[{model_type.__name__}]",
+            (cls,),
+            cls_dict,
+        )
+
     def __init__(
-        self,
-        table: Any,
-        read_exclude: set | None = None,
-        write_exclude: set | None = None,
-    ):
-        self.table = table
-        self.read_exclude = read_exclude if read_exclude is not None else set()
-        self.write_exclude = write_exclude if write_exclude is not None else set()
+        self, read_kwargs: dict[str, Any] = {}, write_kwargs: dict[str, Any] = {}
+    ) -> None:
+        self.read_kwargs = self._update_kwargs(read_kwargs, self.base_read_kwargs)
+        self.write_kwargs = self._update_kwargs(write_kwargs, self.base_write_kwargs)
 
-        class GetDTO(SQLAlchemyDTO[table]):
-            config = SQLAlchemyDTOConfig(exclude=self.read_exclude, max_nested_depth=1)
+    def _update_kwargs(
+        self, base_kwargs: dict[str, Any], update_kwargs: dict[str, Any]
+    ) -> dict[str, Any]:
+        for field, value in update_kwargs.items():
+            if field not in base_kwargs:
+                base_kwargs[field] = value
+        return base_kwargs
 
-        post_exclude = deepcopy(self.write_exclude)
-        post_exclude = post_exclude | {"id"}
+    @property
+    def read_dto(self):
+        class ReadDTO(SQLAlchemyDTO[self.model_type]):
+            config = SQLAlchemyDTOConfig(**self.read_kwargs)
 
-        class PostDTO(SQLAlchemyDTO[table]):
-            config = SQLAlchemyDTOConfig(exclude=post_exclude)
+        return ReadDTO
 
-        put_exclude = deepcopy(self.write_exclude)
-        put_exclude = put_exclude | {"id"}
+    @property
+    def write_dto(self):
+        class WriteDTO(SQLAlchemyDTO[self.model_type]):
+            config = SQLAlchemyDTOConfig(**self.write_kwargs)
 
-        class PutDTO(SQLAlchemyDTO[table]):
-            config = SQLAlchemyDTOConfig(exclude=put_exclude)
-
-        self.read_dto = GetDTO
-        self.write_dto = PostDTO
-        self.update_dto = PutDTO
+        return WriteDTO
 
 
-DeviceDTO = DTOGenerator(
-    table=Device,
-    read_exclude={
-        "device_type.description",
-        "device_type.namespace",
-        "device_type.created_at",
-        "device_type.updated_at",
-        "device_type.external_reference",
-        "device_type.relationship_type",
-        "device_type.symbol",
-        "device_type.id",
+DeviceDTO = DTOGenerator[Device](
+    read_kwargs={
+        "include": {"device_type.id", "name", "id", "description"},
+        "max_nested_depth": 1,
     },
 )
 
-VocabularyDTO = DTOGenerator(
-    table=Vocabulary,
-    read_exclude=None,
-    write_exclude=None,
-)
+VocabularyDTO = DTOGenerator[Vocabulary]()
 
-MethodDTO = DTOGenerator(
-    table=Method,
-    read_exclude={
-        "device",
-        "method_type.description",
-        "method_type.namespace",
-        "method_type.created_at",
-        "method_type.updated_at",
-        "method_type.external_reference",
-        "method_type.relationship_type",
-        "method_type.symbol",
-        "method_type.id",
-    },
-    write_exclude={"device", "method_type"},
-)
+MethodDTO = DTOGenerator[Method]()
 
-UnitDTO = DTOGenerator(
-    table=Unit,
-    read_exclude={
-        "unit_type.description",
-        "unit_type.namespace",
-        "unit_type.created_at",
-        "unit_type.updated_at",
-        "unit_type.external_reference",
-        "unit_type.relationship_type",
-        "unit_type.symbol",
-        "unit_type.id",
-    },
-    write_exclude={"unit_type"},
-)
+UnitDTO = DTOGenerator[Unit]()
 
-VariableDTO = DTOGenerator(
-    table=Variable,
-    read_exclude={
-        "variable_type.description",
-        "variable_type.namespace",
-        "variable_type.created_at",
-        "variable_type.updated_at",
-        "variable_type.external_reference",
-        "variable_type.relationship_type",
-        "variable_type.symbol",
-        "variable_type.id",
-        "device",
-    },
-    write_exclude={"variable_type", "device"},
-)
+VariableDTO = DTOGenerator[Variable]()
 
-BiologicalMaterialDTO = DTOGenerator(
-    table=BiologicalMaterial,
-    read_exclude={"preprocessing_method"},
-    write_exclude={"preprocessing_method"},
-)
+BiologicalMaterialDTO = DTOGenerator[BiologicalMaterial]()
