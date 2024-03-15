@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class DeviceController(BaseController[Device]):
     path = "/device"
     dto = DeviceDTO.write_dto
-    read_dto = DeviceDTO.read_dto
+    return_dto = DeviceDTO.read_dto
 
     @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(
