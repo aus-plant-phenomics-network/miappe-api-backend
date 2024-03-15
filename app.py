@@ -13,7 +13,14 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Base
-from miappe.router import VocabularyController, DeviceController, MethodController, UnitController, VariableController
+from miappe.router import (
+    VocabularyController,
+    DeviceController,
+    MethodController,
+    UnitController,
+    VariableController,
+)
+
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -23,7 +30,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 
 async def provide_transaction(
-        db_session: AsyncSession,
+    db_session: AsyncSession,
 ) -> AsyncGenerator[AsyncSession, None]:
     try:
         async with db_session.begin():
@@ -35,8 +42,7 @@ async def provide_transaction(
         ) from exc
     except NoResultFound as exc:
         raise ClientException(
-            status_code=HTTP_404_NOT_FOUND,
-            detail="No database result matching query"
+            status_code=HTTP_404_NOT_FOUND, detail="No database result matching query"
         )
 
 
@@ -53,7 +59,7 @@ app = Litestar(
         VocabularyController,
         MethodController,
         UnitController,
-        VariableController
+        VariableController,
     ],
     dependencies={"transaction": provide_transaction},
     plugins=[SQLAlchemyPlugin(db_config)],
