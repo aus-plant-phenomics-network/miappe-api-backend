@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Optional
 from uuid import UUID, uuid4
 
 from advanced_alchemy.base import CommonTableAttributes
@@ -12,7 +13,7 @@ class Base(CommonTableAttributes, DeclarativeBase):
         default=uuid4, primary_key=True, info=dto_field("read-only")
     )
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    description: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(nullable=True)
 
     # Audit columns - read-only
     created_at: Mapped[datetime] = mapped_column(

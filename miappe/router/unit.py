@@ -1,10 +1,10 @@
-from typing import Sequence, TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence
 
 from litestar import get
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from miappe.model import Vocabulary, Unit
+from miappe.model import Unit, Vocabulary
 from miappe.router.utils.DTO import UnitDTO
 
 if TYPE_CHECKING:

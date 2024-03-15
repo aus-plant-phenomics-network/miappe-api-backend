@@ -1,5 +1,5 @@
 import datetime
-from typing import Sequence, TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence
 from uuid import UUID
 
 from litestar import get
