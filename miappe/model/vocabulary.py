@@ -1,5 +1,5 @@
 from typing import Optional, TYPE_CHECKING
-
+from litestar.dto import dto_field
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from miappe.model.base import Base
@@ -12,15 +12,26 @@ if TYPE_CHECKING:
 
 
 class Vocabulary(Base):
-    __tablename__ = "vocabulary_table"
+    __tablename__: str = "vocabulary_table"  # type: ignore
 
     external_reference: Mapped[Optional[str]]
-    namespace: Mapped[Optional[str]] = mapped_column(server_default="APPN")  # Todo: Make namespace a separate entity?
-    relationship_type: Mapped[Optional[str]]  # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
+
+    # Todo: Make namespace a separate entity?
+    namespace: Mapped[Optional[str]] = mapped_column(server_default="APPN")
+
+    # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
+    relationship_type: Mapped[Optional[str]]
 
     # Relationships
-    device: Mapped[Optional[list["Device"]]] = relationship(back_populates="device_type", lazy="selectin")
-    method: Mapped[Optional[list["Method"]]] = relationship(back_populates="method_type", lazy="selectin")
-    unit: Mapped[Optional[list["Unit"]]] = relationship(back_populates="unit_type", lazy="selectin")
-    variable: Mapped[Optional[list["Variable"]]] = relationship(back_populates="variable_type", lazy="selectin")
-    
+    device: Mapped[list["Device"]] = relationship(
+        back_populates="device_type", lazy="selectin", info=dto_field("private")
+    )
+    method: Mapped[list["Method"]] = relationship(
+        back_populates="method_type", lazy="selectin", info=dto_field("private")
+    )
+    unit: Mapped[list["Unit"]] = relationship(
+        back_populates="unit_type", lazy="selectin", info=dto_field("private")
+    )
+    variable: Mapped[list["Variable"]] = relationship(
+        back_populates="variable_type", lazy="selectin", info=dto_field("private")
+    )

@@ -12,21 +12,19 @@ if TYPE_CHECKING:
     pass
 
 
-class MethodController(BaseController):
+class MethodController(BaseController[Method]):
     path = "/method"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(Method, MethodDTO, *args, **kwargs)
-
     @get(return_dto=MethodDTO.read_dto)
-    async def get_method(self,
-                         transaction: AsyncSession,
-                         method_type_name: str | None = None
-                         ) -> Sequence[Method]:
+    async def get_method(
+        self, transaction: AsyncSession, method_type_name: str | None = None
+    ) -> Sequence[Method]:
         if method_type_name:
-            stmt = select(Method).join_from(Method, Vocabulary,
-                                            Method.method_type_id == Vocabulary.id).where(
-                Vocabulary.name == method_type_name)
+            stmt = (
+                select(Method)
+                .join_from(Method, Vocabulary, Method.method_type_id == Vocabulary.id)
+                .where(Vocabulary.name == method_type_name)
+            )
         else:
             stmt = select(Method)
 

@@ -13,23 +13,23 @@ if TYPE_CHECKING:
 from miappe.router.base import BaseController
 
 
-class UnitController(BaseController):
+class UnitController(BaseController[Unit]):
     path = "/unit"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(Unit, UnitDTO, *args, **kwargs)
-
     @get(return_dto=UnitDTO.read_dto)
-    async def get_unit(self,
-                       transaction: AsyncSession,
-                       unit_type_name: str | None = None,
-                       symbol: str | None = None,
-                       alternative_symbol: str | None = None
-                       ) -> Sequence[Unit]:
+    async def get_unit(
+        self,
+        transaction: AsyncSession,
+        unit_type_name: str | None = None,
+        symbol: str | None = None,
+        alternative_symbol: str | None = None,
+    ) -> Sequence[Unit]:
         if unit_type_name:
-            stmt = select(Unit).join_from(Unit, Vocabulary,
-                                          Unit.unit_type_id == Vocabulary.id).where(
-                Vocabulary.name == unit_type_name)
+            stmt = (
+                select(Unit)
+                .join_from(Unit, Vocabulary, Unit.unit_type_id == Vocabulary.id)
+                .where(Vocabulary.name == unit_type_name)
+            )
         else:
             stmt = select(Unit)
 

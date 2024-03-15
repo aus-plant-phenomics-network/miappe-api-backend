@@ -8,17 +8,18 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(CommonTableAttributes, DeclarativeBase):
-    id: Mapped[UUID] = mapped_column(default=uuid4, primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=True)
-    description: Mapped[str] = mapped_column(nullable=True)
+    id: Mapped[UUID] = mapped_column(
+        default=uuid4, primary_key=True, info=dto_field("read-only")
+    )
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    description: Mapped[str] = mapped_column(nullable=False)
 
-    """Date/time of instance creation."""
+    # Audit columns - read-only
     created_at: Mapped[datetime] = mapped_column(
         DateTimeUTC(timezone=True),
         default=lambda: datetime.now(timezone.utc),
         info=dto_field("read-only"),
     )
-    """Date/time of instance last update."""
     updated_at: Mapped[datetime] = mapped_column(
         DateTimeUTC(timezone=True),
         default=lambda: datetime.now(timezone.utc),

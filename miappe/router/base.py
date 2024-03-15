@@ -1,43 +1,64 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, TypeVar, Any
 from uuid import UUID
 
-from litestar import Controller, get, put, post, delete
+from litestar import Controller, get, put, post, delete, Router
+from litestar.di import Provide
 from sqlalchemy.orm import DeclarativeBase
 
-from miappe.router.utils.CRUD import read_item_by_id, create_item, delete_item, update_item
+from miappe.router.utils.CRUD import (
+    read_item_by_id,
+    create_item,
+    delete_item,
+    update_item,
+)
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
-    from miappe.router.utils.DTO import DTOGenerator
 
 
-class BaseController(Controller):
-    def __init__(self, table: DeclarativeBase, dto_factory: "DTOGenerator", *args, **kwargs):
-        self.table = table
+T = TypeVar("T", bound=DeclarativeBase)
 
-        @get("/{id:uuid}", return_dto=dto_factory.read_dto)
-        async def _get_item_by_id(self, transaction: "AsyncSession", id: UUID) -> table:
-            return await read_item_by_id(session=transaction, table=table, id=id)
 
-        @post(dto=dto_factory.write_dto, return_dto=dto_factory.write_dto)
-        async def _add_item(self, transaction: "AsyncSession", data: table) -> table:
-            return await create_item(session=transaction, data=data)
+class GenericController(Controller, Generic[T]):
+    model_type: type[T]
 
-        @put("/{id:uuid}", dto=dto_factory.update_dto, return_dto=dto_factory.read_dto)
-        async def _update_item(self,
-                               transaction: "AsyncSession",
-                               id: UUID,
-                               data: table) -> table:
-            result = await update_item(session=transaction, id=id, data=data, table=table)
-            return result
+    def __class_getitem__(cls, model_type: type[T]) -> type:
+        return type(
+            f"Controller[{model_type.__name__}]", (cls,), {"model_type": model_type}
+        )
 
-        @delete("/{id:uuid}")
-        async def _delete_item(self, transaction: "AsyncSession", id: UUID) -> None:
-            await delete_item(session=transaction, id=id, table=table)
+    def __init__(self, owner: Router):
+        super().__init__(owner)
+        self.signature_namespace[T.__name__] = self.model_type  # type: ignore
+        self.dependencies = self.dependencies if self.dependencies else {}
+        self.dependencies["table"] = Provide(self.get_table)  # type: ignore
 
-        self.get_item_by_id = _get_item_by_id
-        self.add_item = _add_item
-        self.update_item = _update_item
-        self.delete_item = _delete_item
+    async def get_table(self) -> type[T]:
+        return self.model_type
 
-        super().__init__(*args, **kwargs)
+
+class BaseController(GenericController[T]):
+    @get("/{id:uuid}")
+    async def _get_item_by_id(
+        self, table: Any, transaction: "AsyncSession", id: UUID
+    ) -> T.__name__:
+        return await read_item_by_id(session=transaction, table=table, id=id)
+
+    @post()
+    async def _create_item(
+        self, transaction: "AsyncSession", data: T.__name__
+    ) -> T.__name__:
+        return await create_item(session=transaction, data=data)
+
+    @put("/{id:uuid}")
+    async def _update_item(
+        self, table: Any, transaction: "AsyncSession", id: UUID, data: T.__name__
+    ) -> T.__name__:
+        result = await update_item(session=transaction, id=id, data=data, table=table)
+        return result
+
+    @delete("/{id:uuid}")
+    async def _delete_item(
+        self, table: Any, transaction: "AsyncSession", id: UUID
+    ) -> None:
+        await delete_item(session=transaction, id=id, table=table)
