@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from miappe.model.biological_material import BiologicalMaterial
     from miappe.model.device import Device
     from miappe.model.vocabulary import Vocabulary
+    from miappe.model.observed_variable import ObservedVariable
 
 
 class Method(Base):
@@ -33,4 +34,9 @@ class Method(Base):
         back_populates="preprocessing_method",
         lazy="selectin",
         info=dto_field("read-only"),
+    )
+    observed_variable: Mapped[Optional["ObservedVariable"]] = relationship(
+        back_populates="method",
+        lazy="selectin",
+        info=dto_field("read-only")
     )

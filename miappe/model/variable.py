@@ -9,7 +9,9 @@ from miappe.model.base import Base
 
 if TYPE_CHECKING:
     from miappe.model.biological_material import BiologicalMaterial
-    from miappe.model.vocabulary import Device, Vocabulary
+    from miappe.model.vocabulary import Vocabulary
+    from miappe.model.environment import Environment
+    from miappe.model.device import Device
 
 
 class Variable(Base):
@@ -35,5 +37,7 @@ class Variable(Base):
     biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(
         back_populates="variable", lazy="selectin", info=dto_field("read-only")
     )
+    environment: Mapped[Optional["Environment"]] = relationship(back_populates="variable", lazy="selectin",
+                                                                info=dto_field("read-only"))
 
     # TODO: Add study information

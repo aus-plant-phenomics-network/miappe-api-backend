@@ -5,6 +5,9 @@ from miappe.model.method import Method
 from miappe.model.unit import Unit
 from miappe.model.variable import Variable
 from miappe.model.biological_material import BiologicalMaterial
+from miappe.model.environment import Environment
+from miappe.model.observed_variable import ObservedVariable
+from miappe.model.experimental_factor import ExperimentalFactor
 
 __all__ = [
     "Base",
@@ -13,5 +16,8 @@ __all__ = [
     "Method",
     "Unit",
     "Variable",
-    "BiologicalMaterial"
+    "BiologicalMaterial",
+    "Environment",
+    "ObservedVariable",
+    "ExperimentalFactor"
 ]

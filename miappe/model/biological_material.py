@@ -26,7 +26,7 @@ class BiologicalMaterial(Base):
 
     # Relationship
     preprocessing_method_id: Mapped[Optional[UUID]] = mapped_column(
-        ForeignKey("method_table.id")
+        ForeignKey("method_table.id"),
     )
     preprocessing_method: Mapped[Optional["Method"]] = relationship(
         back_populates="biological_material",
