@@ -7,10 +7,14 @@ from sqlalchemy import select
 
 from miappe.model import Device, Vocabulary
 from miappe.router.base import BaseController
-from miappe.router.utils.DTO import DeviceDTO
+from miappe.router.utils.DTO import DTOGenerator
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
+
+DeviceDTO = DTOGenerator[Device](
+    read_kwargs={"max_nested_depth": 0}
+)
 
 
 class DeviceController(BaseController[Device]):
@@ -20,15 +24,15 @@ class DeviceController(BaseController[Device]):
 
     @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(
-        self,
-        transaction: "AsyncSession",
-        name: str | None = None,
-        device_type_id: UUID | None = None,
-        device_type_name: str | None = None,
-        brand: str | None = None,
-        serial_number: str | None = None,
-        startup_date: datetime.datetime | None = None,
-        removal_date: datetime.datetime | None = None,
+            self,
+            transaction: "AsyncSession",
+            name: str | None = None,
+            device_type_id: UUID | None = None,
+            device_type_name: str | None = None,
+            brand: str | None = None,
+            serial_number: str | None = None,
+            startup_date: datetime.datetime | None = None,
+            removal_date: datetime.datetime | None = None,
     ) -> Sequence[Device]:
         if device_type_name:
             stmt = (

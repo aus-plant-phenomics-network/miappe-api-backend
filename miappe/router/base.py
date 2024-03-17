@@ -1,5 +1,5 @@
 import datetime
-from typing import TYPE_CHECKING, Any, Generic, Sequence, TypeVar
+from typing import Any, Generic, Sequence, TYPE_CHECKING, TypeVar
 from uuid import UUID
 
 from litestar import Controller, Router, delete, get, post, put
@@ -12,17 +12,17 @@ if TYPE_CHECKING:
     from litestar.contrib.sqlalchemy.base import CommonTableAttributes
     from sqlalchemy.ext.asyncio import AsyncSession
 
-
 T = TypeVar("T", bound=DeclarativeBase)
 
 
 async def create_item(session: "AsyncSession", data: Any) -> Any:
     session.add(data)
+    await session.flush()
     return data
 
 
 async def read_items_by_attrs(
-    session: "AsyncSession", table: type[Any], **kwargs
+        session: "AsyncSession", table: type[Any], **kwargs
 ) -> Sequence[Any]:
     stmt = select(table)
     for attr, value in kwargs.items():
@@ -39,10 +39,10 @@ async def read_item_by_id(session: "AsyncSession", table: type[Any], id: "UUID")
 
 
 async def update_item(
-    session: "AsyncSession",
-    id: "UUID",
-    data: "CommonTableAttributes",
-    table: type[Any],
+        session: "AsyncSession",
+        id: "UUID",
+        data: "CommonTableAttributes",
+        table: type[Any],
 ) -> "Any":
     data_ = {k: v for k, v in data.to_dict().items() if v}
     data_["updated_at"] = datetime.datetime.now(datetime.timezone.utc)
@@ -79,25 +79,26 @@ class GenericController(Controller, Generic[T]):
 class BaseController(GenericController[T]):
     @get("/{id:uuid}")
     async def get_item_by_id(
-        self, table: Any, transaction: "AsyncSession", id: UUID
+            self, table: Any, transaction: "AsyncSession", id: UUID
     ) -> T.__name__:
         return await read_item_by_id(session=transaction, table=table, id=id)
 
     @post()
     async def create_item(
-        self, transaction: "AsyncSession", data: T.__name__
+            self, transaction: "AsyncSession", data: T.__name__
     ) -> T.__name__:
         return await create_item(session=transaction, data=data)
 
     @put("/{id:uuid}")
     async def update_item(
-        self, table: Any, transaction: "AsyncSession", id: UUID, data: T.__name__
+            self, table: Any, transaction: "AsyncSession", id: UUID,
+            data: T.__name__
     ) -> T.__name__:
         result = await update_item(session=transaction, id=id, data=data, table=table)
         return result
 
     @delete("/{id:uuid}")
     async def delete_item(
-        self, table: Any, transaction: "AsyncSession", id: UUID
+            self, table: Any, transaction: "AsyncSession", id: UUID
     ) -> None:
         await delete_item(session=transaction, id=id, table=table)

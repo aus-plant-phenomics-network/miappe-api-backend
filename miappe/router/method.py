@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Method, Vocabulary
 from miappe.router.base import BaseController
-from miappe.router.utils.DTO import MethodDTO
+from miappe.router.utils.DTO import DTOGenerator
 
-if TYPE_CHECKING:
-    pass
+
+MethodDTO = DTOGenerator[Method]()
 
 
 class MethodController(BaseController[Method]):

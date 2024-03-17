@@ -1,16 +1,14 @@
-from typing import TYPE_CHECKING, Sequence
+from typing import Sequence
 
 from litestar import get
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from miappe.model import Unit, Vocabulary
-from miappe.router.utils.DTO import UnitDTO
-
-if TYPE_CHECKING:
-    pass
-
 from miappe.router.base import BaseController
+from miappe.router.utils.DTO import DTOGenerator
+
+UnitDTO = DTOGenerator[Unit]()
 
 
 class UnitController(BaseController[Unit]):
@@ -18,11 +16,11 @@ class UnitController(BaseController[Unit]):
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(
-        self,
-        transaction: AsyncSession,
-        unit_type_name: str | None = None,
-        symbol: str | None = None,
-        alternative_symbol: str | None = None,
+            self,
+            transaction: AsyncSession,
+            unit_type_name: str | None = None,
+            symbol: str | None = None,
+            alternative_symbol: str | None = None,
     ) -> Sequence[Unit]:
         if unit_type_name:
             stmt = (
