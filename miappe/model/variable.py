@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table, Column
+from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from miappe.model.base import Base
@@ -12,6 +13,14 @@ if TYPE_CHECKING:
     from miappe.model.vocabulary import Vocabulary
     from miappe.model.environment import Environment
     from miappe.model.device import Device
+    from miappe.model.study import Study
+
+study_variable_table = Table(
+    "study_variable_table",
+    Base.metadata,
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
+    Column("variable_id", UUID_SQL, ForeignKey("variable_table.id"), primary_key=True)
+)
 
 
 class Variable(Base):
@@ -40,4 +49,11 @@ class Variable(Base):
     environment: Mapped[Optional["Environment"]] = relationship(back_populates="variable", lazy="selectin",
                                                                 info=dto_field("read-only"))
 
-    # TODO: Add study information
+    # Variable to study relationship
+    study: Mapped[list["Study"]] = relationship(
+        "Study",
+        secondary=study_variable_table,
+        back_populates="variable",
+        lazy="selectin",
+        info=dto_field("read-only")
+    )

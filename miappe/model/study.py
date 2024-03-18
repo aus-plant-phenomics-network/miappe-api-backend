@@ -10,7 +10,7 @@ from miappe.model import Base
 
 if TYPE_CHECKING:
     from miappe.model.investigation import Investigation
-
+    from miappe.model.variable import Variable
 
 class Study(Base):
     __tablename__ = "study_table"
@@ -22,6 +22,13 @@ class Study(Base):
     # Relationship
     investigation: Mapped[Optional["Investigation"]] = relationship(
         "Investigation",
+        back_populates="study",
+        lazy="selectin",
+        info=dto_field("read-only")
+    )
+    variable: Mapped[list["Variable"]] = relationship(
+        "Variable",
+        secondary="study_variable_table",
         back_populates="study",
         lazy="selectin",
         info=dto_field("read-only")
