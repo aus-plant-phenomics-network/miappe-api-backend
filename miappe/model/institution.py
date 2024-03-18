@@ -2,7 +2,8 @@ from typing import Optional, TYPE_CHECKING
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table, Column
+from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from miappe.model import Base
@@ -11,11 +12,19 @@ if TYPE_CHECKING:
     from miappe.model.vocabulary import Vocabulary
     from miappe.model.staff import Staff
 
+institution_to_institution_table = Table(
+    "institution_to_institution_table",
+    Base.metadata,
+    Column("child_id", UUID_SQL, ForeignKey("institution_table.id"), primary_key=True),
+    Column("parent_id", UUID_SQL, ForeignKey("institution_table.id"), primary_key=True),
+)
+
 
 class Institution(Base):
     __tablename__ = "institution_table"
 
     institution_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
+    parent_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("institution_table.id"))
 
     # Relationship
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
@@ -23,3 +32,23 @@ class Institution(Base):
     )
     staff: Mapped[list["Staff"]] = relationship("Staff", back_populates="affiliation", lazy="selectin",
                                                 info=dto_field("read-only"))
+
+    children: Mapped[list["Institution"]] = relationship(
+        "Institution",
+        secondary="institution_to_institution_table",
+        back_populates="parents",
+        lazy="selectin",
+        info=dto_field("read-only"),
+        primaryjoin="Institution.id == institution_to_institution_table.c.parent_id",
+        secondaryjoin="Institution.id == institution_to_institution_table.c.child_id",
+    )
+
+    parents: Mapped[list["Institution"]] = relationship(
+        "Institution",
+        secondary="institution_to_institution_table",
+        back_populates="children",
+        lazy="selectin",
+        info=dto_field("read-only"),
+        primaryjoin="Institution.id == institution_to_institution_table.c.child_id",
+        secondaryjoin="Institution.id == institution_to_institution_table.c.parent_id",
+    )
