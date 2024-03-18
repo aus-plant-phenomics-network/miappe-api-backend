@@ -14,6 +14,8 @@ from miappe.model.sample import Sample
 from miappe.model.facility import Facility
 from miappe.model.investigation import Investigation
 from miappe.model.study import Study
+from miappe.model.staff import Staff
+from miappe.model.institution import Institution
 
 __all__ = [
     "Base",
@@ -31,5 +33,7 @@ __all__ = [
     "Sample",
     "Facility",
     "Investigation",
-    "Study"
+    "Study",
+    "Staff",
+    "Institution"
 ]
