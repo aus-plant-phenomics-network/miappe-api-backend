@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from miappe.model.event import Event
     from miappe.model.sample import Sample
     from miappe.model.facility import Facility
+    from miappe.model.institution import Institution
 
 
 class Vocabulary(Base):
@@ -56,4 +57,7 @@ class Vocabulary(Base):
     )
     facility: Mapped[list["Facility"]] = relationship(
         back_populates="facility_type", lazy="selectin", info=dto_field("private")
+    )
+    institution: Mapped[list["Institution"]] = relationship(
+        back_populates="institution_type", lazy="selectin", info=dto_field("private")
     )
