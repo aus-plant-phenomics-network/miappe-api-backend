@@ -10,6 +10,7 @@ from miappe.model.observed_variable import ObservedVariable
 from miappe.model.experimental_factor import ExperimentalFactor
 from miappe.model.event import Event
 from miappe.model.observation_unit import ObservationUnit
+from miappe.model.sample import Sample
 
 __all__ = [
     "Base",
@@ -23,5 +24,6 @@ __all__ = [
     "ObservedVariable",
     "ExperimentalFactor",
     "Event",
-    "ObservationUnit"
+    "ObservationUnit",
+    "Sample"
 ]

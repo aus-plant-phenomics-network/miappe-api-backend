@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from miappe.model.unit import Unit
     from miappe.model.variable import Variable
     from miappe.model.event import Event
-
+    from miappe.model.sample import Sample
 
 class Vocabulary(Base):
     __tablename__: str = "vocabulary_table"  # type: ignore
@@ -39,4 +39,16 @@ class Vocabulary(Base):
     )
     event: Mapped[list["Event"]] = relationship(
         back_populates="event_type", lazy="selectin", info=dto_field("private")
+    )
+    sample_plant_structural_development_stage: Mapped[list["Sample"]] = relationship(
+        back_populates="plant_structural_development_stage",
+        lazy="selectin",
+        primaryjoin="Vocabulary.id == Sample.plant_structural_development_stage_id",
+        info=dto_field("private")
+    )
+    sample_plant_anatomical_entity: Mapped[list["Sample"]] = relationship(
+        back_populates="plant_anatomical_entity",
+        primaryjoin="Vocabulary.id == Sample.plant_anatomical_entity_id",
+        lazy="selectin",
+        info=dto_field("private"),
     )
