@@ -9,6 +9,8 @@ from miappe.model import Base
 
 if TYPE_CHECKING:
     from miappe.model.vocabulary import Vocabulary
+    from miappe.model.experiment import Experiment
+    from miappe.model.institution import Institution
 
 
 class Facility(Base):
@@ -24,11 +26,19 @@ class Facility(Base):
     longitude: Mapped[Optional[str]]
     altitude: Mapped[Optional[str]]
 
-    # TODO: add insitution
+    # relationship 
+    institution_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("institution_table.id"))
+    institution: Mapped[Optional["Institution"]] = relationship(
+        "Institution", back_populates="facilities", lazy="selectin", info=dto_field("read-only")
+    )
 
     # TODO: add variable group table
 
     # Relationship
     facility_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="facility", lazy="selectin", info=dto_field("read-only")
+    )
+    experiments: Mapped[Optional["Experiment"]] = relationship(
+        "Experiment", secondary="experiment_to_facility_table",
+        back_populates="facilities", lazy="selectin", info=dto_field("read-only")
     )

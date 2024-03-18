@@ -24,7 +24,7 @@ class Staff(Base):
     # Relationship
     affiliation: Mapped[Optional["Institution"]] = relationship(
         "Institution",
-        back_populates="staff",
+        back_populates="staffs",
         lazy="selectin",
         info=dto_field("read-only")
     )

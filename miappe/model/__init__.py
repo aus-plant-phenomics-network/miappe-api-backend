@@ -17,6 +17,7 @@ from miappe.model.study import Study
 from miappe.model.staff import Staff
 from miappe.model.institution import Institution
 from miappe.model.data_file import DataFile
+from miappe.model.experiment import Experiment
 
 __all__ = [
     "Base",
@@ -37,5 +38,6 @@ __all__ = [
     "Study",
     "Staff",
     "Institution",
-    "DataFile"
+    "DataFile",
+    "Experiment"
 ]

@@ -11,6 +11,7 @@ from miappe.model import Base
 if TYPE_CHECKING:
     from miappe.model.vocabulary import Vocabulary
     from miappe.model.staff import Staff
+    from miappe.model.facility import Facility
 
 institution_to_institution_table = Table(
     "institution_to_institution_table",
@@ -30,8 +31,10 @@ class Institution(Base):
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     )
-    staff: Mapped[list["Staff"]] = relationship("Staff", back_populates="affiliation", lazy="selectin",
-                                                info=dto_field("read-only"))
+    staffs: Mapped[list["Staff"]] = relationship("Staff", back_populates="affiliation", lazy="selectin",
+                                                 info=dto_field("read-only"))
+    facilities: Mapped[list["Facility"]] = relationship(
+        "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only"))
 
     children: Mapped[list["Institution"]] = relationship(
         "Institution",

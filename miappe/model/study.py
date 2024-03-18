@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from miappe.model.investigation import Investigation
     from miappe.model.variable import Variable
     from miappe.model.data_file import DataFile
+    from miappe.model.experiment import Experiment
 
 
 class Study(Base):
@@ -37,6 +38,12 @@ class Study(Base):
     )
     data_file: Mapped[list["DataFile"]] = relationship(
         "DataFile",
+        back_populates="study",
+        lazy="selectin",
+        info=dto_field("read-only")
+    )
+    experiment: Mapped[list["Experiment"]] = relationship(
+        "Experiment",
         back_populates="study",
         lazy="selectin",
         info=dto_field("read-only")
