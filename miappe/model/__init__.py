@@ -8,6 +8,8 @@ from miappe.model.biological_material import BiologicalMaterial
 from miappe.model.environment import Environment
 from miappe.model.observed_variable import ObservedVariable
 from miappe.model.experimental_factor import ExperimentalFactor
+from miappe.model.event import Event
+from miappe.model.observation_unit import ObservationUnit
 
 __all__ = [
     "Base",
@@ -19,5 +21,7 @@ __all__ = [
     "BiologicalMaterial",
     "Environment",
     "ObservedVariable",
-    "ExperimentalFactor"
+    "ExperimentalFactor",
+    "Event",
+    "ObservationUnit"
 ]

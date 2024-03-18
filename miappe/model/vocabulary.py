@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from miappe.model.method import Method
     from miappe.model.unit import Unit
     from miappe.model.variable import Variable
+    from miappe.model.event import Event
 
 
 class Vocabulary(Base):
@@ -35,4 +36,7 @@ class Vocabulary(Base):
     )
     variable: Mapped[list["Variable"]] = relationship(
         back_populates="variable_type", lazy="selectin", info=dto_field("private")
+    )
+    event: Mapped[list["Event"]] = relationship(
+        back_populates="event_type", lazy="selectin", info=dto_field("private")
     )
