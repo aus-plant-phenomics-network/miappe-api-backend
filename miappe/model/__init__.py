@@ -13,6 +13,7 @@ from miappe.model.observation_unit import ObservationUnit
 from miappe.model.sample import Sample
 from miappe.model.facility import Facility
 from miappe.model.investigation import Investigation
+from miappe.model.study import Study
 
 __all__ = [
     "Base",
@@ -29,5 +30,6 @@ __all__ = [
     "ObservationUnit",
     "Sample",
     "Facility",
-    "Investigation"
+    "Investigation",
+    "Study"
 ]

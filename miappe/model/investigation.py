@@ -1,9 +1,13 @@
 import datetime
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped
+from litestar.dto import dto_field
+from sqlalchemy.orm import Mapped, relationship
 
 from miappe.model import Base
+
+if TYPE_CHECKING:
+    from miappe.model.study import Study
 
 
 class Investigation(Base):
@@ -15,3 +19,8 @@ class Investigation(Base):
     publication_doi: Mapped[Optional[str]]
     website: Mapped[Optional[str]]
     funding: Mapped[Optional[str]]
+
+    # Relationship
+    study: Mapped[list["Study"]] = relationship(
+        "Study", back_populates="investigation", lazy="selectin", info=dto_field("read-only")
+    )
