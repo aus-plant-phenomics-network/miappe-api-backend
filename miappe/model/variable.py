@@ -7,13 +7,14 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from miappe.model.base import Base
-
 if TYPE_CHECKING:
     from miappe.model.biological_material import BiologicalMaterial
     from miappe.model.vocabulary import Vocabulary
     from miappe.model.environment import Environment
     from miappe.model.device import Device
     from miappe.model.study import Study
+    from miappe.model.facility import Facility
+    from miappe.model.observation_unit import ObservationUnit
 
 study_variable_table = Table(
     "study_variable_table",
@@ -50,10 +51,32 @@ class Variable(Base):
                                                                 info=dto_field("read-only"))
 
     # Variable to study relationship
-    study: Mapped[list["Study"]] = relationship(
+    studies: Mapped[list["Study"]] = relationship(
         "Study",
-        secondary=study_variable_table,
-        back_populates="variable",
+        secondary="study_variable_table",
+        back_populates="variables",
         lazy="selectin",
         info=dto_field("read-only")
+    )
+
+    facilities: Mapped[list["Facility"]] = relationship(
+        "Facility",
+        secondary="facility_variable_table",
+        back_populates="variables", lazy="selectin",
+        info=dto_field("read-only"))
+
+    observation_unit_biological_materials: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="biological_material",
+        lazy="selectin",
+        info=dto_field("read-only"),
+        primaryjoin="Variable.id== ObservationUnit.biological_material_id"
+    )
+
+    observation_unit_factors: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="factor",
+        lazy="selectin",
+        info=dto_field("read-only"),
+        primaryjoin= "Variable.id == ObservationUnit.factor_id"
     )

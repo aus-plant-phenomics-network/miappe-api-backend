@@ -24,10 +24,8 @@ institution_to_institution_table = Table(
 class Institution(Base):
     __tablename__ = "institution_table"
 
-    institution_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-    parent_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("institution_table.id"))
-
     # Relationship
+    institution_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     )

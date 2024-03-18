@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from miappe.model.facility import Facility
     from miappe.model.institution import Institution
     from miappe.model.experiment import Experiment
+    from miappe.model.observation_unit import ObservationUnit
 
 
 class Vocabulary(Base):
@@ -64,4 +65,10 @@ class Vocabulary(Base):
     )
     experiment: Mapped[list["Experiment"]] = relationship(
         back_populates="experiment_type", lazy="selectin", info=dto_field("private")
+    )
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="observation_unit_type",
+        lazy="selectin",
+        info=dto_field("read-only")
     )

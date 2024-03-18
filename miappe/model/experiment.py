@@ -28,9 +28,6 @@ class Experiment(Base):
     start_date: Mapped[Optional[datetime.datetime]]
     end_date: Mapped[Optional[datetime.datetime]]
 
-    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
-    experiment_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-
     # Relationship
     facilities: Mapped[list["Facility"]] = relationship(
         "Facility",
@@ -39,15 +36,19 @@ class Experiment(Base):
         lazy="selectin",
         info=dto_field("read-only")
     )
+
+    experiment_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
     experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary",
         back_populates="experiment",
         lazy="selectin",
         info=dto_field("read-only")
     )
+
+    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
     study: Mapped[Optional["Study"]] = relationship(
         "Study",
-        back_populates="experiment",
+        back_populates="experiments",
         lazy="selectin",
         info=dto_field("read-only")
     )

@@ -21,6 +21,6 @@ class Investigation(Base):
     funding: Mapped[Optional[str]]
 
     # Relationship
-    study: Mapped[list["Study"]] = relationship(
+    studies: Mapped[list["Study"]] = relationship(
         "Study", back_populates="investigation", lazy="selectin", info=dto_field("read-only")
     )

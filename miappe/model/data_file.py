@@ -16,12 +16,12 @@ class DataFile(Base):
 
     version: Mapped[Optional[str]]
     link: Mapped[Optional[str]]
-    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
 
     # Relationship
+    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
     study: Mapped[Optional["Study"]] = relationship(
         "Study",
-        back_populates="data_file",
+        back_populates="data_files",
         lazy="selectin",
         info=dto_field("read-only")
     )

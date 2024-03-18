@@ -14,14 +14,13 @@ if TYPE_CHECKING:
 class Staff(Base):
     __tablename__ = "staff_table"
 
-    name: Mapped[str]
     email: Mapped[Optional[str]]
     phone: Mapped[Optional[str]]
     orcid: Mapped[Optional[str]]
-    institution_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("institution_table.id"))
     role: Mapped[Optional[str]]
 
     # Relationship
+    institution_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("institution_table.id"))
     affiliation: Mapped[Optional["Institution"]] = relationship(
         "Institution",
         back_populates="staffs",
