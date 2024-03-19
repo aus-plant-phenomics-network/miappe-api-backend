@@ -14,6 +14,8 @@ MethodDTO = DTOGenerator[Method]()
 
 class MethodController(BaseController[Method]):
     path = "/method"
+    dto = MethodDTO.read_dto
+    return_dto = MethodDTO.write_dto
 
     @get(return_dto=MethodDTO.read_dto)
     async def get_method(
