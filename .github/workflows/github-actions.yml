@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11" ]
+        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -22,10 +22,10 @@ jobs:
           poetry install
       - name: Test with pytest
         run: |
-          poetry run pytest
+          make test
       - name: Lint with Ruff
         run: |
-          poetry run ruff check miappe --exclude miappe/metadata/isatools
-#      - name: Static Analysis with Black
-#        run: |
-#          poetry run black --check miappe
+          make lint
+      - name: Static Analysis with Mypy
+        run: |
+          make analysis
