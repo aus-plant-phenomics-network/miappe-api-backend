@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class DataFile(Base):
-    __tablename__ = "data_file_table"
+    __tablename__ = "data_file_table"  # type: ignore[assignment]
 
     version: Mapped[Optional[str]]
     link: Mapped[Optional[str]]

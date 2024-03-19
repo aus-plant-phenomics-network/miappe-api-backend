@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Staff(Base):
-    __tablename__ = "staff_table"
+    __tablename__ = "staff_table"  # type: ignore[assignment]
 
     email: Mapped[Optional[str]]
     phone: Mapped[Optional[str]]

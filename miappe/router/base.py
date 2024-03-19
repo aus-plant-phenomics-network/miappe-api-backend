@@ -80,20 +80,20 @@ class BaseController(GenericController[T]):
     @get("/{id:uuid}")
     async def get_item_by_id(
             self, table: Any, transaction: "AsyncSession", id: UUID
-    ) -> T.__name__:
+    ) -> T.__name__:  # type: ignore[name-defined]
         return await read_item_by_id(session=transaction, table=table, id=id)
 
     @post()
     async def create_item(
-            self, transaction: "AsyncSession", data: T.__name__
-    ) -> T.__name__:
+            self, transaction: "AsyncSession", data: T.__name__  # type: ignore[name-defined]
+    ) -> T.__name__:  # type: ignore[name-defined]
         return await create_item(session=transaction, data=data)
 
     @put("/{id:uuid}")
     async def update_item(
             self, table: Any, transaction: "AsyncSession", id: UUID,
-            data: T.__name__
-    ) -> T.__name__:
+            data: T.__name__  # type: ignore[name-defined]
+    ) -> T.__name__:  # type: ignore[name-defined]
         result = await update_item(session=transaction, id=id, data=data, table=table)
         return result
 
