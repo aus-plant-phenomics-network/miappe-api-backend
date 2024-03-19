@@ -84,8 +84,9 @@ class BaseController(GenericController[T]):
 
     @post()
     async def create_item(
-            self, transaction: "AsyncSession", data: T.__name__
-            # type: ignore[name-defined]
+            self,
+            transaction: "AsyncSession",
+            data: T.__name__  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
         return await create_item(session=transaction, data=data)
 
