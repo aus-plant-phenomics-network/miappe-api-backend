@@ -13,11 +13,14 @@ UnitDTO = DTOGenerator[Unit]()
 
 class UnitController(BaseController[Unit]):
     path = "/unit"
+    dto = UnitDTO.write_dto
+    return_dto = UnitDTO.read_dto
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(
             self,
             transaction: AsyncSession,
+            name: str | None = None,
             unit_type_name: str | None = None,
             symbol: str | None = None,
             alternative_symbol: str | None = None,
@@ -30,7 +33,8 @@ class UnitController(BaseController[Unit]):
             )
         else:
             stmt = select(Unit)
-
+        if name:
+            stmt = stmt.where(Unit.name == name)
         if symbol:
             stmt = stmt.where(Unit.symbol == symbol)
         if alternative_symbol:
