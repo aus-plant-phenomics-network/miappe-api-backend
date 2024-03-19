@@ -10,7 +10,7 @@ prod:
 
 
 test:
-	$(CMD) pytest --cov-report term-missing --cov=$(MODULE)
+	$(CMD) pytest --cov-report term-missing --cov=$(MODULE) --cov-report=xml
 
 
 lint:
