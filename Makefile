@@ -1,13 +1,26 @@
-setup:
-	poetry run python driver.py
+CMD=poetry run
+MODULE=miappe
 
 dev:
-	poetry run litestar --app miappe.app:app run --debug --reload --pdb
+	$(CMD) litestar --app $(MODULE).app:app run --debug --reload
 
 
-run:
-	poetry run litestar --app miappe.app:app run
+prod:
+	$(CMD) litestar --app $(MODULE).app:app run
 
 
 test:
-	poetry run pytest
+	$(CMD) pytest --cov-report term-missing --cov=$(MODULE)
+
+
+lint:
+	$(CMD) ruff check $(MODULE)
+
+
+analysis:
+	$(CMD) mypy $(MODULE)
+
+
+clean:
+	clear
+	rm -rf *.sqlite
