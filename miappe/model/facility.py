@@ -24,7 +24,7 @@ facility_variable_table = Table(
 
 
 class Facility(Base):
-    __tablename__ = "facility_table"
+    __tablename__ = "facility_table"  # type: ignore[assignment]
 
     address: Mapped[Optional[str]]
     city: Mapped[Optional[str]]

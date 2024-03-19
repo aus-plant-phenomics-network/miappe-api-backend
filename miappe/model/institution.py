@@ -22,7 +22,7 @@ institution_to_institution_table = Table(
 
 
 class Institution(Base):
-    __tablename__ = "institution_table"
+    __tablename__ = "institution_table"  # type: ignore[assignment]
 
     # Relationship
     institution_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))

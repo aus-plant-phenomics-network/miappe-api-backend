@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class Investigation(Base):
-    __tablename__ = "investigation_table"
+    __tablename__ = "investigation_table"  # type: ignore[assignment]
 
     submission_date: Mapped[Optional[datetime.datetime]]
     public_release_date: Mapped[Optional[datetime.datetime]]

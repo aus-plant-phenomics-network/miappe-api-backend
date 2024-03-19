@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class Sample(Base):
-    __tablename__ = "sample_table"
+    __tablename__ = "sample_table"  # type: ignore[assignment]
 
     observation_unit_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("observation_unit_table.id"))
     plant_structural_development_stage_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))

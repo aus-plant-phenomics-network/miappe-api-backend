@@ -40,7 +40,7 @@ class DTOGenerator(Generic[T]):
 
     def __init__(
             self, read_kwargs: dict[str, Any] | None = None,
-            write_kwargs: dict[str, Any] = None
+            write_kwargs: dict[str, Any] | None = None
     ) -> None:
         if write_kwargs is None:
             write_kwargs = {}

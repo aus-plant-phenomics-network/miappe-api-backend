@@ -23,7 +23,7 @@ experiment_to_facility_table = Table(
 
 
 class Experiment(Base):
-    __tablename__ = "experiment_table"
+    __tablename__ = "experiment_table"  # type: ignore[assignment]
     objective: Mapped[Optional[str]]
     start_date: Mapped[Optional[datetime.datetime]]
     end_date: Mapped[Optional[datetime.datetime]]
