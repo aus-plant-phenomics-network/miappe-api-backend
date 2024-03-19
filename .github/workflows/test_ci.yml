@@ -1,0 +1,47 @@
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+      do-coverage:
+        required: true
+        type: boolean
+        default: false
+      os:
+        required: false
+        type: string
+        default: "ubuntu-latest"
+
+jobs:
+  test:
+    runs-on: ${{inputs.os}}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Setup poetry
+        run: pip install poetry
+
+      - name: Install test dependencies
+        run: poetry install
+
+      - name: Test with pytest
+        run: |
+          make test
+
+      - name: Rename coverage file
+        if: inputs.do-coverage
+        run: mv .coverage .coverage.${{ inputs.python-version }}
+
+      - name: Upload coverage
+        if: inputs.do-coverage
+        uses: codecov/codecov-action@v3

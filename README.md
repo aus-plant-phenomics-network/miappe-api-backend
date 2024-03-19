@@ -1,6 +1,19 @@
-Python MIAPPE APIs
+<!-- markdownlint-disable -->
+<p align="center">
+  <!-- github-banner-start -->
+  <!-- github-banner-end -->
+</p>
+<!-- markdownlint-restore -->
 
-Currently supported features:
+<div align="center">
 
-- validate: read in a MIAPPE metadata file in excel format similar to [this](https://github.com/MIAPPE/MIAPPE/blob/master/MIAPPE_Checklist-Data-Model-v1.1/MIAPPE_templates/MIAPPEv1.1_training_spreadsheet.xlsx)
-- convert: convert MIAPPE to ISA 
+<!-- prettier-ignore-start -->
+
+| Project |     | Status                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|---------|:----|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CI/CD   |     | [![CI](https://github.com/haryle/MIAPPE_API/actions/workflows/ci.yml/badge.svg)](https://github.com/haryle/MIAPPE_API/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/haryle/MIAPPE_API/graph/badge.svg?token=NQ4AQXLOJF)](https://codecov.io/gh/haryle/MIAPPE_API) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=haryle_MIAPPE_API&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=haryle_MIAPPE_API) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=haryle_MIAPPE_API&metric=bugs)](https://sonarcloud.io/summary/new_code?id=haryle_MIAPPE_API) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=haryle_MIAPPE_API&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=haryle_MIAPPE_API) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=haryle_MIAPPE_API&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=haryle_MIAPPE_API) | 
+
+<!-- prettier-ignore-end -->
+</div>
+
+<hr>

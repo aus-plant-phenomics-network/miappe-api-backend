@@ -55,7 +55,6 @@ async def update_item(
 async def delete_item(session: "AsyncSession", id: "UUID", table: type[Any]) -> Any:
     stmt = remove(table).where(table.__table__.c.id == id)
     await session.execute(stmt)
-    return
 
 
 class GenericController(Controller, Generic[T]):
@@ -85,7 +84,9 @@ class BaseController(GenericController[T]):
 
     @post()
     async def create_item(
-            self, transaction: "AsyncSession", data: T.__name__  # type: ignore[name-defined]
+            self,
+            transaction: "AsyncSession",
+            data: T.__name__  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
         return await create_item(session=transaction, data=data)
 
