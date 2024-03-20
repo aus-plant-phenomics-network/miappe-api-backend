@@ -22,7 +22,7 @@
 
 This repository provides an implementation of the [MIAPPE](https://www.miappe.org/) standard for managing plant phenotyping experiments metadata. For practical reasons,
 the implemented data model (hence forth referred as MIAPPE+) deviates from the original standard, though we strive to adhere to the original terminologies as much as possible. The high-level schema and 
-an example experiment packaged up using MIAPPE+ can be found [here]().
+an example experiment packaged up using MIAPPE+ can be found [here](assets/MIAPPE+_Architecture).
 
 ## Meta-usage
 
