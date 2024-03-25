@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class Method(Base):
-    __tablename__: str = "method_table"  # type: ignore
+    __tablename__: str = "method_table"  # type: ignore[assignment]
 
     # Relationships:
     method_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))

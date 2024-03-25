@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class Event(Base):
-    __tablename__ = "event_table"  # type: ignore
+    __tablename__ = "event_table"  # type: ignore[assignment]
     event_date: Mapped[datetime.datetime | None]
     vocabulary_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
     observation_unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("observation_unit_table.id"))

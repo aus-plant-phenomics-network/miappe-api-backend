@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class Unit(Base):
-    __tablename__ = "unit_table"  # type: ignore
+    __tablename__ = "unit_table"  # type: ignore[assignment]
 
     symbol: Mapped[str | None]
     alternative_symbol: Mapped[str | None]

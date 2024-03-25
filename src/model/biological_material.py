@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class BiologicalMaterial(Base):
-    __tablename__: str = "biological_material_table"  # type: ignore
+    __tablename__: str = "biological_material_table"  # type: ignore[assignment]
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
     biological_location: Mapped[str | None]

@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class ExperimentalFactor(Base):
-    __tablename__: str = "experimental_factor_table"  # type: ignore
+    __tablename__: str = "experimental_factor_table"  # type: ignore[assignment]
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
     factor_values: Mapped[str]

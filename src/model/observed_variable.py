@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class ObservedVariable(Base):
-    __tablename__: str = "observed_variable_table"  # type: ignore
+    __tablename__: str = "observed_variable_table"  # type: ignore[assignment]
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
     method_id: Mapped[UUID | None] = mapped_column(ForeignKey("method_table.id"))

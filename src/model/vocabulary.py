@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class Vocabulary(Base):
-    __tablename__: str = "vocabulary_table"  # type: ignore
+    __tablename__: str = "vocabulary_table"  # type: ignore[assignment]
 
     external_reference: Mapped[str | None]
 

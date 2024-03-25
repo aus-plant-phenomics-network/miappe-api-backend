@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class Device(Base):
-    __tablename__: str = "device_table"  # type: ignore
+    __tablename__: str = "device_table"  # type: ignore[assignment]
 
     brand: Mapped[str | None]
     serial_number: Mapped[str | None]

@@ -29,7 +29,7 @@ study_variable_table = Table(
 
 
 class Variable(Base):
-    __tablename__: str = "variable_table"  # type: ignore
+    __tablename__: str = "variable_table"  # type: ignore[assignment]
 
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
