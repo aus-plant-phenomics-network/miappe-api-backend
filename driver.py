@@ -1,11 +1,10 @@
-import uuid
-
-from sqlalchemy import create_engine
-from sqlalchemy import event
+from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import create_session
 
-from miappe.model import Base, Device, Method, Vocabulary
+from src.model import Base, Device, Method, Vocabulary
+
+__all__ = ("set_sqlite_pragma",)
 
 
 @event.listens_for(Engine, "connect")
