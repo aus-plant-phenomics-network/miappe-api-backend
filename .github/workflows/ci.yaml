@@ -7,23 +7,28 @@ on:
 
 jobs:
   validate:
-    uses: ./.github/workflows/validate_ci.yml
+    uses: ./.github/workflows/validate_ci.yaml
+
+  analysis:
+    needs: validate
+    uses: ./.github/workflows/analysis_ci.yaml
 
   test:
+    needs: validate
     name: "test (${{ matrix.python-version }})"
     strategy:
       fail-fast: true
       matrix:
         python-version: [ "3.11", "3.12" ]
-    uses: ./.github/workflows/test_ci.yml
+    uses: ./.github/workflows/test_ci.yaml
     with:
       python-version: ${{ matrix.python-version }}
-      do-coverage: ${{ matrix.python-version == 3.12 }}
+      do-coverage: ${{ matrix.python-version == 3.11 }}
 
   sonar:
     needs:
       - test
-      - validate
+      - analysis
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
