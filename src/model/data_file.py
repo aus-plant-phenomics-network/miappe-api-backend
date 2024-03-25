@@ -1,4 +1,4 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
@@ -7,6 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
+__all__ = ("DataFile",)
+
+
 if TYPE_CHECKING:
     from src.model.study import Study
 
@@ -14,14 +17,11 @@ if TYPE_CHECKING:
 class DataFile(Base):
     __tablename__ = "data_file_table"  # type: ignore[assignment]
 
-    version: Mapped[Optional[str]]
-    link: Mapped[Optional[str]]
+    version: Mapped[str | None]
+    link: Mapped[str | None]
 
     # Relationship
-    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
+    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
     study: Mapped[Optional["Study"]] = relationship(
-        "Study",
-        back_populates="data_files",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "Study", back_populates="data_files", lazy="selectin", info=dto_field("read-only")
     )

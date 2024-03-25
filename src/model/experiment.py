@@ -1,18 +1,21 @@
 import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
+from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
+__all__ = ("Experiment",)
+
+
 if TYPE_CHECKING:
-    from src.model.vocabulary import Vocabulary
     from src.model.facility import Facility
     from src.model.study import Study
+    from src.model.vocabulary import Vocabulary
 
 experiment_to_facility_table = Table(
     "experiment_to_facility_table",
@@ -24,9 +27,9 @@ experiment_to_facility_table = Table(
 
 class Experiment(Base):
     __tablename__ = "experiment_table"  # type: ignore[assignment]
-    objective: Mapped[Optional[str]]
-    start_date: Mapped[Optional[datetime.datetime]]
-    end_date: Mapped[Optional[datetime.datetime]]
+    objective: Mapped[str | None]
+    start_date: Mapped[datetime.datetime | None]
+    end_date: Mapped[datetime.datetime | None]
 
     # Relationship
     facilities: Mapped[list["Facility"]] = relationship(
@@ -34,21 +37,15 @@ class Experiment(Base):
         secondary="experiment_to_facility_table",
         back_populates="experiments",
         lazy="selectin",
-        info=dto_field("read-only")
+        info=dto_field("read-only"),
     )
 
-    experiment_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
+    experiment_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
     experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
-        back_populates="experiment",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "Vocabulary", back_populates="experiment", lazy="selectin", info=dto_field("read-only")
     )
 
-    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
+    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
     study: Mapped[Optional["Study"]] = relationship(
-        "Study",
-        back_populates="experiments",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "Study", back_populates="experiments", lazy="selectin", info=dto_field("read-only")
     )

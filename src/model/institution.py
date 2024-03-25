@@ -1,17 +1,20 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
+from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
+__all__ = ("Institution",)
+
+
 if TYPE_CHECKING:
-    from src.model.vocabulary import Vocabulary
-    from src.model.staff import Staff
     from src.model.facility import Facility
+    from src.model.staff import Staff
+    from src.model.vocabulary import Vocabulary
 
 institution_to_institution_table = Table(
     "institution_to_institution_table",
@@ -25,14 +28,16 @@ class Institution(Base):
     __tablename__ = "institution_table"  # type: ignore[assignment]
 
     # Relationship
-    institution_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
+    institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     )
-    staffs: Mapped[list["Staff"]] = relationship("Staff", back_populates="affiliation", lazy="selectin",
-                                                 info=dto_field("read-only"))
+    staffs: Mapped[list["Staff"]] = relationship(
+        "Staff", back_populates="affiliation", lazy="selectin", info=dto_field("read-only")
+    )
     facilities: Mapped[list["Facility"]] = relationship(
-        "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only"))
+        "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only")
+    )
 
     children: Mapped[list["Institution"]] = relationship(
         "Institution",

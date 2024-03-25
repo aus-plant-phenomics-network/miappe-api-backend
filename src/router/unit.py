@@ -1,4 +1,4 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from litestar import get
 from sqlalchemy import select
@@ -6,7 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model import Unit, Vocabulary
 from src.router.base import BaseController
-from src.router.utils.DTO import DTOGenerator
+from src.router.utils.dto import DTOGenerator
+
+__all__ = ("UnitController",)
+
 
 UnitDTO = DTOGenerator[Unit]()
 
@@ -18,12 +21,12 @@ class UnitController(BaseController[Unit]):
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(
-            self,
-            transaction: AsyncSession,
-            name: str | None = None,
-            unit_type_name: str | None = None,
-            symbol: str | None = None,
-            alternative_symbol: str | None = None,
+        self,
+        transaction: AsyncSession,
+        name: str | None = None,
+        unit_type_name: str | None = None,
+        symbol: str | None = None,
+        alternative_symbol: str | None = None,
     ) -> Sequence[Unit]:
         if unit_type_name:
             stmt = (

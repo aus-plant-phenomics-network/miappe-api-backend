@@ -1,5 +1,6 @@
 import datetime
-from typing import TYPE_CHECKING, Sequence
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from litestar import get
@@ -7,14 +8,15 @@ from sqlalchemy import select
 
 from src.model import Device, Vocabulary
 from src.router.base import BaseController
-from src.router.utils.DTO import DTOGenerator
+from src.router.utils.dto import DTOGenerator
+
+__all__ = ("DeviceController",)
+
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
-DeviceDTO = DTOGenerator[Device](
-    read_kwargs={"max_nested_depth": 0}
-)
+DeviceDTO = DTOGenerator[Device](read_kwargs={"max_nested_depth": 0})
 
 
 class DeviceController(BaseController[Device]):
@@ -24,15 +26,15 @@ class DeviceController(BaseController[Device]):
 
     @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(
-            self,
-            transaction: "AsyncSession",
-            name: str | None = None,
-            device_type_id: UUID | None = None,
-            device_type_name: str | None = None,
-            brand: str | None = None,
-            serial_number: str | None = None,
-            startup_date: datetime.datetime | None = None,
-            removal_date: datetime.datetime | None = None,
+        self,
+        transaction: "AsyncSession",
+        name: str | None = None,
+        device_type_id: UUID | None = None,
+        device_type_name: str | None = None,
+        brand: str | None = None,
+        serial_number: str | None = None,
+        startup_date: datetime.datetime | None = None,
+        removal_date: datetime.datetime | None = None,
     ) -> Sequence[Device]:
         if device_type_name:
             stmt = (

@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
@@ -8,26 +8,24 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
+__all__ = ("Event",)
+
+
 if TYPE_CHECKING:
-    from src.model.vocabulary import Vocabulary
     from src.model.observation_unit import ObservationUnit
+    from src.model.vocabulary import Vocabulary
 
 
 class Event(Base):
     __tablename__ = "event_table"  # type: ignore
-    event_date: Mapped[Optional[datetime.datetime]]
-    vocabulary_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-    observation_unit_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("observation_unit_table.id"))
+    event_date: Mapped[datetime.datetime | None]
+    vocabulary_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    observation_unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("observation_unit_table.id"))
 
     # Relationship
     event_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
-        back_populates="event",
-        lazy="selectin",
-        info=dto_field("read-only"))
+        "Vocabulary", back_populates="event", lazy="selectin", info=dto_field("read-only")
+    )
     observation_unit: Mapped[Optional["ObservationUnit"]] = relationship(
-        "ObservationUnit",
-        back_populates="event",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "ObservationUnit", back_populates="event", lazy="selectin", info=dto_field("read-only")
     )

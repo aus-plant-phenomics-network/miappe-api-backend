@@ -1,20 +1,23 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
+__all__ = ("ObservationUnit",)
+
+
 if TYPE_CHECKING:
     from src.model.event import Event
+    from src.model.facility import Facility
     from src.model.sample import Sample
     from src.model.study import Study
-    from src.model.facility import Facility
-    from src.model.vocabulary import Vocabulary
     from src.model.variable import Variable
+    from src.model.vocabulary import Vocabulary
 
 ob_unit_to_ob_unit_table = Table(
     "ob_unit_to_ob_unit_table",
@@ -26,25 +29,25 @@ ob_unit_to_ob_unit_table = Table(
 
 class ObservationUnit(Base):
     __tablename__ = "observation_unit_table"  # type: ignore[assignment]
-    location: Mapped[Optional[str]]
+    location: Mapped[str | None]
 
     # Relationship
-    study_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("study_table.id"))
-    study: Mapped[Optional["Study"]] = relationship("Study", back_populates="observation_units", lazy="selectin",
-                                                    info=dto_field("read-only"))
+    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
+    study: Mapped[Optional["Study"]] = relationship(
+        "Study", back_populates="observation_units", lazy="selectin", info=dto_field("read-only")
+    )
 
-    facility_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("facility_table.id"))
-    facility: Mapped[Optional["Facility"]] = relationship("Facility", back_populates="observation_units",
-                                                          lazy="selectin",
-                                                          info=dto_field("read-only"))
+    facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id"))
+    facility: Mapped[Optional["Facility"]] = relationship(
+        "Facility", back_populates="observation_units", lazy="selectin", info=dto_field("read-only")
+    )
 
-    observation_unit_type_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("vocabulary_table.id"))
-    observation_unit_type: Mapped[Optional["Vocabulary"]] = relationship("Vocabulary",
-                                                                         back_populates="observation_units",
-                                                                         lazy="selectin",
-                                                                         info=dto_field("read-only"))
+    observation_unit_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    observation_unit_type: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary", back_populates="observation_units", lazy="selectin", info=dto_field("read-only")
+    )
 
-    biological_material_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("variable_table.id"))
+    biological_material_id: Mapped[UUID | None] = mapped_column(ForeignKey("variable_table.id"))
     biological_material: Mapped[Optional["Variable"]] = relationship(
         "Variable",
         back_populates="observation_unit_biological_materials",
@@ -53,7 +56,7 @@ class ObservationUnit(Base):
         foreign_keys=[biological_material_id],
     )
 
-    factor_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("variable_table.id"))
+    factor_id: Mapped[UUID | None] = mapped_column(ForeignKey("variable_table.id"))
     factor: Mapped[Optional["Variable"]] = relationship(
         "Variable",
         back_populates="observation_unit_factors",
@@ -63,16 +66,10 @@ class ObservationUnit(Base):
     )
 
     event: Mapped[list["Event"]] = relationship(
-        "Event",
-        back_populates="observation_unit",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "Event", back_populates="observation_unit", lazy="selectin", info=dto_field("read-only")
     )
     sample: Mapped[list["Sample"]] = relationship(
-        "Sample",
-        back_populates="observation_unit",
-        lazy="selectin",
-        info=dto_field("read-only")
+        "Sample", back_populates="observation_unit", lazy="selectin", info=dto_field("read-only")
     )
 
     parents: Mapped[list["ObservationUnit"]] = relationship(
@@ -82,7 +79,7 @@ class ObservationUnit(Base):
         lazy="selectin",
         info=dto_field("read-only"),
         primaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.child_id",
-        secondaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.parent_id"
+        secondaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.parent_id",
     )
 
     children: Mapped[list["ObservationUnit"]] = relationship(
@@ -92,5 +89,5 @@ class ObservationUnit(Base):
         lazy="selectin",
         info=dto_field("read-only"),
         secondaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.child_id",
-        primaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.parent_id"
+        primaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.parent_id",
     )
