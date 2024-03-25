@@ -28,15 +28,20 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Setup poetry
-        run: pip install poetry
+      - uses: pdm-project/setup-pdm@v4
+        name: Set up PDM
+        with:
+          python-version: "3.11"
+          allow-python-prereleases: false
+          cache: true
+          cache-dependency-path: |
+            ./pdm.lock
 
-      - name: Install test dependencies
-        run: poetry install
+      - name: Install dependencies
+        run: pdm install -G:all
 
       - name: Test with pytest
-        run: |
-          make test
+        run: pdm run pytest tests --cov=src --cov-report=xml
 
       - name: Rename coverage file
         if: inputs.do-coverage
