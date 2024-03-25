@@ -1,4 +1,4 @@
-from miappe.model import Vocabulary
+from src.model import Vocabulary
 from tests.helpers import AbstractBaseTestSuite, ResponseValidator
 
 

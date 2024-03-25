@@ -6,15 +6,15 @@ from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.event import Event
-    from miappe.model.sample import Sample
-    from miappe.model.study import Study
-    from miappe.model.facility import Facility
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.variable import Variable
+    from src.model.event import Event
+    from src.model.sample import Sample
+    from src.model.study import Study
+    from src.model.facility import Facility
+    from src.model.vocabulary import Vocabulary
+    from src.model.variable import Variable
 
 ob_unit_to_ob_unit_table = Table(
     "ob_unit_to_ob_unit_table",

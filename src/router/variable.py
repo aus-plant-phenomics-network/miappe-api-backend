@@ -3,10 +3,10 @@ from typing import Sequence
 from litestar import get
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from miappe.model import Variable
-from miappe.router.base import BaseController
-from miappe.router.base import read_items_by_attrs
-from miappe.router.utils.DTO import DTOGenerator
+from src.model import Variable
+from src.router.base import BaseController
+from src.router.base import read_items_by_attrs
+from src.router.utils.DTO import DTOGenerator
 
 VariableDTO = DTOGenerator[Variable]()
 

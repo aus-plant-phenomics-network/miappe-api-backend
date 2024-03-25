@@ -6,14 +6,14 @@ from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.experiment import Experiment
-    from miappe.model.institution import Institution
-    from miappe.model.variable import Variable
-    from miappe.model.observation_unit import ObservationUnit
+    from src.model.vocabulary import Vocabulary
+    from src.model.experiment import Experiment
+    from src.model.institution import Institution
+    from src.model.variable import Variable
+    from src.model.observation_unit import ObservationUnit
 
 facility_variable_table = Table(
     "facility_variable_table",

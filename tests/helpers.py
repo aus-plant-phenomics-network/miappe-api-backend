@@ -10,7 +10,7 @@ import pytest
 from httpx import Response
 from litestar.testing import AsyncTestClient
 
-from miappe.model import Base
+from src.model import Base
 
 HTTP_CODE = Literal[200, 201, 204, 404, 500, 409]
 T = TypeVar("T", bound=Base)

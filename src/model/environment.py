@@ -5,24 +5,32 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.unit import Unit
+    from src.model.unit import Unit
+    from src.model.variable import Variable
 
 
-class ExperimentalFactor(Base):
-    __tablename__: str = "experimental_factor_table"  # type: ignore
+class Environment(Base):
+    __tablename__: str = "environment_table"  # type: ignore
 
     id: Mapped[UUID] = mapped_column(
         ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only")
     )
-    factor_values: Mapped[str]
+    set_point: Mapped[Optional[str]]
     unit_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("unit_table.id"))
 
     # Relationship
     unit: Mapped[Optional["Unit"]] = relationship(
         "Unit",
-        back_populates="experimental_factor",
+        back_populates="environment",
         lazy="selectin",
-        info=dto_field("read-only"))
+        info=dto_field("read-only"),
+    )
+    variable: Mapped["Variable"] = relationship(
+        "Variable",
+        back_populates="environment",
+        lazy="selectin",
+        info=dto_field("read-only"),
+    )

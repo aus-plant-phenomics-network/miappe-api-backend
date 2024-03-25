@@ -5,9 +5,9 @@ from uuid import UUID
 from litestar import get
 from sqlalchemy import select
 
-from miappe.model import Device, Vocabulary
-from miappe.router.base import BaseController
-from miappe.router.utils.DTO import DTOGenerator
+from src.model import Device, Vocabulary
+from src.router.base import BaseController
+from src.router.utils.DTO import DTOGenerator
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession

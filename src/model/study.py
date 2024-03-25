@@ -6,14 +6,14 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.investigation import Investigation
-    from miappe.model.variable import Variable
-    from miappe.model.data_file import DataFile
-    from miappe.model.experiment import Experiment
-    from miappe.model.observation_unit import ObservationUnit
+    from src.model.investigation import Investigation
+    from src.model.variable import Variable
+    from src.model.data_file import DataFile
+    from src.model.experiment import Experiment
+    from src.model.observation_unit import ObservationUnit
 
 
 class Study(Base):

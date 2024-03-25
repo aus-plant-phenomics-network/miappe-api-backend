@@ -5,11 +5,11 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.method import Method
-    from miappe.model.unit import Unit
+    from src.model.method import Method
+    from src.model.unit import Unit
 
 
 class ObservedVariable(Base):

@@ -3,19 +3,19 @@ from typing import TYPE_CHECKING, Optional
 from litestar.dto import dto_field
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model.base import Base
+from src.model.base import Base
 
 if TYPE_CHECKING:
-    from miappe.model.device import Device
-    from miappe.model.method import Method
-    from miappe.model.unit import Unit
-    from miappe.model.variable import Variable
-    from miappe.model.event import Event
-    from miappe.model.sample import Sample
-    from miappe.model.facility import Facility
-    from miappe.model.institution import Institution
-    from miappe.model.experiment import Experiment
-    from miappe.model.observation_unit import ObservationUnit
+    from src.model.device import Device
+    from src.model.method import Method
+    from src.model.unit import Unit
+    from src.model.variable import Variable
+    from src.model.event import Event
+    from src.model.sample import Sample
+    from src.model.facility import Facility
+    from src.model.institution import Institution
+    from src.model.experiment import Experiment
+    from src.model.observation_unit import ObservationUnit
 
 
 class Vocabulary(Base):

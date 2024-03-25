@@ -5,10 +5,10 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.institution import Institution
+    from src.model.institution import Institution
 
 
 class Staff(Base):

@@ -7,12 +7,12 @@ from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.facility import Facility
-    from miappe.model.study import Study
+    from src.model.vocabulary import Vocabulary
+    from src.model.facility import Facility
+    from src.model.study import Study
 
 experiment_to_facility_table = Table(
     "experiment_to_facility_table",

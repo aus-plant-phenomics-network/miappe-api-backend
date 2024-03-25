@@ -1,4 +1,4 @@
-from miappe.model import Method
+from src.model import Method
 from tests.helpers import AbstractBaseTestSuite, ResponseValidator
 
 

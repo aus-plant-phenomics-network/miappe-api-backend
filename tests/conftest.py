@@ -6,8 +6,8 @@ from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
-from miappe.helpers import create_db_config, provide_transaction
-from miappe.router import DeviceController, VocabularyController, MethodController, UnitController, VariableController
+from src.helpers import create_db_config, provide_transaction
+from src.router import DeviceController, VocabularyController, MethodController, UnitController, VariableController
 
 
 @pytest.fixture(scope="module")

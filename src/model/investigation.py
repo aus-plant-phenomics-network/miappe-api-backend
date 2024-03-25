@@ -4,10 +4,10 @@ from typing import Optional, TYPE_CHECKING
 from litestar.dto import dto_field
 from sqlalchemy.orm import Mapped, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.study import Study
+    from src.model.study import Study
 
 
 class Investigation(Base):

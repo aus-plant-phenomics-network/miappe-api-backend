@@ -6,12 +6,12 @@ from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model import Base
+from src.model import Base
 
 if TYPE_CHECKING:
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.staff import Staff
-    from miappe.model.facility import Facility
+    from src.model.vocabulary import Vocabulary
+    from src.model.staff import Staff
+    from src.model.facility import Facility
 
 institution_to_institution_table = Table(
     "institution_to_institution_table",

@@ -1,4 +1,4 @@
-from miappe.model import Device
+from src.model import Device
 
 from tests.helpers import AbstractBaseTestSuite, ResponseValidator
 

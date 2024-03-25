@@ -1,8 +1,8 @@
 from litestar import Litestar
 from litestar.plugins.sqlalchemy import SQLAlchemyPlugin
 
-from miappe.helpers import provide_transaction, create_db_config
-from miappe.router import (
+from src.helpers import provide_transaction, create_db_config
+from src.router import (
     VocabularyController,
     DeviceController,
     MethodController,

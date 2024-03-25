@@ -5,13 +5,13 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model.base import Base
+from src.model.base import Base
 
 if TYPE_CHECKING:
-    from miappe.model.biological_material import BiologicalMaterial
-    from miappe.model.device import Device
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.observed_variable import ObservedVariable
+    from src.model.biological_material import BiologicalMaterial
+    from src.model.device import Device
+    from src.model.vocabulary import Vocabulary
+    from src.model.observed_variable import ObservedVariable
 
 
 class Method(Base):

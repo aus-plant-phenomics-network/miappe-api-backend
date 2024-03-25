@@ -5,11 +5,11 @@ from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model.base import Base
+from src.model.base import Base
 
 if TYPE_CHECKING:
-    from miappe.model.method import Method
-    from miappe.model.variable import Variable
+    from src.model.method import Method
+    from src.model.variable import Variable
 
 
 class BiologicalMaterial(Base):

@@ -4,9 +4,9 @@ from litestar import get
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from miappe.model import Unit, Vocabulary
-from miappe.router.base import BaseController
-from miappe.router.utils.DTO import DTOGenerator
+from src.model import Unit, Vocabulary
+from src.router.base import BaseController
+from src.router.utils.DTO import DTOGenerator
 
 UnitDTO = DTOGenerator[Unit]()
 

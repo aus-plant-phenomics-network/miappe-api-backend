@@ -5,7 +5,7 @@ from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import create_session
 
-from miappe.model import Base, Device, Method, Vocabulary
+from src.model import Base, Device, Method, Vocabulary
 
 
 @event.listens_for(Engine, "connect")

@@ -6,15 +6,15 @@ from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from miappe.model.base import Base
+from src.model.base import Base
 if TYPE_CHECKING:
-    from miappe.model.biological_material import BiologicalMaterial
-    from miappe.model.vocabulary import Vocabulary
-    from miappe.model.environment import Environment
-    from miappe.model.device import Device
-    from miappe.model.study import Study
-    from miappe.model.facility import Facility
-    from miappe.model.observation_unit import ObservationUnit
+    from src.model.biological_material import BiologicalMaterial
+    from src.model.vocabulary import Vocabulary
+    from src.model.environment import Environment
+    from src.model.device import Device
+    from src.model.study import Study
+    from src.model.facility import Facility
+    from src.model.observation_unit import ObservationUnit
 
 study_variable_table = Table(
     "study_variable_table",

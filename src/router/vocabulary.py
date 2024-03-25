@@ -3,10 +3,10 @@ from typing import Any, Sequence
 from litestar import get
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from miappe.model import Vocabulary
-from miappe.router.base import BaseController
-from miappe.router.base import read_items_by_attrs
-from miappe.router.utils.DTO import DTOGenerator
+from src.model import Vocabulary
+from src.router.base import BaseController
+from src.router.base import read_items_by_attrs
+from src.router.utils.DTO import DTOGenerator
 
 VocabularyDTO = DTOGenerator[Vocabulary]()
 

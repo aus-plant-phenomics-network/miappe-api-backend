@@ -8,7 +8,7 @@ from sqlalchemy import Engine, event
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from miappe.model import Base
+from src.model import Base
 
 
 @event.listens_for(Engine, "connect")

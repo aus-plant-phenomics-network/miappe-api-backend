@@ -1,4 +1,4 @@
-from miappe.model import Variable
+from src.model import Variable
 from tests.helpers import AbstractBaseTestSuite, ResponseValidator
 
 
