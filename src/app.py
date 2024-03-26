@@ -1,13 +1,10 @@
 from litestar import Litestar
-from litestar.plugins.sqlalchemy import SQLAlchemyPlugin
+from litestar.contrib.sqlalchemy.plugins import SQLAlchemyPlugin
 
-from src.helpers import create_db_config, provide_transaction
+from src.helpers import create_db_config
+from src.helpers import provide_transaction
 from src.router import (
-    DeviceController,
-    MethodController,
-    UnitController,
-    VariableController,
-    VocabularyController,
+    DeviceController, VocabularyController, MethodController, UnitController, VariableController
 )
 
 db_config = create_db_config("db.sqlite")

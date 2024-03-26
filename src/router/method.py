@@ -11,7 +11,7 @@ from src.router.utils.dto import DTOGenerator
 __all__ = ("MethodController",)
 
 
-MethodDTO = DTOGenerator[Method]()
+MethodDTO = DTOGenerator[Method](read_kwargs={"max_nested_depth": 1})
 
 
 class MethodController(BaseController[Method]):
@@ -25,9 +25,7 @@ class MethodController(BaseController[Method]):
     ) -> Sequence[Method]:
         if method_type_name:
             stmt = (
-                select(Method)
-                .join_from(Method, Vocabulary, Method.method_type_id == Vocabulary.id)
-                .where(Vocabulary.name == method_type_name)
+                select(Method).where(Vocabulary.name == method_type_name)
             )
         else:
             stmt = select(Method)

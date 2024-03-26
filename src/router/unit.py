@@ -10,7 +10,6 @@ from src.router.utils.dto import DTOGenerator
 
 __all__ = ("UnitController",)
 
-
 UnitDTO = DTOGenerator[Unit]()
 
 
@@ -21,18 +20,16 @@ class UnitController(BaseController[Unit]):
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(
-        self,
-        transaction: AsyncSession,
-        name: str | None = None,
-        unit_type_name: str | None = None,
-        symbol: str | None = None,
-        alternative_symbol: str | None = None,
+            self,
+            transaction: AsyncSession,
+            name: str | None = None,
+            unit_type_name: str | None = None,
+            symbol: str | None = None,
+            alternative_symbol: str | None = None,
     ) -> Sequence[Unit]:
         if unit_type_name:
             stmt = (
-                select(Unit)
-                .join_from(Unit, Vocabulary, Unit.unit_type_id == Vocabulary.id)
-                .where(Vocabulary.name == unit_type_name)
+                select(Unit).where(Vocabulary.name == unit_type_name)
             )
         else:
             stmt = select(Unit)

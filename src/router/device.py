@@ -12,11 +12,10 @@ from src.router.utils.dto import DTOGenerator
 
 __all__ = ("DeviceController",)
 
-
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
-DeviceDTO = DTOGenerator[Device](read_kwargs={"max_nested_depth": 0})
+DeviceDTO = DTOGenerator[Device](read_kwargs={"max_nested_depth": 1})
 
 
 class DeviceController(BaseController[Device]):
@@ -26,21 +25,19 @@ class DeviceController(BaseController[Device]):
 
     @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(
-        self,
-        transaction: "AsyncSession",
-        name: str | None = None,
-        device_type_id: UUID | None = None,
-        device_type_name: str | None = None,
-        brand: str | None = None,
-        serial_number: str | None = None,
-        startup_date: datetime.datetime | None = None,
-        removal_date: datetime.datetime | None = None,
+            self,
+            transaction: "AsyncSession",
+            name: str | None = None,
+            device_type_id: UUID | None = None,
+            device_type_name: str | None = None,
+            brand: str | None = None,
+            serial_number: str | None = None,
+            startup_date: datetime.datetime | None = None,
+            removal_date: datetime.datetime | None = None,
     ) -> Sequence[Device]:
         if device_type_name:
             stmt = (
-                select(Device)
-                .join_from(Device, Vocabulary, Device.device_type_id == Vocabulary.id)
-                .where(Vocabulary.name == device_type_name)
+                select(Device).where(Vocabulary.name == device_type_name)
             )
         else:
             stmt = select(Device)
