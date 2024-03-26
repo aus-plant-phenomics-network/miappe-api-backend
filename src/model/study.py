@@ -30,6 +30,13 @@ class Study(Base):
     investigation: Mapped[Optional["Investigation"]] = relationship(
         "Investigation", back_populates="studies", lazy="selectin", info=dto_field("read-only")
     )
+    variables: Mapped[list["Variable"]] = relationship(
+        "Variable",
+        secondary="study_variable_table",
+        back_populates="studies",
+        lazy="selectin",
+        info=dto_field("read-only"),
+    )
     data_files: Mapped[list["DataFile"]] = relationship(
         "DataFile", back_populates="study", lazy="selectin", info=dto_field("read-only")
     )

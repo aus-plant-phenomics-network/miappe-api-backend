@@ -42,7 +42,7 @@ class Variable(Base):
 
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id"))
     device: Mapped[Optional["Device"]] = relationship(
-        back_populates="variable", lazy="selectin", info=dto_field("read-only")
+        lazy="selectin", info=dto_field("read-only")
     )
 
     # Sub-variable relationship

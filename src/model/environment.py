@@ -25,7 +25,6 @@ class Environment(Base):
     # Relationship
     unit: Mapped[Optional["Unit"]] = relationship(
         "Unit",
-        back_populates="environment",
         lazy="selectin",
         info=dto_field("read-only"),
     )
