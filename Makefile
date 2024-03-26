@@ -166,12 +166,12 @@ docs-linkcheck-full: 									## Run the full link check on the docs
 # Application
 # =============================================================================
 .PHONY: app
-app:
+app:												## Start the application - production mode
 	@echo "=>Running application"
 	@$(PDM) run litestar --app src.app:app run
 
 
 .PHONY: app-dev
-app-dev:
+app-dev:											## Start the application - debug mode
 	@echo "=>Running application developer mode"
 	@$(PDM) run litestar --app src.app:app run --debug --reload
