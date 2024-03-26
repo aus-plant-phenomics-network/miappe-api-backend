@@ -64,3 +64,6 @@ class Facility(Base):
         lazy="selectin",
         info=dto_field("read-only"),
     )
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit", back_populates="facility", lazy="selectin", info=dto_field("read-only")
+    )

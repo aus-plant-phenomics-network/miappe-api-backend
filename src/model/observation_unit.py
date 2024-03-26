@@ -39,7 +39,7 @@ class ObservationUnit(Base):
 
     facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id"))
     facility: Mapped[Optional["Facility"]] = relationship(
-        "Facility", lazy="selectin", info=dto_field("read-only")
+        "Facility", back_populates="observation_units", lazy="selectin", info=dto_field("read-only")
     )
 
     observation_unit_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
