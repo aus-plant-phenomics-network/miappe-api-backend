@@ -27,5 +27,5 @@ class ObservedVariable(Base):
         back_populates="observed_variable", lazy="selectin", info=dto_field("read-only")
     )
     unit: Mapped[Optional["Unit"]] = relationship(
-        back_populates="observed_variable", lazy="selectin", info=dto_field("read-only")
+        lazy="selectin", info=dto_field("read-only")
     )
