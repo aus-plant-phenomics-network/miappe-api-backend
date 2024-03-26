@@ -28,7 +28,7 @@ class Method(Base):
 
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id"))
     device: Mapped[Optional["Device"]] = relationship(
-        back_populates="method", lazy="selectin", info=dto_field("read-only")
+        lazy="selectin", info=dto_field("read-only")
     )
 
     biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(
