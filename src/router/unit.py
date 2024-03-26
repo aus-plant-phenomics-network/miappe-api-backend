@@ -20,19 +20,14 @@ class UnitController(BaseController[Unit]):
 
     @get(return_dto=UnitDTO.read_dto)
     async def get_unit(
-            self,
-            transaction: AsyncSession,
-            name: str | None = None,
-            unit_type_name: str | None = None,
-            symbol: str | None = None,
-            alternative_symbol: str | None = None,
+        self,
+        transaction: AsyncSession,
+        name: str | None = None,
+        unit_type_name: str | None = None,
+        symbol: str | None = None,
+        alternative_symbol: str | None = None,
     ) -> Sequence[Unit]:
-        if unit_type_name:
-            stmt = (
-                select(Unit).where(Vocabulary.name == unit_type_name)
-            )
-        else:
-            stmt = select(Unit)
+        stmt = select(Unit).where(Vocabulary.name == unit_type_name) if unit_type_name else select(Unit)
         if name:
             stmt = stmt.where(Unit.name == name)
         if symbol:

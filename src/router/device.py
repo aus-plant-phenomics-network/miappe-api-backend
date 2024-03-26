@@ -25,22 +25,17 @@ class DeviceController(BaseController[Device]):
 
     @get(return_dto=DeviceDTO.read_dto)
     async def get_devices(
-            self,
-            transaction: "AsyncSession",
-            name: str | None = None,
-            device_type_id: UUID | None = None,
-            device_type_name: str | None = None,
-            brand: str | None = None,
-            serial_number: str | None = None,
-            startup_date: datetime.datetime | None = None,
-            removal_date: datetime.datetime | None = None,
+        self,
+        transaction: "AsyncSession",
+        name: str | None = None,
+        device_type_id: UUID | None = None,
+        device_type_name: str | None = None,
+        brand: str | None = None,
+        serial_number: str | None = None,
+        startup_date: datetime.datetime | None = None,
+        removal_date: datetime.datetime | None = None,
     ) -> Sequence[Device]:
-        if device_type_name:
-            stmt = (
-                select(Device).where(Vocabulary.name == device_type_name)
-            )
-        else:
-            stmt = select(Device)
+        stmt = select(Device).where(Vocabulary.name == device_type_name) if device_type_name else select(Device)
         if name:
             stmt = stmt.where(Device.name == name)
         if device_type_id:

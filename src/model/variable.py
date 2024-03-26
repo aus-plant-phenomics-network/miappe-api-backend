@@ -41,9 +41,7 @@ class Variable(Base):
     )
 
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id"))
-    device: Mapped[Optional["Device"]] = relationship(
-        lazy="selectin", info=dto_field("read-only")
-    )
+    device: Mapped[Optional["Device"]] = relationship(lazy="selectin", info=dto_field("read-only"))
 
     # Sub-variable relationship
     biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(

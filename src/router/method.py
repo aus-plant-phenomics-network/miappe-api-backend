@@ -23,12 +23,7 @@ class MethodController(BaseController[Method]):
     async def get_method(
         self, transaction: AsyncSession, method_type_name: str | None = None, name: str | None = None
     ) -> Sequence[Method]:
-        if method_type_name:
-            stmt = (
-                select(Method).where(Vocabulary.name == method_type_name)
-            )
-        else:
-            stmt = select(Method)
+        stmt = select(Method).where(Vocabulary.name == method_type_name) if method_type_name else select(Method)
         if name:
             stmt = stmt.where(Method.name == name)
 

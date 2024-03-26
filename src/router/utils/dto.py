@@ -1,4 +1,4 @@
-from typing import Any, Generic, TypeVar, Type
+from typing import Any, Generic, TypeVar
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
 from litestar.dto import AbstractDTO
@@ -20,7 +20,7 @@ class DTOGenerator(Generic[T]):
         field_definition = FieldDefinition.from_annotation(model_type)
 
         if (field_definition.is_optional and len(field_definition.args) > 2) or (
-                field_definition.is_union and not field_definition.is_optional
+            field_definition.is_union and not field_definition.is_optional
         ):
             raise InvalidAnnotationException("Unions are currently not supported as type argument to DTOs.")
 
@@ -52,14 +52,14 @@ class DTOGenerator(Generic[T]):
         return base_kwargs
 
     @property
-    def read_dto(self) -> Type[AbstractDTO]:
+    def read_dto(self) -> type[AbstractDTO]:
         class ReadDTO(SQLAlchemyDTO[self.model_type]):  # type: ignore[name-defined]
             config = SQLAlchemyDTOConfig(**self.read_kwargs)
 
         return ReadDTO
 
     @property
-    def write_dto(self) -> Type[AbstractDTO]:
+    def write_dto(self) -> type[AbstractDTO]:
         class WriteDTO(SQLAlchemyDTO[self.model_type]):  # type: ignore[name-defined]
             config = SQLAlchemyDTOConfig(**self.write_kwargs)
 

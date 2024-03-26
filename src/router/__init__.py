@@ -5,5 +5,12 @@ from src.router.unit import UnitController
 from src.router.variable import VariableController
 from src.router.vocabulary import VocabularyController
 
-__all__ = ["DeviceController", "VocabularyController", "MethodController", "UnitController", "VariableController",
-           "BaseController", "GenericController"]
+__all__ = [
+    "DeviceController",
+    "VocabularyController",
+    "MethodController",
+    "UnitController",
+    "VariableController",
+    "BaseController",
+    "GenericController",
+]
