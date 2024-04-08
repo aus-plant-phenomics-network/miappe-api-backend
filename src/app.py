@@ -13,8 +13,6 @@ app = Litestar(
         MethodController,
         UnitController,
         VariableController,
-        BaseController,
-        GenericController,
         BiologicalMaterialController,
         DataFileController,
         EnvironmentController,
