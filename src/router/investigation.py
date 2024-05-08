@@ -9,7 +9,8 @@ __all__ = ("InvestigationController",)
 if TYPE_CHECKING:
     pass
 
-InvestigationDTO = DTOGenerator[Investigation](read_kwargs={"max_nested_depth": 1})
+InvestigationDTO = DTOGenerator[Investigation](read_kwargs={"max_nested_depth": 0, "rename_strategy": "camel"},
+                                               write_kwargs={"rename_strategy": "camel"})
 
 
 class InvestigationController(BaseController[Investigation]):

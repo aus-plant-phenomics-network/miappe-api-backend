@@ -22,7 +22,7 @@ class VocabularyController(BaseController[Vocabulary]):
     return_dto = VocabularyDTO.write_dto
 
     @get(return_dto=VocabularyDTO.read_dto)
-    async def get_vocabulary(
+    async def get_items(
         self,
         transaction: "AsyncSession",
         table: Any,

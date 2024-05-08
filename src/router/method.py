@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model import Method, Vocabulary
-from src.router.base import BaseController
+from src.router.base import BaseController, read_items_by_attrs
 from src.router.utils.dto import DTOGenerator
 
 __all__ = ("MethodController",)
@@ -20,12 +20,7 @@ class MethodController(BaseController[Method]):
     return_dto = MethodDTO.write_dto
 
     @get(return_dto=MethodDTO.read_dto)
-    async def get_method(
+    async def get_items(
         self, transaction: AsyncSession, method_type_name: str | None = None, name: str | None = None
     ) -> Sequence[Method]:
-        stmt = select(Method).where(Vocabulary.name == method_type_name) if method_type_name else select(Method)
-        if name:
-            stmt = stmt.where(Method.name == name)
-
-        result = await transaction.execute(stmt)
-        return result.scalars().all()
+        return await read_items_by_attrs(transaction, Method, name=name, method_type_name=method_type_name)

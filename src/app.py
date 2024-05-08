@@ -1,11 +1,11 @@
 from litestar import Litestar
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyPlugin
-
+from litestar.config.cors import CORSConfig
 from src.helpers import create_db_config, provide_transaction
 from src.router import *
 
 db_config = create_db_config("db.sqlite")
-
+cors_config = CORSConfig(allow_origins=["*"])
 app = Litestar(
     [
         DeviceController,
@@ -30,4 +30,5 @@ app = Litestar(
     ],
     dependencies={"transaction": provide_transaction},
     plugins=[SQLAlchemyPlugin(db_config)],
+    cors_config=cors_config
 )

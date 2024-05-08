@@ -11,7 +11,7 @@ __all__ = ("Base",)
 
 class Base(CommonTableAttributes, DeclarativeBase):
     id: Mapped[UUID] = mapped_column(default=uuid4, primary_key=True, info=dto_field("read-only"))
-    name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    title: Mapped[str] = mapped_column(nullable=False, unique=True)
     description: Mapped[str | None] = mapped_column(nullable=True)
 
     # Audit columns - read-only

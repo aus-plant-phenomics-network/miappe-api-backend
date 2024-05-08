@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model import Unit, Vocabulary
-from src.router.base import BaseController
+from src.router.base import BaseController, read_items_by_attrs
 from src.router.utils.dto import DTOGenerator
 
 __all__ = ("UnitController",)
@@ -19,7 +19,7 @@ class UnitController(BaseController[Unit]):
     return_dto = UnitDTO.read_dto
 
     @get(return_dto=UnitDTO.read_dto)
-    async def get_unit(
+    async def get_items(
         self,
         transaction: AsyncSession,
         name: str | None = None,
@@ -27,12 +27,4 @@ class UnitController(BaseController[Unit]):
         symbol: str | None = None,
         alternative_symbol: str | None = None,
     ) -> Sequence[Unit]:
-        stmt = select(Unit).where(Vocabulary.name == unit_type_name) if unit_type_name else select(Unit)
-        if name:
-            stmt = stmt.where(Unit.name == name)
-        if symbol:
-            stmt = stmt.where(Unit.symbol == symbol)
-        if alternative_symbol:
-            stmt = stmt.where(Unit.alternative_symbol == alternative_symbol)
-        result = await transaction.execute(stmt)
-        return result.scalars().all()
+        return read_items_by_attrs(transaction, Unit, name=name, unit_type_name=unit_type_name, symbol=symbol, alternative_symbol=alternative_symbol)
