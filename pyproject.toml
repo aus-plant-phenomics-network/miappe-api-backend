@@ -11,6 +11,7 @@ dependencies = [
     "sqlalchemy>=2.0.29",
     "advanced-alchemy>=0.8.0",
     "anyio>=4.3.0",
+    "pydantic>=2.7.1",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"

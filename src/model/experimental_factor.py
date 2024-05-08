@@ -9,7 +9,6 @@ from src.model import Base
 
 __all__ = ("ExperimentalFactor",)
 
-
 if TYPE_CHECKING:
     from src.model.unit import Unit
 
@@ -22,6 +21,4 @@ class ExperimentalFactor(Base):
     unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("unit_table.id"))
 
     # Relationship
-    unit: Mapped[Optional["Unit"]] = relationship(
-        "Unit", back_populates="experimental_factor", lazy="selectin", info=dto_field("read-only")
-    )
+    unit: Mapped[Optional["Unit"]] = relationship("Unit", lazy="selectin", info=dto_field("read-only"))

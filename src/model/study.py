@@ -10,12 +10,10 @@ from src.model import Base
 
 __all__ = ("Study",)
 
-
 if TYPE_CHECKING:
     from src.model.data_file import DataFile
     from src.model.experiment import Experiment
     from src.model.investigation import Investigation
-    from src.model.observation_unit import ObservationUnit
     from src.model.variable import Variable
 
 
@@ -42,7 +40,4 @@ class Study(Base):
     )
     experiments: Mapped[list["Experiment"]] = relationship(
         "Experiment", back_populates="study", lazy="selectin", info=dto_field("read-only")
-    )
-    observation_units: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit", back_populates="study", lazy="selectin", info=dto_field("read-only")
     )

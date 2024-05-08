@@ -19,7 +19,6 @@ __all__ = (
     "update_item",
 )
 
-
 if TYPE_CHECKING:
     from litestar.contrib.sqlalchemy.base import CommonTableAttributes
     from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,10 +48,10 @@ async def read_item_by_id(session: "AsyncSession", table: type[Any], id: "UUID")
 
 
 async def update_item(
-    session: "AsyncSession",
-    id: "UUID",
-    data: "CommonTableAttributes",
-    table: type[Any],
+        session: "AsyncSession",
+        id: "UUID",
+        data: "CommonTableAttributes",
+        table: type[Any],
 ) -> "Any":
     data_ = {k: v for k, v in data.to_dict().items() if v}
     data_["updated_at"] = datetime.datetime.now(datetime.UTC)
@@ -84,25 +83,30 @@ class GenericController(Controller, Generic[T]):
 
 
 class BaseController(GenericController[T]):
+    @get()
+    async def get_items(self, table: Any, transaction: "AsyncSession") -> Sequence[T.__name__]:
+        return await read_items_by_attrs(transaction, table)
+
     @get("/{id:uuid}")
-    async def get_item_by_id(self, table: Any, transaction: "AsyncSession", id: UUID) -> T.__name__:  # type: ignore[name-defined]
+    async def get_item_by_id(self, table: Any, transaction: "AsyncSession",
+                             id: UUID) -> T.__name__:  # type: ignore[name-defined]
         return await read_item_by_id(session=transaction, table=table, id=id)
 
     @post()
     async def create_item(
-        self,
-        transaction: "AsyncSession",
-        data: T.__name__,  # type: ignore[name-defined]
+            self,
+            transaction: "AsyncSession",
+            data: T.__name__,  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
         return await create_item(session=transaction, data=data)
 
     @put("/{id:uuid}")
     async def update_item(
-        self,
-        table: Any,
-        transaction: "AsyncSession",
-        id: UUID,
-        data: T.__name__,  # type: ignore[name-defined]
+            self,
+            table: Any,
+            transaction: "AsyncSession",
+            id: UUID,
+            data: T.__name__,  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
         return await update_item(session=transaction, id=id, data=data, table=table)
 

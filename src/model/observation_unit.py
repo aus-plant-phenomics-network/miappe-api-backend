@@ -33,9 +33,7 @@ class ObservationUnit(Base):
 
     # Relationship
     study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
-    study: Mapped[Optional["Study"]] = relationship(
-        "Study", back_populates="observation_units", lazy="selectin", info=dto_field("read-only")
-    )
+    study: Mapped[Optional["Study"]] = relationship("Study", lazy="selectin", info=dto_field("read-only"))
 
     facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id"))
     facility: Mapped[Optional["Facility"]] = relationship(

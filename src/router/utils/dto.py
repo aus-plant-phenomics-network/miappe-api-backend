@@ -1,6 +1,7 @@
 from typing import Any, Generic, TypeVar
 
 from litestar.contrib.sqlalchemy.dto import SQLAlchemyDTO, SQLAlchemyDTOConfig
+from litestar.dto import AbstractDTO
 from litestar.exceptions import InvalidAnnotationException
 from litestar.typing import FieldDefinition
 from sqlalchemy.orm import DeclarativeBase
@@ -51,14 +52,14 @@ class DTOGenerator(Generic[T]):
         return base_kwargs
 
     @property
-    def read_dto(self) -> type:
+    def read_dto(self) -> type[AbstractDTO]:
         class ReadDTO(SQLAlchemyDTO[self.model_type]):  # type: ignore[name-defined]
             config = SQLAlchemyDTOConfig(**self.read_kwargs)
 
         return ReadDTO
 
     @property
-    def write_dto(self) -> type:
+    def write_dto(self) -> type[AbstractDTO]:
         class WriteDTO(SQLAlchemyDTO[self.model_type]):  # type: ignore[name-defined]
             config = SQLAlchemyDTOConfig(**self.write_kwargs)
 

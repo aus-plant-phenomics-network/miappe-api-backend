@@ -11,7 +11,6 @@ from src.model import Base
 
 __all__ = ("Experiment",)
 
-
 if TYPE_CHECKING:
     from src.model.facility import Facility
     from src.model.study import Study
@@ -30,6 +29,10 @@ class Experiment(Base):
     objective: Mapped[str | None]
     start_date: Mapped[datetime.datetime | None]
     end_date: Mapped[datetime.datetime | None]
+    observation_unit_level_hierarchy: Mapped[str | None]
+    observation_unit_level_description: Mapped[str | None]
+    cultural_practices: Mapped[str | None]
+    map_of_exp_design: Mapped[str | None]
 
     # Relationship
     facilities: Mapped[list["Facility"]] = relationship(

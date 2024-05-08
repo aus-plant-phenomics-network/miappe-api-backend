@@ -19,5 +19,5 @@ class VariableController(BaseController[Variable]):
     return_dto = VariableDTO.write_dto
 
     @get(return_dto=VariableDTO.read_dto)
-    async def get_variable(self, transaction: AsyncSession, name: str | None = None) -> Sequence[Variable]:
+    async def get_items(self, transaction: AsyncSession, name: str | None = None) -> Sequence[Variable]:
         return await read_items_by_attrs(session=transaction, table=Variable, name=name)
