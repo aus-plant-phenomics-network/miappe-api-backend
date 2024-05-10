@@ -84,8 +84,8 @@ class GenericController(Controller, Generic[T]):
 
 class BaseController(GenericController[T]):
     @get()
-    async def get_items(self, table: Any, transaction: "AsyncSession") -> Sequence[T.__name__]:
-        return await read_items_by_attrs(transaction, table)
+    async def get_items(self, table: Any, transaction: "AsyncSession", **kwargs: Any) -> Sequence[T.__name__]:
+        return await read_items_by_attrs(transaction, table, **kwargs)
 
     @get("/{id:uuid}")
     async def get_item_by_id(self, table: Any, transaction: "AsyncSession",
