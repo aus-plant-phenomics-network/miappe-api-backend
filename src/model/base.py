@@ -27,4 +27,4 @@ class Base(CommonTableAttributes, DeclarativeBase):
     )
 
     def __repr__(self) -> str:
-        return f"id: {self.id}, name: {self.name}, description: {self.description}"
+        return f"id: {self.id}, name: {self.title}, description: {self.description}"

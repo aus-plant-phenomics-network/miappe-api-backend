@@ -5,9 +5,7 @@ from src.router.utils.dto import DTOGenerator
 __all__ = ("InvestigationController",)
 
 
-InvestigationDTO = DTOGenerator[Investigation](
-    read_kwargs={"max_nested_depth": 0, "rename_strategy": "camel"}, write_kwargs={"rename_strategy": "camel"}
-)
+InvestigationDTO = DTOGenerator[Investigation]()
 
 
 class InvestigationController(BaseController[Investigation]):
