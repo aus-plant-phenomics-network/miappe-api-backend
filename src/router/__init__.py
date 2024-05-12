@@ -21,11 +21,11 @@ from src.router.study import StudyController
 
 # from src.router.unit import UnitController
 # from src.router.variable import VariableController
-# from src.router.vocabulary import VocabularyController
+from src.router.vocabulary import VocabularyController
 
 __all__ = [
     # "DeviceController",
-    # "VocabularyController",
+    "VocabularyController",
     # "MethodController",
     # "UnitController",
     # "VariableController",

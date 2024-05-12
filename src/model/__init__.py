@@ -21,12 +21,12 @@ from src.model.study import Study
 
 # from src.model.unit import Unit
 # from src.model.variable import Variable
-# from src.model.vocabulary import Vocabulary
+from src.model.vocabulary import Vocabulary
 
 __all__ = [
     "Base",
     # "Device",
-    # "Vocabulary",
+    "Vocabulary",
     # "Method",
     # "Unit",
     # "Variable",

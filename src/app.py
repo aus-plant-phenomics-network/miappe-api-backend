@@ -20,6 +20,7 @@ from src.router import (
     # SampleController,
     # StaffController,
     StudyController,
+    VocabularyController,
 )
 
 db_config = create_db_config("db.sqlite")
@@ -27,7 +28,7 @@ cors_config = CORSConfig(allow_origins=["*"])
 app = Litestar(
     [
         # DeviceController,
-        # VocabularyController,
+        VocabularyController,
         # MethodController,
         # UnitController,
         # VariableController,
