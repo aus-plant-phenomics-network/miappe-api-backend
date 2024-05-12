@@ -1,7 +1,8 @@
 from src.router.base import BaseController, GenericController
 
 # from src.router.biological_material import BiologicalMaterialController
-# from src.router.data_file import DataFileController
+from src.router.data_file import DataFileController
+
 # from src.router.device import DeviceController
 # from src.router.environment import EnvironmentController
 # from src.router.event import EventController
@@ -31,7 +32,7 @@ __all__ = [
     "BaseController",
     "GenericController",
     # "BiologicalMaterialController",
-    # "DataFileController",
+    "DataFileController",
     # "EnvironmentController",
     # "EventController",
     # "ExperimentController",

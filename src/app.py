@@ -5,7 +5,7 @@ from litestar.contrib.sqlalchemy.plugins import SQLAlchemyPlugin
 from src.helpers import create_db_config, provide_transaction
 from src.router import (
     # BiologicalMaterialController,
-    # DataFileController,
+    DataFileController,
     # DeviceController,
     # EnvironmentController,
     # EventController,
@@ -32,7 +32,7 @@ app = Litestar(
         # UnitController,
         # VariableController,
         # BiologicalMaterialController,
-        # DataFileController,
+        DataFileController,
         # EnvironmentController,
         # EventController,
         # ExperimentController,
