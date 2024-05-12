@@ -17,8 +17,8 @@ if TYPE_CHECKING:
 class DataFile(Base):
     __tablename__ = "data_file_table"  # type: ignore[assignment]
 
-    version: Mapped[str | None]
-    link: Mapped[str | None]
+    data_file_version: Mapped[str | None]
+    data_file_link: Mapped[str | None]
 
     # Relationship
     study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
