@@ -25,7 +25,7 @@ class Study(Base):
     objective: Mapped[str]
 
     # Relationship
-    investigation_id: Mapped[UUID | None] = mapped_column(ForeignKey("investigation_table.id"))
+    investigation_id: Mapped[UUID | None] = mapped_column(ForeignKey("investigation_table.id", ondelete="cascade"))
     investigation: Mapped[Optional["Investigation"]] = relationship(
         "Investigation", lazy="selectin", info=dto_field("read-only"), back_populates="studies"
     )
