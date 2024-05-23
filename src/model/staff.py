@@ -1,17 +1,11 @@
-from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
-from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.model import Base
 
 __all__ = ("Staff",)
-
-
-if TYPE_CHECKING:
-    from src.model.institution import Institution
 
 
 class Staff(Base):
@@ -24,6 +18,3 @@ class Staff(Base):
 
     # Relationship
     institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id"))
-    affiliation: Mapped[Optional["Institution"]] = relationship(
-        "Institution", back_populates="staffs", lazy="selectin", info=dto_field("read-only")
-    )
