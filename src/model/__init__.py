@@ -9,14 +9,14 @@ from src.model.data_file import DataFile
 # from src.model.experiment import Experiment
 # from src.model.experimental_factor import ExperimentalFactor
 # from src.model.facility import Facility
-# from src.model.institution import Institution
+from src.model.institution import Institution
 from src.model.investigation import Investigation
 
 # from src.model.method import Method
 # from src.model.observation_unit import ObservationUnit
 # from src.model.observed_variable import ObservedVariable
 # from src.model.sample import Sample
-# from src.model.staff import Staff
+from src.model.staff import Staff
 from src.model.study import Study
 
 # from src.model.unit import Unit
@@ -40,8 +40,8 @@ __all__ = [
     # "Facility",
     "Investigation",
     "Study",
-    # "Staff",
-    # "Institution",
+    "Staff",
+    "Institution",
     "DataFile",
     # "Experiment",
 ]

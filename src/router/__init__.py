@@ -9,14 +9,14 @@ from src.router.data_file import DataFileController
 # from src.router.experiment import ExperimentController
 # from src.router.experimental_factor import ExperimentalFactorController
 # from src.router.facility import FacilityController
-# from src.router.institution import InstitutionController
+from src.router.institution import InstitutionController
 from src.router.investigation import InvestigationController
 
 # from src.router.method import MethodController
 # from src.router.observation_unit import ObservationUnitController
 # from src.router.observed_variable import ObservedVariableController
 # from src.router.sample import SampleController
-# from src.router.staff import StaffController
+from src.router.staff import StaffController
 from src.router.study import StudyController
 
 # from src.router.unit import UnitController
@@ -39,10 +39,10 @@ __all__ = [
     # "ExperimentalFactorController",
     # "FacilityController",
     "InvestigationController",
-    # "InstitutionController",
+    "InstitutionController",
     # "ObservedVariableController",
     # "ObservationUnitController",
     # "SampleController",
     "StudyController",
-    # "StaffController",
+    "StaffController",
 ]

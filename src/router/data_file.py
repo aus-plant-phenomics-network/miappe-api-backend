@@ -9,6 +9,6 @@ DataFileDTO = DTOGenerator[DataFile](read_kwargs={"max_nested_depth": 1})
 
 
 class DataFileController(BaseController[DataFile]):
-    path = "/data_file"
+    path = "/dataFile"
     dto = DataFileDTO.write_dto
     return_dto = DataFileDTO.read_dto

@@ -8,12 +8,12 @@ from src.model.base import Base
 __all__ = ("Vocabulary",)
 
 
-# if TYPE_CHECKING:
-#     from src.model.device import Device
-#     from src.model.event import Event
-#     from src.model.experiment import Experiment
-#     from src.model.facility import Facility
-#     from src.model.institution import Institution
+if TYPE_CHECKING:
+    #     from src.model.device import Device
+    #     from src.model.event import Event
+    #     from src.model.experiment import Experiment
+    #     from src.model.facility import Facility
+    from src.model.institution import Institution
 #     from src.model.method import Method
 #     from src.model.observation_unit import ObservationUnit
 #     from src.model.sample import Sample
@@ -59,9 +59,9 @@ class Vocabulary(Base):
     # facility: Mapped[list["Facility"]] = relationship(
     #     back_populates="facility_type", lazy="selectin", info=dto_field("private")
     # )
-    # institution: Mapped[list["Institution"]] = relationship(
-    #     back_populates="institution_type", lazy="selectin", info=dto_field("private")
-    # )
+    institution: Mapped[list["Institution"]] = relationship(
+        back_populates="institution_type", lazy="selectin", info=dto_field("private")
+    )
     # experiment: Mapped[list["Experiment"]] = relationship(
     #     back_populates="experiment_type", lazy="selectin", info=dto_field("private")
     # )
