@@ -1,5 +1,6 @@
 from collections.abc import AsyncGenerator
 
+from advanced_alchemy.extensions.litestar.plugins import EngineConfig
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import (
     autocommit_before_send_handler,
 )
@@ -7,10 +8,13 @@ from litestar.contrib.sqlalchemy.plugins import SQLAlchemyAsyncConfig
 from litestar.exceptions import ClientException
 from litestar.status_codes import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from sqlalchemy import Engine, event
+from sqlalchemy import log as sqlalchemy_log
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model.base import Base
+
+sqlalchemy_log._add_default_handler = lambda x: None  # Patch to avoid duplicate logging
 
 __all__ = ("create_db_config", "provide_transaction", "set_sqlite_pragma")
 
@@ -43,4 +47,5 @@ def create_db_config(sqlite_db: str) -> SQLAlchemyAsyncConfig:
         metadata=Base.metadata,
         create_all=True,
         before_send_handler=autocommit_before_send_handler,
+        engine_config=EngineConfig(echo=True),
     )
