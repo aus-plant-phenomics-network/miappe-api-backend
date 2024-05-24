@@ -27,7 +27,10 @@ class Study(Base):
     # Relationship
     investigation_id: Mapped[UUID | None] = mapped_column(ForeignKey("investigation_table.id", ondelete="cascade"))
     investigation: Mapped[Optional["Investigation"]] = relationship(
-        "Investigation", lazy="selectin", info=dto_field("read-only"), back_populates="studies"
+        "Investigation",
+        lazy="selectin",
+        info=dto_field("read-only"),
+        back_populates="studies",
     )
     # variables: Mapped[list["Variable"]] = relationship(
     #     "Variable",
