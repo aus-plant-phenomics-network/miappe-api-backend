@@ -30,20 +30,36 @@ class InstitutionWriteDTO(DataclassDTO[InstitutionWriteData]):
     config = DTOConfig(rename_strategy="camel")
 
 
+async def get_institution_list(session: AsyncSession, id: list[UUID] | None = None) -> list[Institution]:
+    stmt = select(Institution)
+    if id:
+        stmt = stmt.where(Institution.id.in_(id))
+    result = await session.execute(stmt)
+    return cast(list[Institution], result.scalars().all())
+
+
+async def get_institution_by_id(
+    session: AsyncSession, id: UUID, with_parents: bool = False, with_children: bool = False
+) -> Institution:
+    stmt = select(Institution).where(Institution.id == id)
+    if with_parents:
+        stmt = stmt.options(selectinload(Institution.parents))
+    if with_children:
+        stmt = stmt.options(selectinload(Institution.children))
+    result = await session.execute(stmt)
+    return result.scalars().one()
+
+
 class InstitutionController(Controller):
     path = "/institution"
 
     @get()
     async def get_item(self, transaction: AsyncSession) -> list[Institution]:
-        stmt = select(Institution)
-        result = await transaction.execute(stmt)
-        return cast(list[Institution], result.scalars().all())
+        return await get_institution_list(transaction)
 
     @get("/{id:uuid}", return_dto=InstitutionWriteDTO)
     async def get_item_by_id(self, transaction: AsyncSession, id: UUID) -> InstitutionWriteData:
-        stmt = select(Institution).where(Institution.id == id).options(selectinload(Institution.parents))
-        result = await transaction.execute(stmt)
-        data = result.scalars().one()
+        data = await get_institution_by_id(transaction, id, True)
         return_data = InstitutionWriteData(
             id=data.id,
             title=data.title,
@@ -58,35 +74,29 @@ class InstitutionController(Controller):
         return return_data
 
     @post(dto=InstitutionWriteDTO)
-    async def create_item(self, transaction: AsyncSession, data: InstitutionWriteData) -> None:  # type: ignore[name-defined]
+    async def create_item(self, transaction: AsyncSession, data: InstitutionWriteData) -> Institution:  # type: ignore[name-defined]
         institution_data = Institution(
             title=data.title, description=data.description, institution_type_id=data.institution_type_id
         )
         if len(data.parent_id) > 0:
-            stmt = select(Institution).where(Institution.id.in_(data.parent_id))
-            result = await transaction.execute(stmt)
-            parents: list[Institution] = cast(list[Institution], result.scalars().all())
+            parents = await get_institution_list(transaction, data.parent_id)
             institution_data.parents = parents
         transaction.add(institution_data)
-        return
+        return institution_data
 
     @put("{id:uuid}", dto=InstitutionWriteDTO)
-    async def update_item(self, transaction: AsyncSession, data: InstitutionWriteData, id: UUID) -> None:
+    async def update_item(self, transaction: AsyncSession, data: InstitutionWriteData, id: UUID) -> Institution:
         # Fetch item
-        stmt = select(Institution).where(Institution.id == id).options(selectinload(Institution.parents))
-        result = await transaction.execute(stmt)
-        item = result.scalars().one()
+        item = await get_institution_by_id(transaction, id, True)
         # Fetch parents
         if len(data.parent_id) > 0:
-            stmt = select(Institution).where(Institution.id.in_(data.parent_id))
-            result = await transaction.execute(stmt)
-            parents: list[Institution] = cast(list[Institution], result.scalars().all())
+            parents = await get_institution_list(transaction, data.parent_id)
             item.parents = parents
         item.title = data.title
         item.description = data.description
         item.institution_type_id = data.institution_type_id
         item.updated_at = datetime.datetime.now(datetime.UTC)
-        return
+        return item
 
     @delete("{id:uuid}")
     async def delete_item(self, transaction: AsyncSession, id: UUID) -> None:
