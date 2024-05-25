@@ -2,8 +2,8 @@ from src.model.base import Base
 
 # from src.model.biological_material import BiologicalMaterial
 from src.model.data_file import DataFile
+from src.model.device import Device
 
-# from src.model.device import Device
 # from src.model.environment import Environment
 # from src.model.event import Event
 # from src.model.experiment import Experiment
@@ -25,7 +25,7 @@ from src.model.vocabulary import Vocabulary
 
 __all__ = [
     "Base",
-    # "Device",
+    "Device",
     "Vocabulary",
     # "Method",
     # "Unit",

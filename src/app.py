@@ -6,7 +6,7 @@ from src.helpers import create_db_config, provide_transaction
 from src.router import (
     # BiologicalMaterialController,
     DataFileController,
-    # DeviceController,
+    DeviceController,
     # EnvironmentController,
     # EventController,
     # ExperimentalFactorController,
@@ -27,7 +27,7 @@ db_config = create_db_config("db.sqlite")
 cors_config = CORSConfig(allow_origins=["*"])
 app = Litestar(
     [
-        # DeviceController,
+        DeviceController,
         VocabularyController,
         # MethodController,
         # UnitController,
