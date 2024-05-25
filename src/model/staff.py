@@ -17,4 +17,4 @@ class Staff(Base):
     role: Mapped[str | None]
 
     # Relationship
-    institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id"))
+    institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id", ondelete="SET NULL"))
