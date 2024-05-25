@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     #     from src.model.experiment import Experiment
     #     from src.model.facility import Facility
     from src.model.institution import Institution
+    from src.model.method import Method
 
-    #     from src.model.method import Method
     #     from src.model.observation_unit import ObservationUnit
     #     from src.model.sample import Sample
     from src.model.unit import Unit
@@ -36,9 +36,7 @@ class Vocabulary(Base):
 
     # # Relationships
     device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy=None, info=dto_field("private"))
-    # method: Mapped[list["Method"]] = relationship(
-    #     back_populates="method_type", lazy="selectin", info=dto_field("private")
-    # )
+    method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy=None, info=dto_field("private"))
     unit: Mapped[list["Unit"]] = relationship(back_populates="unit_type", lazy=None, info=dto_field("private"))
     # variable: Mapped[list["Variable"]] = relationship(
     #     back_populates="variable_type", lazy="selectin", info=dto_field("private")

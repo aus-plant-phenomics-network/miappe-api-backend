@@ -11,8 +11,8 @@ from src.model.device import Device
 # from src.model.facility import Facility
 from src.model.institution import Institution
 from src.model.investigation import Investigation
+from src.model.method import Method
 
-# from src.model.method import Method
 # from src.model.observation_unit import ObservationUnit
 # from src.model.observed_variable import ObservedVariable
 # from src.model.sample import Sample
@@ -27,7 +27,7 @@ __all__ = [
     "Base",
     "Device",
     "Vocabulary",
-    # "Method",
+    "Method",
     "Unit",
     # "Variable",
     # "BiologicalMaterial",

@@ -11,8 +11,8 @@ from src.router.device import DeviceController
 # from src.router.facility import FacilityController
 from src.router.institution import InstitutionController
 from src.router.investigation import InvestigationController
+from src.router.method import MethodController
 
-# from src.router.method import MethodController
 # from src.router.observation_unit import ObservationUnitController
 # from src.router.observed_variable import ObservedVariableController
 # from src.router.sample import SampleController
@@ -26,7 +26,7 @@ from src.router.vocabulary import VocabularyController
 __all__ = [
     "DeviceController",
     "VocabularyController",
-    # "MethodController",
+    "MethodController",
     "UnitController",
     # "VariableController",
     "BaseController",

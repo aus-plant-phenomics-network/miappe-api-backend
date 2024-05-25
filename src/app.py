@@ -14,7 +14,7 @@ from src.router import (
     # FacilityController,
     InstitutionController,
     InvestigationController,
-    # MethodController,
+    MethodController,
     # ObservationUnitController,
     # ObservedVariableController,
     # SampleController,
@@ -30,7 +30,7 @@ app = Litestar(
     [
         DeviceController,
         VocabularyController,
-        # MethodController,
+        MethodController,
         UnitController,
         # VariableController,
         # BiologicalMaterialController,
