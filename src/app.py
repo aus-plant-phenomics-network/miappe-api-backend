@@ -20,6 +20,7 @@ from src.router import (
     # SampleController,
     StaffController,
     StudyController,
+    UnitController,
     VocabularyController,
 )
 
@@ -30,7 +31,7 @@ app = Litestar(
         DeviceController,
         VocabularyController,
         # MethodController,
-        # UnitController,
+        UnitController,
         # VariableController,
         # BiologicalMaterialController,
         DataFileController,

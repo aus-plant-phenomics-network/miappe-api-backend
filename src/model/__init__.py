@@ -18,8 +18,8 @@ from src.model.investigation import Investigation
 # from src.model.sample import Sample
 from src.model.staff import Staff
 from src.model.study import Study
+from src.model.unit import Unit
 
-# from src.model.unit import Unit
 # from src.model.variable import Variable
 from src.model.vocabulary import Vocabulary
 
@@ -28,7 +28,7 @@ __all__ = [
     "Device",
     "Vocabulary",
     # "Method",
-    # "Unit",
+    "Unit",
     # "Variable",
     # "BiologicalMaterial",
     # "Environment",
