@@ -21,7 +21,7 @@ class DataFile(Base):
     data_file_link: Mapped[str | None]
 
     # Relationship
-    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
-    # study: Mapped[Optional["Study"]] = relationship(
-    #     "Study", back_populates="data_files", lazy="selectin", info=dto_field("read-only")
-    # )
+    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id", ondelete="SET NULL"))
+    study: Mapped[Optional["Study"]] = relationship(
+        "Study", back_populates="data_files", lazy=None, info=dto_field("read-only")
+    )
