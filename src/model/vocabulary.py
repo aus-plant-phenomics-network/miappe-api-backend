@@ -9,7 +9,8 @@ __all__ = ("Vocabulary",)
 
 
 if TYPE_CHECKING:
-    #     from src.model.device import Device
+    from src.model.device import Device
+
     #     from src.model.event import Event
     #     from src.model.experiment import Experiment
     #     from src.model.facility import Facility
@@ -33,9 +34,7 @@ class Vocabulary(Base):
     namespace: Mapped[str | None] = mapped_column(server_default="APPN")
 
     # # Relationships
-    # device: Mapped[list["Device"]] = relationship(
-    #     back_populates="device_type", lazy="selectin", info=dto_field("private")
-    # )
+    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy=None, info=dto_field("private"))
     # method: Mapped[list["Method"]] = relationship(
     #     back_populates="method_type", lazy="selectin", info=dto_field("private")
     # )
@@ -60,7 +59,7 @@ class Vocabulary(Base):
     #     back_populates="facility_type", lazy="selectin", info=dto_field("private")
     # )
     institution: Mapped[list["Institution"]] = relationship(
-        back_populates="institution_type", lazy="selectin", info=dto_field("private")
+        back_populates="institution_type", lazy=None, info=dto_field("private")
     )
     # experiment: Mapped[list["Experiment"]] = relationship(
     #     back_populates="experiment_type", lazy="selectin", info=dto_field("private")
