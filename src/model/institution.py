@@ -28,11 +28,11 @@ class Institution(Base):
     __tablename__ = "institution_table"  # type: ignore[assignment]
 
     # Relationship
-    institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="cascade"))
+    institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     )
-    staffs: Mapped[list["Staff"]] = relationship("Staff", lazy="selectin", info=dto_field("read-only"))
+    staffs: Mapped[list["Staff"]] = relationship("Staff", lazy=None, info=dto_field("read-only"))
     # facilities: Mapped[list["Facility"]] = relationship(
     #     "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     # )
