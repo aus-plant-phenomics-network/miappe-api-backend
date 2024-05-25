@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 institution_to_institution_table = Table(
     "institution_to_institution_table",
     Base.metadata,
-    Column("child_id", UUID_SQL, ForeignKey("institution_table.id"), primary_key=True),
-    Column("parent_id", UUID_SQL, ForeignKey("institution_table.id"), primary_key=True),
+    Column("child_id", UUID_SQL, ForeignKey("institution_table.id", ondelete="cascade"), primary_key=True),
+    Column("parent_id", UUID_SQL, ForeignKey("institution_table.id", ondelete="cascade"), primary_key=True),
 )
 
 
@@ -28,7 +28,7 @@ class Institution(Base):
     __tablename__ = "institution_table"  # type: ignore[assignment]
 
     # Relationship
-    institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="cascade"))
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="institution", lazy="selectin", info=dto_field("read-only")
     )
@@ -41,18 +41,20 @@ class Institution(Base):
         "Institution",
         secondary="institution_to_institution_table",
         back_populates="parents",
-        lazy="selectin",
+        lazy=None,
         info=dto_field("read-only"),
         primaryjoin="Institution.id == institution_to_institution_table.c.parent_id",
         secondaryjoin="Institution.id == institution_to_institution_table.c.child_id",
+        cascade="all, delete",
     )
 
     parents: Mapped[list["Institution"]] = relationship(
         "Institution",
         secondary="institution_to_institution_table",
         back_populates="children",
-        lazy="selectin",
+        lazy=None,
         info=dto_field("read-only"),
         primaryjoin="Institution.id == institution_to_institution_table.c.child_id",
         secondaryjoin="Institution.id == institution_to_institution_table.c.parent_id",
+        cascade="all, delete",
     )
