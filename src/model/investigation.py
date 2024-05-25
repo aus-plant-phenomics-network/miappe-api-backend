@@ -27,7 +27,7 @@ class Investigation(Base):
     studies: Mapped[list["Study"]] = relationship(
         "Study",
         back_populates="investigation",
-        lazy="selectin",
+        lazy=None,
         info=dto_field("read-only"),
         cascade="all, delete",
     )

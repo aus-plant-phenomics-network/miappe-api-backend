@@ -28,7 +28,7 @@ class Study(Base):
     investigation_id: Mapped[UUID | None] = mapped_column(ForeignKey("investigation_table.id", ondelete="cascade"))
     investigation: Mapped[Optional["Investigation"]] = relationship(
         "Investigation",
-        lazy="selectin",
+        lazy=None,
         info=dto_field("read-only"),
         back_populates="studies",
     )
@@ -39,7 +39,7 @@ class Study(Base):
     #     lazy="selectin",
     #     info=dto_field("read-only"),
     # )
-    data_files: Mapped[list["DataFile"]] = relationship("DataFile", lazy="selectin", info=dto_field("read-only"))
+    # data_files: Mapped[list["DataFile"]] = relationship("DataFile", lazy="selectin", info=dto_field("read-only"))
     # experiments: Mapped[list["Experiment"]] = relationship(
     #     "Experiment", back_populates="study", lazy="selectin", info=dto_field("read-only")
     # )
