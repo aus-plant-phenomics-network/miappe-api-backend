@@ -12,7 +12,6 @@ __all__ = ("Variable",)
 
 
 if TYPE_CHECKING:
-    # from src.model.biological_material import BiologicalMaterial
     from src.model.device import Device
 
     # from src.model.facility import Facility
@@ -31,6 +30,11 @@ study_variable_table = Table(
 
 class Variable(Base):
     __tablename__: str = "variable_table"  # type: ignore[assignment]
+    __mapper_args__ = {
+        "polymorphic_identity": "variable",
+        "polymorphic_on": "type",
+    }
+    type: Mapped[str]
 
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
@@ -48,13 +52,13 @@ class Variable(Base):
     unit: Mapped[Optional["Unit"]] = relationship(lazy=None, info=dto_field("read-only"))
 
     # Variable to study relationship
-    studies: Mapped[list["Study"]] = relationship(
-        "Study",
-        secondary="study_variable_table",
-        back_populates="variables",
-        lazy=None,
-        info=dto_field("read-only"),
-    )
+    # studies: Mapped[list["Study"]] = relationship(
+    #     "Study",
+    #     secondary="study_variable_table",
+    #     back_populates="variables",
+    #     lazy=None,
+    #     info=dto_field("read-only"),
+    # )
 
     # facilities: Mapped[list["Facility"]] = relationship(
     #     "Facility",
