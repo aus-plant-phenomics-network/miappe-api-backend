@@ -6,12 +6,12 @@ authors = [
     { name = "hoangson", email = "lehoangsonsg@gmail.com" },
 ]
 dependencies = [
-    "litestar[standard]>=2.7.0",
     "aiosqlite>=0.20.0",
     "sqlalchemy>=2.0.29",
-    "advanced-alchemy>=0.8.0",
     "anyio>=4.3.0",
     "pydantic>=2.7.1",
+    "litestar[standard]>=2.8.3",
+    "advanced-alchemy>=0.11.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"

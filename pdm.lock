@@ -5,11 +5,11 @@
 groups = ["default", "test", "analysis"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:9a6562576793a1130c114d85b916cb8faab001bb1202f297b25cecff3be76639"
+content_hash = "sha256:94eead87011e4fd7648f6557f6c004f2b2193f91e6de92d441872dfbbfa9c01c"
 
 [[package]]
 name = "advanced-alchemy"
-version = "0.8.0"
+version = "0.11.0"
 requires_python = ">=3.8"
 summary = "Ready-to-go SQLAlchemy concoctions."
 groups = ["default"]
@@ -20,8 +20,8 @@ dependencies = [
     "typing-extensions>=4.0.0",
 ]
 files = [
-    {file = "advanced_alchemy-0.8.0-py3-none-any.whl", hash = "sha256:8b477913bbe6313ef3cfb02a242247c775c4a1433fe0946cd5ae83273247b666"},
-    {file = "advanced_alchemy-0.8.0.tar.gz", hash = "sha256:0904cdd9a4f50c0d74dd328a15d5ef84883698b250c6d0503107721ce76412c2"},
+    {file = "advanced_alchemy-0.11.0-py3-none-any.whl", hash = "sha256:ed32c20ad02923060542c00678d90efbab914226792b62f2c6928e89acaf7ab2"},
+    {file = "advanced_alchemy-0.11.0.tar.gz", hash = "sha256:bdc2c81067b5b6c3d22d1d4869b40a471b4818b536f15c018164e9de08d65a0b"},
 ]
 
 [[package]]
@@ -209,7 +209,7 @@ files = [
 
 [[package]]
 name = "faker"
-version = "24.3.0"
+version = "25.2.0"
 requires_python = ">=3.8"
 summary = "Faker is a Python package that generates fake data for you."
 groups = ["default"]
@@ -217,8 +217,8 @@ dependencies = [
     "python-dateutil>=2.4",
 ]
 files = [
-    {file = "Faker-24.3.0-py3-none-any.whl", hash = "sha256:9978025e765ba79f8bf6154c9630a9c2b7f9c9b0f175d4ad5e04b19a82a8d8d6"},
-    {file = "Faker-24.3.0.tar.gz", hash = "sha256:5fb5aa9749d09971e04a41281ae3ceda9414f683d4810a694f8a8eebb8f9edec"},
+    {file = "Faker-25.2.0-py3-none-any.whl", hash = "sha256:cfe97c4857c4c36ee32ea4aaabef884895992e209bae4cbd26807cf3e05c6918"},
+    {file = "Faker-25.2.0.tar.gz", hash = "sha256:45b84f47ff1ef86e3d1a8d11583ca871ecf6730fad0660edadc02576583a2423"},
 ]
 
 [[package]]
@@ -290,7 +290,7 @@ files = [
 
 [[package]]
 name = "httpcore"
-version = "1.0.4"
+version = "1.0.5"
 requires_python = ">=3.8"
 summary = "A minimal low-level HTTP client."
 groups = ["default"]
@@ -299,8 +299,8 @@ dependencies = [
     "h11<0.15,>=0.13",
 ]
 files = [
-    {file = "httpcore-1.0.4-py3-none-any.whl", hash = "sha256:ac418c1db41bade2ad53ae2f3834a3a0f5ae76b56cf5aa497d2d033384fc7d73"},
-    {file = "httpcore-1.0.4.tar.gz", hash = "sha256:cb2839ccfcba0d2d3c1131d3c3e26dfc327326fbe7a5dc0dbfe9f6c9151bb022"},
+    {file = "httpcore-1.0.5-py3-none-any.whl", hash = "sha256:421f18bac248b25d310f3cacd198d55b8e6125c107797b609ff9b7a6ba7991b5"},
+    {file = "httpcore-1.0.5.tar.gz", hash = "sha256:34a38e2f9291467ee3b44e89dd52615370e152954ba21721378a87b2960f7a61"},
 ]
 
 [[package]]
@@ -373,7 +373,7 @@ files = [
 
 [[package]]
 name = "jinja2"
-version = "3.1.3"
+version = "3.1.4"
 requires_python = ">=3.7"
 summary = "A very fast and expressive template engine."
 groups = ["default"]
@@ -381,8 +381,8 @@ dependencies = [
     "MarkupSafe>=2.0",
 ]
 files = [
-    {file = "Jinja2-3.1.3-py3-none-any.whl", hash = "sha256:7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa"},
-    {file = "Jinja2-3.1.3.tar.gz", hash = "sha256:ac8bd6544d4bb2c9792bf3a159e80bba8fda7f07e81bc3aed565432d5925ba90"},
+    {file = "jinja2-3.1.4-py3-none-any.whl", hash = "sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d"},
+    {file = "jinja2-3.1.4.tar.gz", hash = "sha256:4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369"},
 ]
 
 [[package]]
@@ -400,7 +400,7 @@ files = [
 
 [[package]]
 name = "litestar"
-version = "2.7.0"
+version = "2.8.3"
 requires_python = "<4.0,>=3.8"
 summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
 groups = ["default"]
@@ -417,13 +417,13 @@ dependencies = [
     "typing-extensions",
 ]
 files = [
-    {file = "litestar-2.7.0-py3-none-any.whl", hash = "sha256:62eabe89c08a1a5b66063bf9d8ec7677368bf7d3593c0579fb3605dd61b486a3"},
-    {file = "litestar-2.7.0.tar.gz", hash = "sha256:30f703b513d8c8a7f82e3b5cd583b071147f7e60b929650eeeeb00ff0ff65582"},
+    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
+    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
 ]
 
 [[package]]
 name = "litestar"
-version = "2.7.0"
+version = "2.8.3"
 extras = ["standard"]
 requires_python = "<4.0,>=3.8"
 summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
@@ -432,18 +432,18 @@ dependencies = [
     "fast-query-parsers>=1.0.2",
     "jinja2",
     "jsbeautifier",
-    "litestar==2.7.0",
+    "litestar==2.8.3",
     "uvicorn[standard]",
     "uvloop>=0.18.0; sys_platform != \"win32\"",
 ]
 files = [
-    {file = "litestar-2.7.0-py3-none-any.whl", hash = "sha256:62eabe89c08a1a5b66063bf9d8ec7677368bf7d3593c0579fb3605dd61b486a3"},
-    {file = "litestar-2.7.0.tar.gz", hash = "sha256:30f703b513d8c8a7f82e3b5cd583b071147f7e60b929650eeeeb00ff0ff65582"},
+    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
+    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
 ]
 
 [[package]]
 name = "mako"
-version = "1.3.2"
+version = "1.3.5"
 requires_python = ">=3.8"
 summary = "A super-fast templating language that borrows the best ideas from the existing templating languages."
 groups = ["default"]
@@ -451,8 +451,8 @@ dependencies = [
     "MarkupSafe>=0.9.2",
 ]
 files = [
-    {file = "Mako-1.3.2-py3-none-any.whl", hash = "sha256:32a99d70754dfce237019d17ffe4a282d2d3351b9c476e90d8a60e63f133b80c"},
-    {file = "Mako-1.3.2.tar.gz", hash = "sha256:2a0c8ad7f6274271b3bb7467dd37cf9cc6dab4bc19cb69a4ef10669402de698e"},
+    {file = "Mako-1.3.5-py3-none-any.whl", hash = "sha256:260f1dbc3a519453a9c856dedfe4beb4e50bd5a26d96386cb6c80856556bb91a"},
+    {file = "Mako-1.3.5.tar.gz", hash = "sha256:48dbc20568c1d276a2698b36d968fa76161bf127194907ea6fc594fa81f943bc"},
 ]
 
 [[package]]
@@ -623,7 +623,7 @@ files = [
 
 [[package]]
 name = "polyfactory"
-version = "2.15.0"
+version = "2.16.0"
 requires_python = "<4.0,>=3.8"
 summary = "Mock data generation factories"
 groups = ["default"]
@@ -632,8 +632,8 @@ dependencies = [
     "typing-extensions>=4.6.0",
 ]
 files = [
-    {file = "polyfactory-2.15.0-py3-none-any.whl", hash = "sha256:ff5b6a8742cbd6fbde9f81310b9732d5421fbec31916d6ede5a977753110fbe9"},
-    {file = "polyfactory-2.15.0.tar.gz", hash = "sha256:a3ff5263756ad74acf4001f04c1b6aab7d1197cbaa070352df79573a8dcd85ec"},
+    {file = "polyfactory-2.16.0-py3-none-any.whl", hash = "sha256:168d8e50b77e91e35e691e8b3eedac43d7e423a6857fa26d473def96d53f0ecf"},
+    {file = "polyfactory-2.16.0.tar.gz", hash = "sha256:03d8c706b70c4782ac8e637d0f6ab52760a7d11b712da5936a95a8f7022b2688"},
 ]
 
 [[package]]
@@ -714,13 +714,13 @@ files = [
 
 [[package]]
 name = "pygments"
-version = "2.17.2"
-requires_python = ">=3.7"
+version = "2.18.0"
+requires_python = ">=3.8"
 summary = "Pygments is a syntax highlighting package written in Python."
 groups = ["default"]
 files = [
-    {file = "pygments-2.17.2-py3-none-any.whl", hash = "sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c"},
-    {file = "pygments-2.17.2.tar.gz", hash = "sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367"},
+    {file = "pygments-2.18.0-py3-none-any.whl", hash = "sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a"},
+    {file = "pygments-2.18.0.tar.gz", hash = "sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199"},
 ]
 
 [[package]]
@@ -843,18 +843,18 @@ files = [
 
 [[package]]
 name = "rich-click"
-version = "1.7.4"
+version = "1.8.2"
 requires_python = ">=3.7"
 summary = "Format click help output nicely with rich"
 groups = ["default"]
 dependencies = [
     "click>=7",
-    "rich>=10.7.0",
+    "rich>=10.7",
     "typing-extensions",
 ]
 files = [
-    {file = "rich-click-1.7.4.tar.gz", hash = "sha256:7ce5de8e4dc0333aec946113529b3eeb349f2e5d2fafee96b9edf8ee36a01395"},
-    {file = "rich_click-1.7.4-py3-none-any.whl", hash = "sha256:e363655475c60fec5a3e16a1eb618118ed79e666c365a36006b107c17c93ac4e"},
+    {file = "rich_click-1.8.2-py3-none-any.whl", hash = "sha256:b57856f304e4fe0394b82d7ce0784450758f8c8b4e201ccc4320501cc201806b"},
+    {file = "rich_click-1.8.2.tar.gz", hash = "sha256:8e29bdede858b59aa2859a1ab1c4ccbd39ed7ed5870262dae756fba6b5dc72e8"},
 ]
 
 [[package]]
