@@ -22,7 +22,7 @@ class Study(Base):
     __tablename__ = "study_table"  # type: ignore[assignment]
     title: Mapped[str] = mapped_column(nullable=False)
     objective: Mapped[str] = mapped_column(nullable=False)
-    start_date: Mapped[datetime.datetime | None]
+    start_date: Mapped[datetime.datetime] = mapped_column(nullable=False)
     end_date: Mapped[datetime.datetime | None]
 
     # Relationship
