@@ -5,7 +5,7 @@ from uuid import UUID
 from litestar.dto import dto_field
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model.base import Base, BaseDataclass
 
@@ -24,7 +24,7 @@ institution_staff_table = Table(
 
 class Staff(Base):
     __tablename__ = "staff_table"  # type: ignore[assignment]
-
+    name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str | None]
     phone: Mapped[str | None]
     orcid: Mapped[str | None]
@@ -40,8 +40,9 @@ class Staff(Base):
     )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class StaffDataclass(BaseDataclass):
+    name: str
     email: str | None = field(default=None)
     phone: str | None = field(default=None)
     orcid: str | None = field(default=None)
