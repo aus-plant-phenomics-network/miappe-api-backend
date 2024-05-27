@@ -8,7 +8,7 @@ __all__ = ("InvestigationController",)
 InvestigationDTO = DTOGenerator[Investigation]()
 
 
-class InvestigationController(BaseController[Investigation]):
+class InvestigationController(BaseController[Investigation, Investigation, Investigation]):
     path = "/investigation"
     dto = InvestigationDTO.write_dto
     return_dto = InvestigationDTO.read_dto

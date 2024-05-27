@@ -16,9 +16,7 @@ if TYPE_CHECKING:
 
     # from src.model.facility import Facility
     # from src.model.observation_unit import ObservationUnit
-    from src.model.study import Study
     from src.model.unit import Unit
-    from src.model.vocabulary import Vocabulary
 
 study_variable_table = Table(
     "study_variable_table",

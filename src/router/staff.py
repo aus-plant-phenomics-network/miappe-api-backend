@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from src.model import Staff
 from src.router.base import BaseController
 from src.router.utils.dto import DTOGenerator

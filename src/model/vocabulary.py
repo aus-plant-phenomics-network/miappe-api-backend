@@ -20,7 +20,6 @@ if TYPE_CHECKING:
     #     from src.model.observation_unit import ObservationUnit
     #     from src.model.sample import Sample
     from src.model.unit import Unit
-    from src.model.variable import Variable
 
 
 class Vocabulary(Base):

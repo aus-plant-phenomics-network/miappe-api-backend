@@ -39,7 +39,9 @@ class Study(Base):
     #     lazy="selectin",
     #     info=dto_field("read-only"),
     # )
-    data_files: Mapped[list["DataFile"]] = relationship("DataFile", lazy=None, info=dto_field("read-only"))
+    data_files: Mapped[list["DataFile"]] = relationship(
+        "DataFile", secondary="study_data_file_table", lazy=None, info=dto_field("read-only")
+    )
     # experiments: Mapped[list["Experiment"]] = relationship(
     #     "Experiment", back_populates="study", lazy="selectin", info=dto_field("read-only")
     # )
