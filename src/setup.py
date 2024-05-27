@@ -97,8 +97,24 @@ async def insert_data_file(
         session.add(data_file_item)
         await session.commit()
         return {"datafile": data_file_item.id}
-    
-async def insert_staff(async_session: async_sessionmaker[AsyncSession], institution_id: dict[str, UUID])->dict[str, UUID]:
+
+
+async def insert_staff(
+    async_session: async_sessionmaker[AsyncSession], institution_id: dict[str, UUID]
+) -> dict[str, UUID]:
+    async with async_session() as session:
+        uoa_ = await session.execute(select(Institution).where(Institution.id == institution_id["uoa"]))
+        uoa = uoa_.scalars().one()
+        appn_ = await session.execute(select(Institution).where(Institution.id == institution_id["appn"]))
+        appn = appn_.scalars().one()
+        staff_item = Staff(
+            title="John Doe",
+            role="SWE",
+        )
+        staff_item.institutions = [appn, uoa]
+        session.add(staff_item)
+        await session.commit()
+        return {"staff": staff_item.id}
 
 
 async def async_main() -> None:
@@ -112,7 +128,8 @@ async def async_main() -> None:
     institution_type = await insert_institution_types(async_session)
     study_id = await insert_study(async_session, investigation_id)
     institution_id = await insert_institution(async_session, institution_type)
-    data_file_id = await insert_data_file(async_session, study_id)
+    _ = await insert_data_file(async_session, study_id)
+    _ = await insert_staff(async_session, institution_id)
 
     # for AsyncEngine created in function scope, close and
     # clean-up pooled connections
