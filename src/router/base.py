@@ -1,18 +1,16 @@
-import datetime
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast
 from uuid import UUID
 
 from litestar import Controller, Router, delete, get, post, put
 from litestar.di import Provide
 from sqlalchemy import delete as remove
 from sqlalchemy import select
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, selectinload
 
 __all__ = (
     "BaseController",
     "GenericController",
-    "create_item",
     "delete_item",
     "read_item_by_id",
     "read_items_by_attrs",
@@ -20,20 +18,27 @@ __all__ = (
 )
 
 if TYPE_CHECKING:
-    from litestar.contrib.sqlalchemy.base import CommonTableAttributes
     from sqlalchemy.ext.asyncio import AsyncSession
+
+    from src.model.base import Base
 
 T = TypeVar("T", bound=DeclarativeBase)
 
 
-async def create_item(session: "AsyncSession", table: type[Any], data: Any) -> Any:
-    session.add(data)
-    await session.flush()
-    return await read_item_by_id(session, table, data.id)
-
-
-async def read_items_by_attrs(session: "AsyncSession", table: type[Any], **kwargs: Any) -> Sequence[Any]:
+async def read_items_by_attrs(
+    session: "AsyncSession",
+    table: type[Any],
+    selectinload_attrs: list[Any] | None = None,
+    id: UUID | list[UUID] | None = None,
+    **kwargs: Any,
+) -> Sequence[Any]:
     stmt = select(table)
+    if selectinload_attrs:
+        for attr in selectinload_attrs:
+            stmt = stmt.options(selectinload(attr))
+    if id:
+        processed_id = [id] if isinstance(id, UUID) else id
+        stmt = stmt.where(table.__table__.c["id"].in_(processed_id))
     for attr, value in kwargs.items():
         if value is not None:
             stmt = stmt.where(table.__table__.c[attr] == value)
@@ -41,8 +46,16 @@ async def read_items_by_attrs(session: "AsyncSession", table: type[Any], **kwarg
     return result.scalars().all()
 
 
-async def read_item_by_id(session: "AsyncSession", table: type[Any], id: "UUID") -> Any:
+async def read_item_by_id(
+    session: "AsyncSession",
+    table: type[Any],
+    id: "UUID",
+    selectinload_attrs: list[Any] | None = None,
+) -> Any:
     stmt = select(table).where(table.__table__.c.id == id)
+    if selectinload_attrs:
+        for attr in selectinload_attrs:
+            stmt = stmt.options(selectinload(attr))
     result = await session.execute(stmt)
     return result.scalars().one()
 
@@ -50,13 +63,12 @@ async def read_item_by_id(session: "AsyncSession", table: type[Any], id: "UUID")
 async def update_item(
     session: "AsyncSession",
     id: "UUID",
-    data: "CommonTableAttributes",
+    data: "Base",
     table: type[Any],
 ) -> "Any":
-    data_ = {k: v for k, v in data.to_dict().items() if v}
-    data_["updated_at"] = datetime.datetime.now(datetime.UTC)
+    data_dict = data.to_dict()
     result = await read_item_by_id(session=session, table=table, id=id)
-    for attr, value in data_.items():
+    for attr, value in data_dict.items():
         setattr(result, attr, value)
     return result
 
@@ -85,23 +97,38 @@ class GenericController(Controller, Generic[T]):
 class BaseController(GenericController[T]):
     @get()
     async def get_items(
-        self, table: Any, transaction: "AsyncSession", title: str | None, **kwargs: Any
+        self,
+        table: Any,
+        transaction: "AsyncSession",
+        title: str | None,
+        id: UUID | list[UUID] | None = None,
+        **kwargs: Any,
     ) -> Sequence[T.__name__]:
-        return await read_items_by_attrs(transaction, table, title=title, **kwargs)
+        return cast(
+            Sequence[T],
+            await read_items_by_attrs(transaction, table, title=title, id=id, **kwargs),
+        )
 
     @get("/{id:uuid}")
-    async def get_item_by_id(self, table: Any, transaction: "AsyncSession", id: UUID) -> T.__name__:  # type: ignore[name-defined]
-        result = await read_item_by_id(session=transaction, table=table, id=id)
-        return result
+    async def get_item_by_id(
+        self,
+        table: Any,
+        transaction: "AsyncSession",
+        id: UUID,
+    ) -> T.__name__:
+        return cast(
+            T,
+            await read_item_by_id(session=transaction, table=table, id=id),
+        )
 
     @post()
     async def create_item(
         self,
-        table: Any,
         transaction: "AsyncSession",
         data: T.__name__,  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
-        return await create_item(session=transaction, table=table, data=data)
+        transaction.add(data)
+        return data
 
     @put("/{id:uuid}")
     async def update_item(
