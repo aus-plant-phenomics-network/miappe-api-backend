@@ -35,7 +35,10 @@ class Institution(Base):
         "Vocabulary", back_populates="institution", lazy=None, info=dto_field("read-only")
     )
     staffs: Mapped[list["Staff"]] = relationship(
-        "Staff", lazy=None, back_populates="institutions", info=dto_field("read-only")
+        "Staff",
+        lazy=None,
+        secondary="institution_staff_table",
+        info=dto_field("read-only"),
     )
     # facilities: Mapped[list["Facility"]] = relationship(
     #     "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only")
