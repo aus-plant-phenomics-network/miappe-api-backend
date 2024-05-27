@@ -125,10 +125,12 @@ class BaseController(GenericController[T]):
     async def create_item(
         self,
         transaction: "AsyncSession",
+        table: Any,
         data: T.__name__,  # type: ignore[name-defined]
     ) -> T.__name__:  # type: ignore[name-defined]
         transaction.add(data)
-        return data
+        await transaction.flush()
+        return await read_item_by_id(transaction, table, data.id)
 
     @put("/{id:uuid}")
     async def update_item(
