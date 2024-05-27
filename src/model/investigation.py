@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 class Investigation(Base):
     __tablename__ = "investigation_table"  # type: ignore[assignment]
+    title: Mapped[str] = mapped_column(nullable=False, unique=True)
     description: Mapped[str | None] = mapped_column(nullable=True)
     submission_date: Mapped[datetime.datetime | None]
     public_release_date: Mapped[datetime.datetime | None]
