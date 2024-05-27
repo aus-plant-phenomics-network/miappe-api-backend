@@ -1,17 +1,27 @@
-from typing import TYPE_CHECKING, Optional
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from litestar.dto import dto_field
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import UUID as UUID_SQL
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import Mapped, relationship
 
-from src.model import Base
+from src.model.base import Base, BaseDataclass
 
 __all__ = ("DataFile",)
 
 
 if TYPE_CHECKING:
     from src.model.study import Study
+
+
+study_data_file_table = Table(
+    "study_data_file_table",
+    Base.metadata,
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
+    Column("variable_id", UUID_SQL, ForeignKey("data_file_table.id"), primary_key=True),
+)
 
 
 class DataFile(Base):
@@ -22,7 +32,25 @@ class DataFile(Base):
     data_file_link: Mapped[str | None]
 
     # Relationship
-    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id", ondelete="SET NULL"))
-    study: Mapped[Optional["Study"]] = relationship(
-        "Study", back_populates="data_files", lazy=None, info=dto_field("read-only")
+    studies: Mapped[list["Study"]] = relationship(
+        "Study",
+        secondary="study_data_file_table",
+        back_populates="data_files",
+        lazy=None,
+        info=dto_field("read-only"),
     )
+
+
+@dataclass
+class DataFileDataclass(BaseDataclass):
+    data_file_description: str | None = field(default=None)
+    data_file_version: str | None = field(default=None)
+    data_file_link: str | None = field(default=None)
+    study_id: list[UUID] = field(default_factory=list[UUID])
+
+    @classmethod
+    def from_orm(cls, data: DataFile) -> "DataFileDataclass":  # type: ignore[override]
+        data_dict = data.to_dict()
+        if len(data.studies) > 0:
+            data_dict["study_id"] = [item.id for item in data.studies]
+        return cls(**data_dict)
