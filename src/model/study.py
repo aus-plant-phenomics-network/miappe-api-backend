@@ -20,9 +20,9 @@ if TYPE_CHECKING:
 
 class Study(Base):
     __tablename__ = "study_table"  # type: ignore[assignment]
+    objective: Mapped[str] = mapped_column(nullable=False)
     start_date: Mapped[datetime.datetime | None]
     end_date: Mapped[datetime.datetime | None]
-    objective: Mapped[str]
 
     # Relationship
     investigation_id: Mapped[UUID] = mapped_column(ForeignKey("investigation_table.id", ondelete="cascade"))

@@ -15,4 +15,4 @@ class Environment(Variable):
     __mapper_args__ = {"polymorphic_identity": "environment"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
-    set_point: Mapped[str | None]
+    setpoint: Mapped[str | None]

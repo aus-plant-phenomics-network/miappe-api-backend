@@ -2,7 +2,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 from litestar.dto import dto_field
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
 
@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 class Investigation(Base):
     __tablename__ = "investigation_table"  # type: ignore[assignment]
+    description: Mapped[str | None] = mapped_column(nullable=True)
 
     submission_date: Mapped[datetime.datetime | None]
     public_release_date: Mapped[datetime.datetime | None]

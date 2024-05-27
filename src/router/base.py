@@ -91,7 +91,8 @@ class BaseController(GenericController[T]):
 
     @get("/{id:uuid}")
     async def get_item_by_id(self, table: Any, transaction: "AsyncSession", id: UUID) -> T.__name__:  # type: ignore[name-defined]
-        return await read_item_by_id(session=transaction, table=table, id=id)
+        result = await read_item_by_id(session=transaction, table=table, id=id)
+        return result
 
     @post()
     async def create_item(

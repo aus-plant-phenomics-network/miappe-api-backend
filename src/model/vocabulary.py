@@ -38,9 +38,7 @@ class Vocabulary(Base):
     device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy=None, info=dto_field("private"))
     method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy=None, info=dto_field("private"))
     unit: Mapped[list["Unit"]] = relationship(back_populates="unit_type", lazy=None, info=dto_field("private"))
-    variable: Mapped[list["Variable"]] = relationship(
-        back_populates="variable_type", lazy="selectin", info=dto_field("private")
-    )
+
     # event: Mapped[list["Event"]] = relationship(back_populates="event_type", lazy="selectin", info=dto_field("private"))
     # sample_plant_structural_development_stage: Mapped[list["Sample"]] = relationship(
     #     back_populates="plant_structural_development_stage",

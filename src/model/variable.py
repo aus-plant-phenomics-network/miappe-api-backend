@@ -39,12 +39,6 @@ class Variable(Base):
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
 
-    # Relationships:
-    variable_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
-    variable_type: Mapped[Optional["Vocabulary"]] = relationship(
-        back_populates="variable", lazy=None, info=dto_field("read-only")
-    )
-
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id", ondelete="SET NULL"))
     device: Mapped[Optional["Device"]] = relationship(lazy=None, info=dto_field("read-only"))
 

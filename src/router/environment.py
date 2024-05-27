@@ -5,7 +5,7 @@ from src.router.utils.dto import DTOGenerator
 __all__ = ("EnvironmentController",)
 
 
-EnvironmentDTO = DTOGenerator[Environment](read_kwargs={"max_nested_depth": 1})
+EnvironmentDTO = DTOGenerator[Environment]()
 
 
 class EnvironmentController(BaseController[Environment]):
