@@ -3,9 +3,10 @@ import datetime
 from datetime import UTC
 from uuid import UUID
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from src.model import Base, Institution, Investigation, Study, Vocabulary
+from src.model import Base, DataFile, Institution, Investigation, Staff, Study, Vocabulary
 
 
 async def insert_investigation(async_session: async_sessionmaker[AsyncSession]) -> dict[str, UUID]:
@@ -78,6 +79,28 @@ async def insert_institution(
         return {"uoa": uoa.id, "uq": uq.id, "appn": appn.id, "tpa": tpa.id}
 
 
+async def insert_data_file(
+    async_session: async_sessionmaker[AsyncSession], study_id: dict[str, UUID]
+) -> dict[str, UUID]:
+    async with async_session() as session:
+        first_study_ = await session.execute(select(Study).where(Study.id == study_id["First Study"]))
+        first_study = first_study_.scalars().one()
+        second_study_ = await session.execute(select(Study).where(Study.id == study_id["Second Study"]))
+        second_study = second_study_.scalars().one()
+        data_file_item = DataFile(
+            title="images",
+            data_file_description="barley images",
+            data_file_link="google.com",
+            data_file_version="1.0.0",
+        )
+        data_file_item.studies = [first_study, second_study]
+        session.add(data_file_item)
+        await session.commit()
+        return {"datafile": data_file_item.id}
+    
+async def insert_staff(async_session: async_sessionmaker[AsyncSession], institution_id: dict[str, UUID])->dict[str, UUID]:
+
+
 async def async_main() -> None:
     engine = create_async_engine("sqlite+aiosqlite:///db.sqlite", echo=True)
     async_session = async_sessionmaker(engine, expire_on_commit=False)
@@ -89,6 +112,7 @@ async def async_main() -> None:
     institution_type = await insert_institution_types(async_session)
     study_id = await insert_study(async_session, investigation_id)
     institution_id = await insert_institution(async_session, institution_type)
+    data_file_id = await insert_data_file(async_session, study_id)
 
     # for AsyncEngine created in function scope, close and
     # clean-up pooled connections
