@@ -173,5 +173,7 @@ app:												## Start the application - production mode
 
 .PHONY: app-dev
 app-dev:											## Start the application - debug mode
+	@echo "=>Running setup file"
+	@$(PDM) run python -m src.setup
 	@echo "=>Running application developer mode"
 	@$(PDM) run litestar --app src.app:app run --debug --reload
