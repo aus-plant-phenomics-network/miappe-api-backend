@@ -27,6 +27,7 @@ institution_to_institution_table = Table(
 
 class Institution(Base):
     __tablename__ = "institution_table"  # type: ignore[assignment]
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
     country: Mapped[str | None] = mapped_column(nullable=True)
 
     # Relationship
@@ -67,8 +68,9 @@ class Institution(Base):
     )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class InstitutionDataclass(BaseDataclass):
+    name: str
     country: str | None = field(default=None)
     institution_type_id: UUID | None = field(default=None)
     parent_id: list[UUID] = field(default_factory=list[UUID])
