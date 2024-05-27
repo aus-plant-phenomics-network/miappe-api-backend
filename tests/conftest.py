@@ -7,7 +7,7 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.helpers import create_db_config, provide_transaction
-from src.router import InvestigationController, StudyController
+from src.router import InstitutionController, InvestigationController, StudyController, VocabularyController
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -15,7 +15,7 @@ async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
     p = Path("test.sqlite")
     db_config = create_db_config("test.sqlite")
     app = Litestar(
-        [InvestigationController, StudyController],
+        [InvestigationController, StudyController, VocabularyController, InstitutionController],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
     )

@@ -113,3 +113,112 @@ async def update_study(
     )
     assert response.status_code == 200
     yield (project_id, study_id)
+
+
+# Vocabulary Fixture
+INSTITUTION_TYPE_NAMESPACE = "Institution"
+RESEARCH_UNIVERSITY = "Research University"
+RESEARCH_DEPARTMENT = "Research Department"
+
+
+@pytest.fixture(scope="function")
+async def setup_vocab_university_and_department(
+    test_client: AsyncTestClient,
+) -> AsyncGenerator[tuple[UUID, UUID], None]:
+    uni_response = await test_client.post(
+        "vocabulary", json={"title": RESEARCH_UNIVERSITY, "namespace": INSTITUTION_TYPE_NAMESPACE}
+    )
+    assert uni_response.status_code == 201
+    uni_id = uni_response.json()["id"]
+
+    department_response = await test_client.post(
+        "vocabulary", json={"title": RESEARCH_DEPARTMENT, "namespace": INSTITUTION_TYPE_NAMESPACE}
+    )
+    assert department_response.status_code == 201
+    department_id = department_response.json()["id"]
+
+    yield (uni_id, department_id)
+
+    await test_client.delete(f"vocabulary/{uni_id}")
+    await test_client.delete(f"vocabulary/{department_id}")
+
+
+# Institution Fixture
+UOA_TITLE = "The University of Adelaide"
+COUNTRY = "Australia"
+TPA_TITLE = "The Plant Accelerator"
+APPN_TITLE = "Australian Plant Phenomic Network"
+
+
+@pytest.fixture(scope="function")
+async def setup_UOA(
+    setup_vocab_university_and_department: tuple[UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID], None]:
+    uni_id, department_id = setup_vocab_university_and_department
+    response = await test_client.post(
+        "institution", json={"title": UOA_TITLE, "institutionTypeId": uni_id, "country": COUNTRY}
+    )
+    assert response.status_code == 201
+    uoa_id = response.json()["id"]
+    yield uoa_id, uni_id, department_id
+
+    await test_client.delete(f"institution/{uoa_id}")
+
+
+@pytest.fixture(scope="function")
+async def setup_APPN(
+    setup_UOA: tuple[UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID], None]:
+    uoa_id, uni_id, department_id = setup_UOA
+    response = await test_client.post(
+        "institution",
+        json={"title": APPN_TITLE, "institutionTypeId": department_id, "country": COUNTRY, "parentId": [uoa_id]},
+    )
+    assert response.status_code == 201
+    appn_id = response.json()["id"]
+    yield appn_id, uoa_id, uni_id, department_id
+
+    await test_client.delete(f"institution/{appn_id}")
+
+
+@pytest.fixture(scope="function")
+async def setup_TPA(
+    setup_APPN: tuple[UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID, UUID], None]:
+    appn_id, uoa_id, uni_id, department_id = setup_APPN
+    response = await test_client.post(
+        "institution",
+        json={"title": TPA_TITLE, "institutionTypeId": department_id, "country": COUNTRY, "parentId": [uoa_id]},
+    )
+    assert response.status_code == 201
+    tpa_id = response.json()["id"]
+    yield tpa_id, appn_id, uoa_id, uni_id, department_id
+    await test_client.delete(f"institution/{tpa_id}")
+
+
+@pytest.fixture(scope="function")
+async def update_TPA(
+    setup_TPA: tuple[UUID, UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID, UUID], None]:
+    tpa_id, appn_id, uoa_id, uni_id, department_id = setup_TPA
+    response = await test_client.put(
+        f"institution/{tpa_id}",
+        json={
+            "title": TPA_TITLE,
+            "institutionTypeId": department_id,
+            "country": COUNTRY,
+            "parentId": [uoa_id, appn_id],
+        },
+    )
+    assert response.status_code == 200
+    yield tpa_id, appn_id, uoa_id, uni_id, department_id
+
+
+@pytest.fixture(scope="function")
+async def delete_APPN(
+    update_TPA: tuple[UUID, UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID, UUID], None]:
+    tpa_id, appn_id, uoa_id, uni_id, department_id = update_TPA
+    response = await test_client.delete(f"institution/{appn_id}")
+    assert response.status_code == 204
+    yield tpa_id, appn_id, uoa_id, uni_id, department_id
