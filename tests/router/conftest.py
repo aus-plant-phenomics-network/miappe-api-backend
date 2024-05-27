@@ -282,3 +282,45 @@ async def delete_first_study_get_data_file(
     response = await test_client.delete(f"study/{first_id}")
     assert response.status_code == 204
     yield data_file_id, first_id, second_id
+
+
+# Staff fixture
+STAFF_NAME = "John Doe"
+STAFF_ROLE = "SWE"
+
+
+@pytest.fixture(scope="function")
+async def setup_staff(
+    setup_TPA: tuple[UUID, UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID], None]:
+    tpa_id, appn_id, uoa_id, _, _ = setup_TPA
+    response = await test_client.post(
+        "staff", json={"title": STAFF_NAME, "role": STAFF_ROLE, "institutionId": [tpa_id, appn_id]}
+    )
+    assert response.status_code == 201
+    staff_id = response.json()["id"]
+    yield staff_id, tpa_id, appn_id, uoa_id
+    await test_client.delete(f"staff/{staff_id}")
+
+
+@pytest.fixture(scope="function")
+async def update_staff(
+    setup_staff: tuple[UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID], None]:
+    staff_id, tpa_id, appn_id, uoa_id = setup_staff
+    response = await test_client.put(
+        f"staff/{staff_id}", json={"title": STAFF_NAME, "role": STAFF_ROLE, "institutionId": [tpa_id, appn_id, uoa_id]}
+    )
+    assert response.status_code == 200
+    staff_id = response.json()["id"]
+    yield staff_id, tpa_id, appn_id, uoa_id
+
+
+@pytest.fixture(scope="function")
+async def delete_tpa_get_staff(
+    setup_staff: tuple[UUID, UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID, UUID], None]:
+    staff_id, tpa_id, appn_id, uoa_id = setup_staff
+    response = await test_client.delete(f"institution/{tpa_id}")
+    assert response.status_code == 204
+    yield staff_id, tpa_id, appn_id, uoa_id

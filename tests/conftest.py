@@ -11,6 +11,7 @@ from src.router import (
     DataFileController,
     InstitutionController,
     InvestigationController,
+    StaffController,
     StudyController,
     VocabularyController,
 )
@@ -21,7 +22,14 @@ async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
     p = Path("test.sqlite")
     db_config = create_db_config("test.sqlite")
     app = Litestar(
-        [InvestigationController, StudyController, VocabularyController, InstitutionController, DataFileController],
+        [
+            InvestigationController,
+            StudyController,
+            VocabularyController,
+            InstitutionController,
+            DataFileController,
+            StaffController,
+        ],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
     )
