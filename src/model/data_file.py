@@ -5,7 +5,7 @@ from uuid import UUID
 from litestar.dto import dto_field
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model.base import Base, BaseDataclass
 
@@ -27,9 +27,9 @@ study_data_file_table = Table(
 class DataFile(Base):
     __tablename__ = "data_file_table"  # type: ignore[assignment]
 
-    data_file_description: Mapped[str | None]
-    data_file_version: Mapped[str | None]
-    data_file_link: Mapped[str | None]
+    data_file_description: Mapped[str] = mapped_column(nullable=False)
+    data_file_version: Mapped[str] = mapped_column(nullable=False)
+    data_file_link: Mapped[str] = mapped_column(nullable=False)
 
     # Relationship
     studies: Mapped[list["Study"]] = relationship(
@@ -41,11 +41,11 @@ class DataFile(Base):
     )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class DataFileDataclass(BaseDataclass):
-    data_file_description: str | None = field(default=None)
-    data_file_version: str | None = field(default=None)
-    data_file_link: str | None = field(default=None)
+    data_file_description: str
+    data_file_version: str
+    data_file_link: str
     study_id: list[UUID] = field(default_factory=list[UUID])
 
     @classmethod
