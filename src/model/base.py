@@ -19,7 +19,6 @@ class Serialisable(Protocol):
 
 class Base(CommonTableAttributes, DeclarativeBase):
     id: Mapped[UUID] = mapped_column(default=uuid4, primary_key=True, info=dto_field("read-only"))
-    title: Mapped[str] = mapped_column(nullable=False, unique=True)
 
     # Audit columns - read-only
     created_at: Mapped[datetime] = mapped_column(
@@ -39,9 +38,8 @@ class Base(CommonTableAttributes, DeclarativeBase):
         return {k: v for k, v in data_dict.items() if v is not None}
 
 
-@dataclass
+@dataclass(kw_only=True)
 class BaseDataclass:
-    title: str
     created_at: datetime | None = field(default=None)
     updated_at: datetime | None = field(default=None)
     id: UUID | None = field(default=None)
