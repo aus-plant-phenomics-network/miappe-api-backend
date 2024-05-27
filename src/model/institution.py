@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
@@ -6,7 +7,7 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.model import Base
+from src.model.base import Base, BaseDataclass
 
 __all__ = ("Institution",)
 
@@ -59,3 +60,17 @@ class Institution(Base):
         secondaryjoin="Institution.id == institution_to_institution_table.c.parent_id",
         cascade="all, delete",
     )
+
+
+@dataclass
+class InstitutionDataclass(BaseDataclass):
+    country: str | None = field(default=None)
+    institution_type_id: UUID | None = field(default=None)
+    parent_id: list[UUID] = field(default_factory=list[UUID])
+
+    @classmethod
+    def from_orm(cls, data: Institution) -> "InstitutionDataclass":  # type: ignore[override]
+        data_dict = data.to_dict()
+        if len(data.parents) > 0:
+            data_dict["parent_id"] = [item.id for item in data.parents]
+        return cls(**data_dict)
