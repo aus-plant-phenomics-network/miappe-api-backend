@@ -39,6 +39,7 @@ class DataFileController(BaseController[DataFile]):
         data_dict = await prepare_data_dict(transaction, data)
         data_file_data = DataFile(**data_dict)
         transaction.add(data_file_data)
+        await transaction.flush()
         return data_file_data
 
     @put("{id:uuid}", dto=DataFileDTO)

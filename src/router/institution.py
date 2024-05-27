@@ -40,6 +40,7 @@ class InstitutionController(BaseController[Institution]):
         data_dict = await prepare_data_dict(transaction, data)
         institution_data = Institution(**data_dict)
         transaction.add(institution_data)
+        await transaction.flush()
         return institution_data
 
     @put("{id:uuid}", dto=InstitutionDTO)

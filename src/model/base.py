@@ -1,5 +1,5 @@
 import abc
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Protocol
 from uuid import UUID, uuid4
@@ -41,10 +41,10 @@ class Base(CommonTableAttributes, DeclarativeBase):
 
 @dataclass
 class BaseDataclass:
-    id: UUID | None
     title: str
-    created_at: datetime | None
-    updated_at: datetime | None
+    created_at: datetime | None = field(default=None)
+    updated_at: datetime | None = field(default=None)
+    id: UUID | None = field(default=None)
 
     def to_dict(self, exclude: set[str] | None = None) -> dict[str, Any]:
         result = {k: v for k, v in asdict(self).items() if v is not None}

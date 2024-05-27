@@ -39,6 +39,7 @@ class StaffController(BaseController[Staff]):
         data_dict = await prepare_data_dict(transaction, data)
         staff_data = Staff(**data_dict)
         transaction.add(staff_data)
+        await transaction.flush()
         return staff_data
 
     @put("{id:uuid}", dto=StaffDTO)
