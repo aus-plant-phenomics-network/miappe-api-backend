@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import AsyncGenerator
 from pathlib import Path
 
 import pytest
@@ -7,23 +7,18 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.helpers import create_db_config, provide_transaction
-from src.router import DeviceController, MethodController, UnitController, VariableController, VocabularyController
+from src.router import InvestigationController
 
 
-@pytest.fixture(scope="module")
-def test_client() -> Generator[AsyncTestClient, None, None]:
+@pytest.fixture(scope="function", autouse=True)
+async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
     p = Path("test.sqlite")
     db_config = create_db_config("test.sqlite")
     app = Litestar(
-        [
-            DeviceController,
-            VocabularyController,
-            MethodController,
-            UnitController,
-            VariableController,
-        ],
+        [InvestigationController],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
     )
-    yield AsyncTestClient(app=app)
+    async with AsyncTestClient(app=app) as client:
+        yield client
     p.unlink(missing_ok=True)
