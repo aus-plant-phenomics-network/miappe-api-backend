@@ -19,7 +19,7 @@ __all__ = ("InstitutionController",)
 class InstitutionWriteData:
     id: UUID | None
     title: str
-    description: str | None
+    country: str | None
     created_at: datetime.datetime | None
     updated_at: datetime.datetime | None
     institution_type_id: UUID | None
@@ -63,7 +63,7 @@ class InstitutionController(Controller):
         return_data = InstitutionWriteData(
             id=data.id,
             title=data.title,
-            description=data.description,
+            country=data.country,
             created_at=data.created_at,
             updated_at=data.updated_at,
             institution_type_id=data.institution_type_id,
@@ -76,7 +76,7 @@ class InstitutionController(Controller):
     @post(dto=InstitutionWriteDTO)
     async def create_item(self, transaction: AsyncSession, data: InstitutionWriteData) -> Institution:  # type: ignore[name-defined]
         institution_data = Institution(
-            title=data.title, description=data.description, institution_type_id=data.institution_type_id
+            title=data.title, country=data.country, institution_type_id=data.institution_type_id
         )
         if len(data.parent_id) > 0:
             parents = await get_institution_list(transaction, data.parent_id)
@@ -93,7 +93,7 @@ class InstitutionController(Controller):
             parents = await get_institution_list(transaction, data.parent_id)
             item.parents = parents
         item.title = data.title
-        item.description = data.description
+        item.country = data.country
         item.institution_type_id = data.institution_type_id
         item.updated_at = datetime.datetime.now(datetime.UTC)
         return item
