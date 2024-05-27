@@ -20,7 +20,7 @@ async def setup_investigation(test_client: AsyncTestClient) -> AsyncGenerator[UU
 
 
 @pytest.fixture(scope="function")
-async def setup_no_cleanup(test_client: AsyncTestClient) -> AsyncGenerator[UUID, None]:
+async def setup_investigation_no_cleanup(test_client: AsyncTestClient) -> AsyncGenerator[UUID, None]:
     response = await test_client.post(
         "/investigation", json={"title": PROJECT_UPDATED_TITLE, "description": PROJECT_UPDATED_DESCRIPTION}
     )
@@ -30,7 +30,7 @@ async def setup_no_cleanup(test_client: AsyncTestClient) -> AsyncGenerator[UUID,
 
 
 @pytest.fixture(scope="function")
-async def setup_with_cleanup(test_client: AsyncTestClient) -> AsyncGenerator[UUID, None]:
+async def setup_investigation_with_cleanup(test_client: AsyncTestClient) -> AsyncGenerator[UUID, None]:
     response = await test_client.post(
         "/investigation", json={"title": PROJECT_UPDATED_TITLE, "description": PROJECT_UPDATED_DESCRIPTION}
     )
@@ -59,10 +59,10 @@ async def test_investigation_updated(setup_investigation: UUID, test_client: Asy
 
 
 async def test_read_multiple_investigations(
-    setup_investigation: UUID, setup_with_cleanup: UUID, test_client: AsyncTestClient
+    setup_investigation: UUID, setup_investigation_with_cleanup: UUID, test_client: AsyncTestClient
 ) -> None:
     first_id = setup_investigation
-    second_id = setup_with_cleanup
+    second_id = setup_investigation_with_cleanup
     all_ids = {first_id, second_id}
 
     response = await test_client.get("investigation")
@@ -73,8 +73,8 @@ async def test_read_multiple_investigations(
     assert all_ids == db_ids
 
 
-async def test_delete_investigation(setup_no_cleanup: UUID, test_client: AsyncTestClient) -> None:
-    item_id = setup_no_cleanup
+async def test_delete_investigation(setup_investigation_no_cleanup: UUID, test_client: AsyncTestClient) -> None:
+    item_id = setup_investigation_no_cleanup
     await test_client.delete(f"investigation/{item_id}")
     query_response = await test_client.get(f"investigation/{item_id}")
     assert query_response.status_code == 404
