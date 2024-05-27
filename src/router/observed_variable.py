@@ -5,7 +5,7 @@ from src.router.utils.dto import DTOGenerator
 __all__ = ("ObservedVariableController",)
 
 
-ObservedVariableDTO = DTOGenerator[ObservedVariable](read_kwargs={"max_nested_depth": 1})
+ObservedVariableDTO = DTOGenerator[ObservedVariable]()
 
 
 class ObservedVariableController(BaseController[ObservedVariable]):
