@@ -8,6 +8,8 @@ PROJECT_INIT_TITLE = "First Project"
 PROJECT_UPDATED_TITLE = "First Investigation"
 PROJECT_UPDATED_DESCRIPTION = "Project Description"
 
+# Investigation fixture
+
 
 @pytest.fixture(scope="function")
 async def setup_investigation(test_client: AsyncTestClient) -> AsyncGenerator[UUID, None]:
@@ -222,3 +224,61 @@ async def delete_APPN(
     response = await test_client.delete(f"institution/{appn_id}")
     assert response.status_code == 204
     yield tpa_id, appn_id, uoa_id, uni_id, department_id
+
+
+# Data file fixture
+DATA_FILE_TITLE = "Images"
+DATA_FILE_DESCRIPTION = "Barley Images"
+DATA_FILE_LINK = "DOI:12444"
+DATA_FILE_VERSION = "1.0.0"
+
+
+@pytest.fixture(scope="function")
+async def setup_data_file(
+    setup_study: tuple[UUID, UUID], setup_second_study: tuple[UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID], None]:
+    _, first_id = setup_study
+    _, second_id = setup_second_study
+    response = await test_client.post(
+        "dataFile",
+        json={
+            "title": DATA_FILE_TITLE,
+            "dataFileDescription": DATA_FILE_DESCRIPTION,
+            "dataFileLink": DATA_FILE_LINK,
+            "dataFileVersion": DATA_FILE_VERSION,
+            "studyId": [first_id, second_id],
+        },
+    )
+    assert response.status_code == 201
+    data_file_id = response.json()["id"]
+    yield data_file_id, first_id, second_id
+    await test_client.delete(f"dataFile/{data_file_id}")
+
+
+@pytest.fixture(scope="function")
+async def update_data_file(
+    setup_data_file: tuple[UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID], None]:
+    data_file_id, first_id, second_id = setup_data_file
+    response = await test_client.put(
+        f"dataFile/{data_file_id}",
+        json={
+            "title": DATA_FILE_TITLE,
+            "dataFileDescription": DATA_FILE_DESCRIPTION,
+            "dataFileLink": DATA_FILE_LINK,
+            "dataFileVersion": DATA_FILE_VERSION,
+            "studyId": [first_id],
+        },
+    )
+    assert response.status_code == 200
+    yield data_file_id, first_id, second_id
+
+
+@pytest.fixture(scope="function")
+async def delete_first_study_get_data_file(
+    setup_data_file: tuple[UUID, UUID, UUID], test_client: AsyncTestClient
+) -> AsyncGenerator[tuple[UUID, UUID, UUID], None]:
+    data_file_id, first_id, second_id = setup_data_file
+    response = await test_client.delete(f"study/{first_id}")
+    assert response.status_code == 204
+    yield data_file_id, first_id, second_id
