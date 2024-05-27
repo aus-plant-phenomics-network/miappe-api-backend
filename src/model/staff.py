@@ -17,8 +17,8 @@ __all__ = ("Staff", "StaffDataclass")
 institution_staff_table = Table(
     "institution_staff_table",
     Base.metadata,
-    Column("institution_id", UUID_SQL, ForeignKey("institution_table.id"), primary_key=True),
-    Column("staff_id", UUID_SQL, ForeignKey("staff_table.id"), primary_key=True),
+    Column("institution_id", UUID_SQL, ForeignKey("institution_table.id", ondelete="cascade"), primary_key=True),
+    Column("staff_id", UUID_SQL, ForeignKey("staff_table.id", ondelete="cascade"), primary_key=True),
 )
 
 

@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 study_data_file_table = Table(
     "study_data_file_table",
     Base.metadata,
-    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
-    Column("data_file_id", UUID_SQL, ForeignKey("data_file_table.id"), primary_key=True),
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id", ondelete="cascade"), primary_key=True),
+    Column("data_file_id", UUID_SQL, ForeignKey("data_file_table.id", ondelete="cascade"), primary_key=True),
 )
 
 
