@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, relationship
 
 from src.model.base import Base, BaseDataclass
 
-__all__ = ("DataFile",)
+__all__ = ("DataFile", "DataFileDataclass")
 
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ study_data_file_table = Table(
     "study_data_file_table",
     Base.metadata,
     Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
-    Column("variable_id", UUID_SQL, ForeignKey("data_file_table.id"), primary_key=True),
+    Column("data_file_id", UUID_SQL, ForeignKey("data_file_table.id"), primary_key=True),
 )
 
 
