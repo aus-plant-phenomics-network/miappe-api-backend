@@ -32,7 +32,7 @@ class Staff(Base):
 
     # Relationship
     institutions: Mapped[list["Institution"]] = relationship(
-        "Insitution",
+        "Institution",
         secondary="institution_staff_table",
         back_populates="staffs",
         lazy=None,
