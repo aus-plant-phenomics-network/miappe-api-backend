@@ -34,7 +34,7 @@ class DataFileController(BaseController[DataFile]):
     dto = DataFileDTO
     return_dto = DataFileReturnDTO.read_dto
 
-    @get("/{id:uuid}")
+    @get("/{id:uuid}", return_dto=DataFileDTO)
     async def get_item_by_id(self, transaction: AsyncSession, id: UUID) -> DataFileDataclass:
         data = await read_item_by_id(transaction, DataFile, id, [DataFile.studies])
         return DataFileDataclass.from_orm(data)

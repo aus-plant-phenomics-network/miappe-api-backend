@@ -9,6 +9,7 @@
     "ondelete",
     "orcid",
     "Phenomic",
+    "Scanalyzer",
     "sqlalchemy"
   ]
 }

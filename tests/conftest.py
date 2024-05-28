@@ -24,8 +24,8 @@ pytest_plugins = [
     "tests.router.institution.fixture",
     "tests.router.staff.fixture",
     "tests.router.data_file.fixture",
-    "tests.router.method.fixture",
     "tests.router.device.fixture",
+    "tests.router.method.fixture",
 ]
 
 

@@ -4,50 +4,47 @@ from uuid import UUID
 from httpx import Response
 from litestar.testing import AsyncTestClient
 
-from src.model.staff import Staff, StaffDataclass
-from tests.helpers import validate_post, validate_put
-from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, PATH, STEP_W, AllStaffFixtureResponse, StaffResponse
+from src.model.method import Method
+from tests.helpers import validate_post
+from tests.router.method.fixture import (
+    DAY_TO_ANTHESIS_METHOD,
+    PATH,
+    PROJECTED_SHOOT_AREA_METHOD,
+    AllMethodFixtureResponse,
+    MethodResponse,
+)
 
 
 @dataclass
-class StaffFixture:
+class MethodFixture:
     id: UUID
     response: Response
-    data: StaffDataclass
+    data: Method
+    method_reference_id: UUID
+    device_id: UUID | None = None
 
 
-def get_staff_fixture(response: StaffResponse, data: Staff) -> StaffFixture:
-    staff_response = response.staff_response
-    institution_id = [item.json()["id"] for item in response.institution_response]
-    fixture = StaffDataclass(institution_id=institution_id, **data.to_dict())
-    return StaffFixture(id=staff_response.json()["id"], response=staff_response, data=fixture)
+def get_method_fixture(response: MethodResponse, data: Method) -> MethodFixture:
+    method_response = response.method_response
+    method_reference_id = response.method_reference_response.json()["id"]
+    device_id = response.device_response.json()["id"] if response.device_response else None
+    fixture = Method(method_reference_id=method_reference_id, **data.to_dict())
+    return MethodFixture(
+        id=method_response.json()["id"],
+        response=method_response,
+        data=fixture,
+        method_reference_id=method_reference_id,
+        device_id=device_id,
+    )
 
 
-async def test_chris_b_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(setup_staff.chris_b, CHRIS_B)
+async def test_projected_shoot_area_created(
+    setup_method: AllMethodFixtureResponse, test_client: AsyncTestClient
+) -> None:
+    fixture = get_method_fixture(setup_method.projected_shoot_area, PROJECTED_SHOOT_AREA_METHOD)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
 
-async def test_step_w_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(setup_staff.step_w, STEP_W)
+async def test_days_to_anthesis_created(setup_method: AllMethodFixtureResponse, test_client: AsyncTestClient) -> None:
+    fixture = get_method_fixture(setup_method.day_to_anthesis, DAY_TO_ANTHESIS_METHOD)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
-
-
-async def test_john_doe_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(setup_staff.john_doe, JOHN_DOE)
-    await validate_post(PATH, fixture.data, test_client, fixture.response)
-
-
-async def test_john_doe_updated(update_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(update_staff.john_doe, JOHN_DOE)
-    await validate_put(PATH, fixture.data, test_client, fixture.response)
-
-
-async def test_delete_appn(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    appn_id = setup_staff.institution_response.APPN.institution_response.json()["id"]
-    uoa_id = setup_staff.institution_response.UOA.institution_response.json()["id"]
-    await test_client.delete(f"institution/{appn_id}")
-    john_doe_id = setup_staff.john_doe.staff_response.json()["id"]
-    response = await test_client.get(f"{PATH}/{john_doe_id}")
-    assert response.status_code == 200
-    assert response.json()["institutionId"] == [uoa_id]
