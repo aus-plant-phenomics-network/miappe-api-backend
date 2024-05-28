@@ -27,16 +27,28 @@ class Vocabulary(Base):
     title: Mapped[str]
     # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
     relationship_type: Mapped[str | None]
-
+    accession_number: Mapped[str | None]
     external_reference: Mapped[str | None]
 
     # Todo: Make namespace a separate entity?
     namespace: Mapped[str | None] = mapped_column(server_default="APPN")
 
     # # Relationships
-    device: Mapped[list["Device"]] = relationship(back_populates="device_type", lazy=None, info=dto_field("private"))
-    method: Mapped[list["Method"]] = relationship(back_populates="method_type", lazy=None, info=dto_field("private"))
-    unit: Mapped[list["Unit"]] = relationship(back_populates="unit_type", lazy=None, info=dto_field("private"))
+    device: Mapped[list["Device"]] = relationship(
+        back_populates="device_reference",
+        lazy=None,
+        info=dto_field("private"),
+    )
+    method: Mapped[list["Method"]] = relationship(
+        back_populates="method_reference",
+        lazy=None,
+        info=dto_field("private"),
+    )
+    unit: Mapped[list["Unit"]] = relationship(
+        back_populates="unit_reference",
+        lazy=None,
+        info=dto_field("private"),
+    )
 
     # event: Mapped[list["Event"]] = relationship(back_populates="event_type", lazy="selectin", info=dto_field("private"))
     # sample_plant_structural_development_stage: Mapped[list["Sample"]] = relationship(

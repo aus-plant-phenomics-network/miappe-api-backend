@@ -25,7 +25,7 @@ class Device(Base):
 
     # Relationships:
     # With vocabulary
-    device_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
-    device_type: Mapped[Optional["Vocabulary"]] = relationship(
+    device_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
+    device_reference: Mapped[Optional["Vocabulary"]] = relationship(
         back_populates="device", lazy=None, info=dto_field("read-only")
     )

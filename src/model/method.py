@@ -19,10 +19,12 @@ if TYPE_CHECKING:
 
 class Method(Base):
     __tablename__: str = "method_table"  # type: ignore[assignment]
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    description: Mapped[str | None] = mapped_column(nullable=True)
 
     # Relationships:
-    method_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
-    method_type: Mapped[Optional["Vocabulary"]] = relationship(
+    method_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
+    method_reference: Mapped[Optional["Vocabulary"]] = relationship(
         back_populates="method", lazy=None, info=dto_field("read-only")
     )
 

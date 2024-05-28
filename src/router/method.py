@@ -5,7 +5,7 @@ from src.router.utils.dto import DTOGenerator
 __all__ = ("MethodController",)
 
 
-MethodDTO = DTOGenerator[Method](read_kwargs={"max_nested_depth": 1})
+MethodDTO = DTOGenerator[Method]()
 
 
 class MethodController(BaseController[Method]):
