@@ -2,5 +2,12 @@
   "python.testing.pytestArgs": ["tests"],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
-  "cSpell.words": ["litestar", "ondelete", "orcid", "Phenomic", "sqlalchemy"]
+  "cSpell.words": [
+    "INRAE",
+    "litestar",
+    "ondelete",
+    "orcid",
+    "Phenomic",
+    "sqlalchemy"
+  ]
 }

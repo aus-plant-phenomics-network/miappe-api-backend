@@ -20,6 +20,7 @@ pytest_plugins = [
     "tests.router.investigation.fixture",
     "tests.router.study.fixture",
     "tests.router.institution.fixture",
+    "tests.router.staff.fixture",
 ]
 
 
