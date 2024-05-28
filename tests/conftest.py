@@ -16,6 +16,8 @@ from src.router import (
     VocabularyController,
 )
 
+pytest_plugins = ["tests.router.investigation.fixture", "tests.router.study.fixture"]
+
 
 @pytest.fixture(scope="function", autouse=True)
 async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
