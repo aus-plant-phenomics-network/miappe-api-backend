@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 class Device(Base):
     __tablename__: str = "device_table"  # type: ignore[assignment]
-
+    name: Mapped[str] = mapped_column(nullable=False)
     brand: Mapped[str | None]
     serial_number: Mapped[str | None]
     constructor_model: Mapped[str | None]
@@ -25,7 +25,7 @@ class Device(Base):
 
     # Relationships:
     # With vocabulary
-    device_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
-    device_reference: Mapped[Optional["Vocabulary"]] = relationship(
+    device_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
+    device_type: Mapped[Optional["Vocabulary"]] = relationship(
         back_populates="device", lazy=None, info=dto_field("read-only")
     )

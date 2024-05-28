@@ -35,7 +35,7 @@ class Vocabulary(Base):
 
     # # Relationships
     device: Mapped[list["Device"]] = relationship(
-        back_populates="device_reference",
+        back_populates="device_type",
         lazy=None,
         info=dto_field("private"),
     )
