@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
@@ -6,13 +7,14 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.model.base import Base
+from src.model.base import Base, BaseDataclass
 
 __all__ = ("Variable",)
 
 
 if TYPE_CHECKING:
     from src.model.device import Device
+    from src.model.study import Study
 
     # from src.model.facility import Facility
     # from src.model.observation_unit import ObservationUnit
@@ -44,13 +46,13 @@ class Variable(Base):
     unit: Mapped[Optional["Unit"]] = relationship(lazy=None, info=dto_field("read-only"))
 
     # Variable to study relationship
-    # studies: Mapped[list["Study"]] = relationship(
-    #     "Study",
-    #     secondary="study_variable_table",
-    #     back_populates="variables",
-    #     lazy=None,
-    #     info=dto_field("read-only"),
-    # )
+    studies: Mapped[list["Study"]] = relationship(
+        "Study",
+        secondary="study_variable_table",
+        back_populates="variables",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
 
     # facilities: Mapped[list["Facility"]] = relationship(
     #     "Facility",
@@ -75,3 +77,19 @@ class Variable(Base):
     #     info=dto_field("read-only"),
     #     primaryjoin="Variable.id == ObservationUnit.factor_id",
     # )
+
+
+@dataclass(kw_only=True)
+class VariableDataclass(BaseDataclass):
+    time_interval: str | None = field(default=None)
+    sample_interval: str | None = field(default=None)
+    device_id: UUID | None = field(default=None)
+    unit_id: UUID | None = field(default=None)
+    study_id: list[UUID] = field(default_factory=list[UUID])
+
+    @classmethod
+    def from_orm(cls, data: Variable) -> "VariableDataclass":  # type: ignore[override]
+        data_dict = data.to_dict()
+        if len(data.studies) > 0:
+            data_dict["study_id"] = [item.id for item in data.studies]
+        return cls(**data_dict)
