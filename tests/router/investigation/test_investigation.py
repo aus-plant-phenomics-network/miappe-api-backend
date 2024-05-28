@@ -2,7 +2,7 @@ from httpx import Response
 from litestar.testing import AsyncTestClient
 
 from tests.helpers import delete_fixture, post_fixture, validate_get_not_exist, validate_post, validate_put
-from tests.router.investigation.conftest import (
+from tests.router.investigation.fixture import (
     BARLEY_PROJECT_INVESTIGATION,
     FIRST_PROJECT,
     FIRST_PROJECT_UPDATED,
