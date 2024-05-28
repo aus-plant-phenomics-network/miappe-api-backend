@@ -16,7 +16,11 @@ from src.router import (
     VocabularyController,
 )
 
-pytest_plugins = ["tests.router.investigation.fixture", "tests.router.study.fixture"]
+pytest_plugins = [
+    "tests.router.investigation.fixture",
+    "tests.router.study.fixture",
+    "tests.router.institution.fixture",
+]
 
 
 @pytest.fixture(scope="function", autouse=True)
