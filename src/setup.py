@@ -15,6 +15,7 @@ from tests.router.method.fixture import (
 )
 from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
 from tests.router.study.fixture import BARLEY_PROJECT_STUDY, FIRST_STUDY, MAIZE_PROJECT_STUDY, SECOND_STUDY
+from tests.router.unit.fixture import DEGREE_DAY_REF, DEGREE_DAY_UNIT, KILO_PIXEL_UNIT, MICROGRAM_UNIT
 
 
 async def async_main() -> None:
@@ -68,6 +69,10 @@ async def async_main() -> None:
         PROJECTED_SHOOT_AREA_METHOD.device = SCANALYZER_DEVICE
         DAY_TO_ANTHESIS_METHOD.method_reference = DAY_TO_ANTHESIS_REF
         session.add_all([PROJECTED_SHOOT_AREA_METHOD, DAY_TO_ANTHESIS_METHOD])
+
+        # Add unit
+        DEGREE_DAY_UNIT.unit_reference = DEGREE_DAY_REF
+        session.add_all([DEGREE_DAY_REF, DEGREE_DAY_UNIT, MICROGRAM_UNIT, KILO_PIXEL_UNIT])
 
         await session.commit()
 
