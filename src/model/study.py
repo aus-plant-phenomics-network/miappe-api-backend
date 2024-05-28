@@ -12,10 +12,10 @@ __all__ = ("Study",)
 
 if TYPE_CHECKING:
     from src.model.data_file import DataFile
+    from src.model.investigation import Investigation
 
     #     from src.model.experiment import Experiment
-    #     from src.model.variable import Variable
-    from src.model.investigation import Investigation
+    from src.model.variable import Variable
 
 
 class Study(Base):
@@ -33,13 +33,13 @@ class Study(Base):
         info=dto_field("read-only"),
         back_populates="studies",
     )
-    # variables: Mapped[list["Variable"]] = relationship(
-    #     "Variable",
-    #     secondary="study_variable_table",
-    #     back_populates="studies",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
+    variables: Mapped[list["Variable"]] = relationship(
+        "Variable",
+        secondary="study_variable_table",
+        back_populates="studies",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
     data_files: Mapped[list["DataFile"]] = relationship(
         "DataFile",
         secondary="study_data_file_table",
