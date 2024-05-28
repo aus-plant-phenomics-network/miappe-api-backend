@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model.institution import Institution, InstitutionDataclass
 from src.router.base import BaseController, read_item_by_id, read_items_by_attrs
+from src.router.utils.dto import DTOGenerator
 
 __all__ = ("InstitutionController",)
 
@@ -26,11 +27,15 @@ async def prepare_data_dict(session: AsyncSession, data: InstitutionDataclass) -
     return data_dict
 
 
+InstitutionReturnDTO = DTOGenerator[Institution]()
+
+
 class InstitutionController(BaseController[Institution]):
     path = "/institution"
     dto = InstitutionDTO
+    return_dto = InstitutionReturnDTO.read_dto
 
-    @get("/{id:uuid}")
+    @get("/{id:uuid}", return_dto=InstitutionDTO)
     async def get_item_by_id(self, transaction: AsyncSession, id: UUID) -> InstitutionDataclass:
         data = await read_item_by_id(transaction, Institution, id, [Institution.parents])
         return InstitutionDataclass.from_orm(data)

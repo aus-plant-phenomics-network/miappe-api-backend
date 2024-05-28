@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.model.data_file import DataFile, DataFileDataclass
 from src.model.study import Study
 from src.router.base import BaseController, read_item_by_id, read_items_by_attrs
+from src.router.utils.dto import DTOGenerator
 
 __all__ = ("DataFileController",)
 
@@ -25,9 +26,13 @@ async def prepare_data_dict(session: AsyncSession, data: DataFileDataclass) -> d
     return data_dict
 
 
+DataFileReturnDTO = DTOGenerator[DataFile]()
+
+
 class DataFileController(BaseController[DataFile]):
     path = "/dataFile"
     dto = DataFileDTO
+    return_dto = DataFileReturnDTO.read_dto
 
     @get("/{id:uuid}")
     async def get_item_by_id(self, transaction: AsyncSession, id: UUID) -> DataFileDataclass:

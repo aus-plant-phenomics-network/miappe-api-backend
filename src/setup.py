@@ -3,6 +3,7 @@ import asyncio
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from src.model import Base
+from tests.router.data_file.fixture import BARLEY_DATA_FILE, MAIZE_DATA_FILE
 from tests.router.institution.fixture import ANU, APPN, INRAE, RESEARCH_INSTITUTE, TPA, UMR, UNIVERSITY, UOA, UPARIS
 from tests.router.investigation.fixture import BARLEY_PROJECT_INVESTIGATION, FIRST_PROJECT, MAIZE_PROJECT_INVESTIGATION
 from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
@@ -45,6 +46,11 @@ async def async_main() -> None:
         STEP_W.institutions = [APPN]
         JOHN_DOE.institutions = [UOA]
         session.add_all([CHRIS_B, STEP_W, JOHN_DOE])
+
+        # Add data file
+        BARLEY_DATA_FILE.studies = [BARLEY_PROJECT_STUDY]
+        MAIZE_DATA_FILE.studies = [MAIZE_PROJECT_STUDY]
+        session.add_all([BARLEY_DATA_FILE, MAIZE_DATA_FILE])
 
         await session.commit()
 
