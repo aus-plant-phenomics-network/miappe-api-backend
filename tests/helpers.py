@@ -32,7 +32,7 @@ def serialise_data(data: dict[str, Any] | Serialisable) -> dict[str, Any]:
         if isinstance(v, datetime.datetime):
             new_dict[new_k] = v.strftime("%Y-%m-%dT%H:%M:%S") if k == "updated_at" else v.isoformat()
         else:
-            new_dict[new_k] = str(v)
+            new_dict[new_k] = v
     return new_dict
 
 
