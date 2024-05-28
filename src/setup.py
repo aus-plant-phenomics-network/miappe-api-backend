@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from src.model import Base
 from tests.router.institution.fixture import ANU, APPN, INRAE, RESEARCH_INSTITUTE, TPA, UMR, UNIVERSITY, UOA, UPARIS
 from tests.router.investigation.fixture import BARLEY_PROJECT_INVESTIGATION, FIRST_PROJECT, MAIZE_PROJECT_INVESTIGATION
+from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
 from tests.router.study.fixture import BARLEY_PROJECT_STUDY, FIRST_STUDY, MAIZE_PROJECT_STUDY, SECOND_STUDY
 
 
@@ -38,6 +39,12 @@ async def async_main() -> None:
         UMR.institution_type = RESEARCH_INSTITUTE
         UMR.parents = [INRAE, UPARIS]
         session.add_all([ANU, APPN, INRAE, RESEARCH_INSTITUTE, TPA, UMR, UNIVERSITY, UOA, UPARIS])
+
+        # Add staff
+        CHRIS_B.institutions = [UOA, TPA]
+        STEP_W.institutions = [APPN]
+        JOHN_DOE.institutions = [UOA]
+        session.add_all([CHRIS_B, STEP_W, JOHN_DOE])
 
         await session.commit()
 
