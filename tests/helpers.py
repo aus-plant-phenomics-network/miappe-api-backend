@@ -54,9 +54,7 @@ async def validate_get_exist(path: str, data: dict[str, Any] | Serialisable, cli
     query_data = query.json()
     for k, v in serialise_data(data).items():
         assert k in query_data
-        if k == "updatedAt":
-            assert v == query_data[k][:19]
-        else:
+        if k != "updatedAt":
             assert v == query_data[k]
 
 

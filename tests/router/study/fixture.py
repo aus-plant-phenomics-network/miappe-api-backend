@@ -1,6 +1,7 @@
 import datetime
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass
+from uuid import UUID
 
 import pytest
 from httpx import Response
@@ -8,6 +9,7 @@ from litestar.testing import AsyncTestClient
 
 from src.model import Study
 from tests.helpers import delete_fixture, post_fixture, put_fixture
+from tests.router.investigation.fixture import AllInvestigationFixtureResponse
 
 PATH = "study"
 FIRST_STUDY = Study(title="First Study", objective="First Study Objective", start_date=datetime.datetime(2022, 1, 1))
@@ -38,65 +40,59 @@ MAIZE_PROJECT_STUDY = Study(
 @dataclass
 class StudyResponse:
     investigation_response: Response
-    study_response: Response | list[Response]
+    study_response: Response
+
+
+@dataclass
+class AllStudyFixtureResponse:
+    first: StudyResponse
+    second: StudyResponse
+    barley: StudyResponse
+    maize: StudyResponse
+    investigation_response: AllInvestigationFixtureResponse
+
+
+async def get_study_fixture(
+    data: Study, investigation: Response, test_client: AsyncTestClient, id: UUID | None = None
+) -> StudyResponse:
+    investigation_id = investigation.json()["id"]
+    send_data = Study(investigation_id=investigation_id, **data.to_dict())
+    if id is None:
+        response = await post_fixture(PATH, send_data, test_client)
+    else:
+        response = await put_fixture(PATH, send_data, test_client, id)
+    return StudyResponse(study_response=response, investigation_response=investigation)
 
 
 @pytest.fixture(scope="function")
-async def setup_first_study(
-    setup_first_project: Response, test_client: AsyncTestClient
-) -> AsyncGenerator[StudyResponse, None]:
-    investigation_response = setup_first_project
-    first_study = Study(investigation_id=investigation_response.json()["id"], **FIRST_STUDY.to_dict())
-    study_response = await post_fixture(PATH, first_study, test_client)
-    yield StudyResponse(investigation_response=investigation_response, study_response=study_response)
-    await delete_fixture(PATH, study_response.json()["id"], test_client)
+async def setup_study(
+    setup_investigation: AllInvestigationFixtureResponse, test_client: AsyncTestClient
+) -> AsyncGenerator[AllStudyFixtureResponse, None]:
+    first_response = await get_study_fixture(FIRST_STUDY, setup_investigation.first, test_client)
+    second_response = await get_study_fixture(SECOND_STUDY, setup_investigation.first, test_client)
+    barley_response = await get_study_fixture(BARLEY_PROJECT_STUDY, setup_investigation.barley, test_client)
+    maize_response = await get_study_fixture(MAIZE_PROJECT_STUDY, setup_investigation.maize, test_client)
+    yield AllStudyFixtureResponse(
+        first=first_response,
+        second=second_response,
+        barley=barley_response,
+        maize=maize_response,
+        investigation_response=setup_investigation,
+    )
+    await delete_fixture(PATH, first_response.study_response.json()["id"], test_client)
+    await delete_fixture(PATH, second_response.study_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_response.study_response.json()["id"], test_client)
+    await delete_fixture(PATH, maize_response.study_response.json()["id"], test_client)
 
 
 @pytest.fixture(scope="function")
-async def setup_first_and_second_study(
-    setup_first_project: Response, test_client: AsyncTestClient
-) -> AsyncGenerator[StudyResponse, None]:
-    investigation_response = setup_first_project
-    first_study = Study(investigation_id=investigation_response.json()["id"], **FIRST_STUDY.to_dict())
-    second_study = Study(investigation_id=investigation_response.json()["id"], **SECOND_STUDY.to_dict())
-    first_study_response = await post_fixture(PATH, first_study, test_client)
-    second_study_response = await post_fixture(PATH, second_study, test_client)
-    study_response = [first_study_response, second_study_response]
-    yield StudyResponse(investigation_response=investigation_response, study_response=study_response)
-    await delete_fixture(PATH, first_study_response.json()["id"], test_client)
-    await delete_fixture(PATH, second_study_response.json()["id"], test_client)
-
-
-@pytest.fixture(scope="function")
-async def update_first_study(
-    setup_first_study: StudyResponse, test_client: AsyncTestClient
-) -> AsyncGenerator[StudyResponse, None]:
-    study_response = setup_first_study.study_response
-    investigation_response = setup_first_study.investigation_response
-    if isinstance(study_response, list):
-        study_response = study_response[0]
-    updated_first_study = Study(investigation_id=investigation_response.json()["id"], **FIRST_STUDY_UPDATED.to_dict())
-    response = await put_fixture(PATH, updated_first_study, test_client, study_response.json()["id"])
-    yield StudyResponse(investigation_response=setup_first_study.investigation_response, study_response=response)
-
-
-@pytest.fixture(scope="function")
-async def setup_barley_study(
-    setup_barley_project: Response, test_client: AsyncTestClient
-) -> AsyncGenerator[StudyResponse, None]:
-    project_id = setup_barley_project.json()["id"]
-    barley_study = Study(investigation_id=project_id, **BARLEY_PROJECT_STUDY.to_dict())
-    response = await post_fixture(PATH, barley_study, test_client)
-    yield StudyResponse(investigation_response=setup_barley_project, study_response=response)
-    await delete_fixture(PATH, response.json()["id"], test_client)
-
-
-@pytest.fixture(scope="function")
-async def setup_maize_study(
-    setup_maize_project: Response, test_client: AsyncTestClient
-) -> AsyncGenerator[StudyResponse, None]:
-    project_id = setup_maize_project.json()["id"]
-    maize_study = Study(investigation_id=project_id, **MAIZE_PROJECT_STUDY.to_dict())
-    response = await post_fixture(PATH, maize_study, test_client)
-    yield StudyResponse(investigation_response=setup_maize_project, study_response=response)
-    await delete_fixture(PATH, response.json()["id"], test_client)
+async def update_study(
+    setup_study: AllStudyFixtureResponse, test_client: AsyncTestClient
+) -> AsyncGenerator[AllStudyFixtureResponse, None]:
+    all_response = setup_study
+    first_id = all_response.first.study_response.json()["id"]
+    first_response = await get_study_fixture(
+        FIRST_STUDY_UPDATED, all_response.first.investigation_response, test_client, first_id
+    )
+    all_response.first = first_response
+    yield all_response

@@ -1,5 +1,7 @@
 import datetime
 from collections.abc import AsyncGenerator
+from dataclasses import dataclass
+from uuid import UUID
 
 import pytest
 from httpx import Response
@@ -37,31 +39,41 @@ MAIZE_PROJECT_INVESTIGATION = Investigation(
 )
 
 
-@pytest.fixture(scope="function")
-async def setup_first_project(test_client: AsyncTestClient) -> AsyncGenerator[Response, None]:
-    response = await post_fixture(PATH, FIRST_PROJECT, test_client)
-    yield response
-    await delete_fixture(PATH, response.json()["id"], test_client)
+@dataclass
+class AllInvestigationFixtureResponse:
+    first: Response
+    barley: Response
+    maize: Response
+
+
+async def get_investigation_fixture(
+    data: Investigation, test_client: AsyncTestClient, id: UUID | None = None
+) -> Response:
+    send_data = Investigation(**data.to_dict())
+    if id is None:
+        response = await post_fixture(PATH, send_data, test_client)
+    else:
+        response = await put_fixture(PATH, send_data, test_client, id)
+    return response
 
 
 @pytest.fixture(scope="function")
-async def update_first_project(
-    setup_first_project: Response, test_client: AsyncTestClient
-) -> AsyncGenerator[Response, None]:
-    post_response = setup_first_project
-    response = await put_fixture(PATH, FIRST_PROJECT_UPDATED, test_client, post_response.json()["id"])
-    yield response
+async def setup_investigation(test_client: AsyncTestClient) -> AsyncGenerator[AllInvestigationFixtureResponse, None]:
+    first_response = await get_investigation_fixture(FIRST_PROJECT, test_client)
+    barley_response = await get_investigation_fixture(BARLEY_PROJECT_INVESTIGATION, test_client)
+    maize_response = await get_investigation_fixture(MAIZE_PROJECT_INVESTIGATION, test_client)
+    yield AllInvestigationFixtureResponse(first=first_response, barley=barley_response, maize=maize_response)
+    await delete_fixture(PATH, first_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_response.json()["id"], test_client)
+    await delete_fixture(PATH, maize_response.json()["id"], test_client)
 
 
 @pytest.fixture(scope="function")
-async def setup_barley_project(test_client: AsyncTestClient) -> AsyncGenerator[Response, None]:
-    response = await post_fixture(PATH, BARLEY_PROJECT_INVESTIGATION, test_client)
-    yield response
-    await delete_fixture(PATH, response.json()["id"], test_client)
-
-
-@pytest.fixture(scope="function")
-async def setup_maize_project(test_client: AsyncTestClient) -> AsyncGenerator[Response, None]:
-    response = await post_fixture(PATH, MAIZE_PROJECT_INVESTIGATION, test_client)
-    yield response
-    await delete_fixture(PATH, response.json()["id"], test_client)
+async def update_investigation(
+    setup_investigation: AllInvestigationFixtureResponse, test_client: AsyncTestClient
+) -> AsyncGenerator[AllInvestigationFixtureResponse, None]:
+    all_response = setup_investigation
+    first_id = all_response.first.json()["id"]
+    response = await get_investigation_fixture(FIRST_PROJECT_UPDATED, test_client, first_id)
+    all_response.first = response
+    yield all_response

@@ -21,6 +21,7 @@ pytest_plugins = [
     "tests.router.study.fixture",
     "tests.router.institution.fixture",
     "tests.router.staff.fixture",
+    "tests.router.data_file.fixture",
 ]
 
 
