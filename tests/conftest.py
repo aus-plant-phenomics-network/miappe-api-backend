@@ -10,6 +10,7 @@ from src.helpers import create_db_config, provide_transaction
 from src.router import (
     DataFileController,
     DeviceController,
+    EnvironmentController,
     InstitutionController,
     InvestigationController,
     MethodController,
@@ -28,6 +29,7 @@ pytest_plugins = [
     "tests.router.device.fixture",
     "tests.router.method.fixture",
     "tests.router.unit.fixture",
+    "tests.router.environment.fixture",
 ]
 
 
@@ -46,6 +48,7 @@ async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
             MethodController,
             DeviceController,
             UnitController,
+            EnvironmentController,
         ],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
