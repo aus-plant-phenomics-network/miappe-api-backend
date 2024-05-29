@@ -35,13 +35,10 @@ class Variable(Base):
         "polymorphic_on": "type",
     }
     type: Mapped[str]
-
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
-
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id", ondelete="SET NULL"))
     device: Mapped[Optional["Device"]] = relationship(lazy=None, info=dto_field("read-only"))
-
     unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("unit_table.id", ondelete="SET NULL"))
     unit: Mapped[Optional["Unit"]] = relationship(lazy=None, info=dto_field("read-only"))
 
@@ -81,6 +78,7 @@ class Variable(Base):
 
 @dataclass(kw_only=True)
 class VariableDataclass(BaseDataclass):
+    type: str | None = field(default=None)
     time_interval: str | None = field(default=None)
     sample_interval: str | None = field(default=None)
     device_id: UUID | None = field(default=None)

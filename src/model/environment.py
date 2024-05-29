@@ -16,9 +16,11 @@ class Environment(Variable):
     __mapper_args__ = {"polymorphic_identity": "environment"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
+    parameter: Mapped[str] = mapped_column(nullable=False)
     setpoint: Mapped[str | None]
 
 
-@dataclass
+@dataclass(kw_only=True)
 class EnvironmentDataclass(VariableDataclass):
+    parameter: str
     setpoint: str | None = field(default=None)
