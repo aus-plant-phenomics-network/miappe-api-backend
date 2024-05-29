@@ -25,6 +25,7 @@ from tests.router.experimental_factor.fixture import (
     MAIZE_WATERING_FACTOR,
     MAIZE_WATERING_TYPE,
 )
+from tests.router.facility.fixture import APPN_GREENHOUSE, FIELD_CONDITION_TYPE, GREENHOUSE_TYPE, INRAE_FIELD
 from tests.router.institution.fixture import ANU, APPN, INRAE, RESEARCH_INSTITUTE, TPA, UMR, UNIVERSITY, UOA, UPARIS
 from tests.router.investigation.fixture import BARLEY_PROJECT_INVESTIGATION, FIRST_PROJECT, MAIZE_PROJECT_INVESTIGATION
 from tests.router.method.fixture import (
@@ -129,6 +130,12 @@ async def async_main() -> None:
         BARLEY_FUNGAL_EXPOSURE_FACTOR.studies = [BARLEY_PROJECT_STUDY]
         session.add_all([BARLEY_ZN_EXPOSURE_FACTOR, BARLEY_FUNGAL_EXPOSURE_FACTOR, MAIZE_WATERING_FACTOR])
 
+        # Setup facility
+        APPN_GREENHOUSE.facility_type = GREENHOUSE_TYPE
+        APPN_GREENHOUSE.institution = APPN
+        INRAE_FIELD.facility_type = FIELD_CONDITION_TYPE
+        INRAE_FIELD.institution = INRAE
+        session.add_all([APPN_GREENHOUSE, FIELD_CONDITION_TYPE, GREENHOUSE_TYPE, INRAE_FIELD])
         await session.commit()
 
     # for AsyncEngine created in function scope, close and
