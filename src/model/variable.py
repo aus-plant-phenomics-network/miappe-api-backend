@@ -23,8 +23,8 @@ if TYPE_CHECKING:
 study_variable_table = Table(
     "study_variable_table",
     Base.metadata,
-    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
-    Column("variable_id", UUID_SQL, ForeignKey("variable_table.id"), primary_key=True),
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id", ondelete="cascade"), primary_key=True),
+    Column("variable_id", UUID_SQL, ForeignKey("variable_table.id", ondelete="cascade"), primary_key=True),
 )
 
 
@@ -34,6 +34,7 @@ class Variable(Base):
         "polymorphic_identity": "variable",
         "polymorphic_on": "type",
     }
+    description: Mapped[str | None]
     type: Mapped[str]
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
@@ -78,6 +79,7 @@ class Variable(Base):
 
 @dataclass(kw_only=True)
 class VariableDataclass(BaseDataclass):
+    description: str | None = field(default=None)
     type: str | None = field(default=None)
     time_interval: str | None = field(default=None)
     sample_interval: str | None = field(default=None)
