@@ -1,5 +1,6 @@
 import datetime
-from typing import TYPE_CHECKING, Optional
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Optional, cast
 from uuid import UUID
 
 from litestar.dto import dto_field
@@ -7,7 +8,7 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.model import Base
+from src.model.base import Base, BaseDataclass, Serialisable
 
 __all__ = ("Experiment",)
 
@@ -26,6 +27,7 @@ experiment_to_facility_table = Table(
 
 class Experiment(Base):
     __tablename__ = "experiment_table"  # type: ignore[assignment]
+    title: Mapped[str] = mapped_column(nullable=False)
     objective: Mapped[str | None]
     start_date: Mapped[datetime.datetime | None]
     end_date: Mapped[datetime.datetime | None]
@@ -52,3 +54,26 @@ class Experiment(Base):
     study: Mapped[Optional["Study"]] = relationship(
         "Study", back_populates="experiments", lazy=None, info=dto_field("read-only")
     )
+
+
+@dataclass(kw_only=True)
+class ExperimentDataclass(BaseDataclass):
+    title: str
+    objective: str | None = field(default=None)
+    start_date: datetime.datetime | None = field(default=None)
+    end_date: datetime.datetime | None = field(default=None)
+    observation_unit_level_hierarchy: str | None = field(default=None)
+    observation_unit_level_description: str | None = field(default=None)
+    cultural_practices: str | None = field(default=None)
+    map_of_exp_design: str | None = field(default=None)
+    experiment_type_id: UUID | None = field(default=None)
+    study_id: UUID | None = field(default=None)
+    facility_id: list[UUID] = field(default_factory=list[UUID])
+
+    @classmethod
+    def from_orm(cls, data: Serialisable) -> "ExperimentDataclass":
+        data = cast(Experiment, data)
+        data_dict = data.to_dict()
+        if len(data.facilities) > 0:
+            data_dict["facility_id"] = [item.id for item in data.facilities]
+        return cls(**data_dict)

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 from uuid import UUID
 
 from litestar.dto import dto_field
@@ -7,7 +7,7 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.model.base import Base, BaseDataclass
+from src.model.base import Base, BaseDataclass, Serialisable
 
 __all__ = ("DataFile", "DataFileDataclass")
 
@@ -49,7 +49,8 @@ class DataFileDataclass(BaseDataclass):
     study_id: list[UUID] = field(default_factory=list[UUID])
 
     @classmethod
-    def from_orm(cls, data: DataFile) -> "DataFileDataclass":  # type: ignore[override]
+    def from_orm(cls, data: Serialisable) -> "DataFileDataclass":
+        data = cast(DataFile, data)
         data_dict = data.to_dict()
         if len(data.studies) > 0:
             data_dict["study_id"] = [item.id for item in data.studies]
