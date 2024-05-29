@@ -9,9 +9,12 @@ from tests.helpers import validate_post, validate_put
 from tests.router.institution.fixture import (
     ANU,
     APPN,
+    INRAE,
     PATH,
     TPA,
+    UMR,
     UOA,
+    UPARIS,
     AllInstitutionFixtureResponse,
     InstitutionResponse,
 )
@@ -45,6 +48,15 @@ async def test_all_institutions_created(
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
     fixture = get_institution_fixture(setup_institutions.TPA, TPA)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_institution_fixture(setup_institutions.UPARIS, UPARIS)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_institution_fixture(setup_institutions.INRAE, INRAE)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_institution_fixture(setup_institutions.UMR, UMR)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
 

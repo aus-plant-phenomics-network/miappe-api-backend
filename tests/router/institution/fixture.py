@@ -30,6 +30,9 @@ class AllInstitutionFixtureResponse:
     ANU: InstitutionResponse
     APPN: InstitutionResponse
     TPA: InstitutionResponse
+    UPARIS: InstitutionResponse
+    INRAE: InstitutionResponse
+    UMR: InstitutionResponse
     institution_type: InstitutionTypeResponse
 
 
@@ -86,17 +89,26 @@ async def setup_institutions(
     anu = await get_institution_fixture(setup_institution_type.university, ANU, [], test_client)
     appn = await get_institution_fixture(setup_institution_type.institute, APPN, [uoa, anu], test_client)
     tpa = await get_institution_fixture(setup_institution_type.institute, TPA, [uoa, appn], test_client)
+    uparis = await get_institution_fixture(setup_institution_type.university, UPARIS, [], test_client)
+    inrae = await get_institution_fixture(setup_institution_type.institute, INRAE, [], test_client)
+    umr = await get_institution_fixture(setup_institution_type.institute, UMR, [inrae, uparis], test_client)
     yield AllInstitutionFixtureResponse(
         UOA=uoa,
         ANU=anu,
         APPN=appn,
         TPA=tpa,
         institution_type=setup_institution_type,
+        UPARIS=uparis,
+        INRAE=inrae,
+        UMR=umr,
     )
     await delete_fixture(PATH, uoa.institution_response.json()["id"], test_client)
     await delete_fixture(PATH, anu.institution_response.json()["id"], test_client)
     await delete_fixture(PATH, appn.institution_response.json()["id"], test_client)
     await delete_fixture(PATH, tpa.institution_response.json()["id"], test_client)
+    await delete_fixture(PATH, uparis.institution_response.json()["id"], test_client)
+    await delete_fixture(PATH, inrae.institution_response.json()["id"], test_client)
+    await delete_fixture(PATH, umr.institution_response.json()["id"], test_client)
 
 
 @pytest.fixture(scope="function")
