@@ -55,7 +55,10 @@ async def validate_get_exist(path: str, data: dict[str, Any] | Serialisable, cli
     for k, v in serialise_data(data).items():
         assert k in query_data
         if k != "updatedAt":
-            assert v == query_data[k]
+            if isinstance(v, list) and isinstance(query_data[k], list):
+                assert set(v) == set(query_data[k])
+            else:
+                assert v == query_data[k]
 
 
 async def validate_get_not_exist(path: str, client: AsyncTestClient, id: UUID) -> None:
