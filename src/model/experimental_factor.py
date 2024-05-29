@@ -21,16 +21,16 @@ class ExperimentalFactor(Variable):
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
     factor_values: Mapped[str]
-    experimental_factor_description: Mapped[str]
-    experimental_factor_type_id: Mapped[UUID | None] = mapped_column(
+    factor_description: Mapped[str]
+    factor_type_id: Mapped[UUID | None] = mapped_column(
         ForeignKey(
             "vocabulary_table.id",
             ondelete="SET NULL",
         )
     )
-    experimental_factor_type: Mapped[Optional["Vocabulary"]] = relationship(
+    factor_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary",
-        back_populates="experimental_factor_type",
+        back_populates="factor_type",
         lazy=None,
         info=dto_field("private"),
     )
@@ -39,5 +39,5 @@ class ExperimentalFactor(Variable):
 @dataclass(kw_only=True)
 class ExperimentalFactorDataclass(VariableDataclass):
     factor_values: str | None = field(default=None)
-    experimental_factor_description: str | None = field(default=None)
-    experimental_factor_type_id: str | None = field(default=None)
+    factor_description: str | None = field(default=None)
+    factor_type_id: UUID | None = field(default=None)

@@ -50,8 +50,8 @@ class Vocabulary(Base):
         lazy=None,
         info=dto_field("private"),
     )
-    experimental_factor_type: Mapped[list["ExperimentalFactor"]] = relationship(
-        back_populates="experimental_factor_type",
+    factor_type: Mapped[list["ExperimentalFactor"]] = relationship(
+        back_populates="factor_type",
         lazy=None,
         info=dto_field("private"),
     )
