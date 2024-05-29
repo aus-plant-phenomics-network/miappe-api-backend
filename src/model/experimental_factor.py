@@ -1,11 +1,15 @@
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
 from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model.variable import Variable, VariableDataclass
+
+if TYPE_CHECKING:
+    from src.model.vocabulary import Vocabulary
 
 __all__ = ("ExperimentalFactor",)
 
@@ -17,8 +21,23 @@ class ExperimentalFactor(Variable):
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
     factor_values: Mapped[str]
+    experimental_factor_description: Mapped[str]
+    experimental_factor_type_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey(
+            "vocabulary_table.id",
+            ondelete="SET NULL",
+        )
+    )
+    experimental_factor_type: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary",
+        back_populates="experimental_factor_type",
+        lazy=None,
+        info=dto_field("private"),
+    )
 
 
 @dataclass(kw_only=True)
 class ExperimentalFactorDataclass(VariableDataclass):
     factor_values: str | None = field(default=None)
+    experimental_factor_description: str | None = field(default=None)
+    experimental_factor_type_id: str | None = field(default=None)
