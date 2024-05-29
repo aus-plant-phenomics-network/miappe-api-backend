@@ -17,6 +17,14 @@ from tests.router.environment.fixture import (
     MAIZE_ROOTING_MEDIUM,
     MAIZE_SOWING_DENSITY,
 )
+from tests.router.experimental_factor.fixture import (
+    BARLEY_FUNGAL_EXPOSURE_FACTOR,
+    BARLEY_FUNGAL_EXPOSURE_TYPE,
+    BARLEY_ZN_EXPOSURE_FACTOR,
+    BARLEY_ZN_EXPOSURE_TYPE,
+    MAIZE_WATERING_FACTOR,
+    MAIZE_WATERING_TYPE,
+)
 from tests.router.institution.fixture import ANU, APPN, INRAE, RESEARCH_INSTITUTE, TPA, UMR, UNIVERSITY, UOA, UPARIS
 from tests.router.investigation.fixture import BARLEY_PROJECT_INVESTIGATION, FIRST_PROJECT, MAIZE_PROJECT_INVESTIGATION
 from tests.router.method.fixture import (
@@ -111,6 +119,15 @@ async def async_main() -> None:
                 MAIZE_SOWING_DENSITY,
             ]
         )
+
+        # Add experimental factor
+        BARLEY_ZN_EXPOSURE_FACTOR.factor_type = BARLEY_ZN_EXPOSURE_TYPE
+        BARLEY_ZN_EXPOSURE_FACTOR.studies = [BARLEY_PROJECT_STUDY]
+        MAIZE_WATERING_FACTOR.factor_type = MAIZE_WATERING_TYPE
+        MAIZE_WATERING_FACTOR.studies = [MAIZE_PROJECT_STUDY]
+        BARLEY_FUNGAL_EXPOSURE_FACTOR.factor_type = BARLEY_FUNGAL_EXPOSURE_TYPE
+        BARLEY_FUNGAL_EXPOSURE_FACTOR.studies = [BARLEY_PROJECT_STUDY]
+        session.add_all([BARLEY_ZN_EXPOSURE_FACTOR, BARLEY_FUNGAL_EXPOSURE_FACTOR, MAIZE_WATERING_FACTOR])
 
         await session.commit()
 
