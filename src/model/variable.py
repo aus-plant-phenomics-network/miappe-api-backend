@@ -14,9 +14,9 @@ __all__ = ("Variable",)
 
 if TYPE_CHECKING:
     from src.model.device import Device
+    from src.model.facility import Facility
     from src.model.study import Study
 
-    # from src.model.facility import Facility
     # from src.model.observation_unit import ObservationUnit
     from src.model.unit import Unit
 
@@ -51,14 +51,6 @@ class Variable(Base):
         lazy=None,
         info=dto_field("read-only"),
     )
-
-    # facilities: Mapped[list["Facility"]] = relationship(
-    #     "Facility",
-    #     secondary="facility_variable_table",
-    #     back_populates="variables",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
 
     # observation_unit_biological_materials: Mapped[list["ObservationUnit"]] = relationship(
     #     "ObservationUnit",

@@ -40,30 +40,21 @@ class Facility(Base):
 
     # relationship
     institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id"))
-    # institution: Mapped[Optional["Institution"]] = relationship(
-    #     "Institution", back_populates="facilities", lazy="selectin", info=dto_field("read-only")
-    # )
+    institution: Mapped[Optional["Institution"]] = relationship(
+        "Institution", back_populates="facilities", lazy=None, info=dto_field("read-only")
+    )
 
-    # variables: Mapped[list["Variable"]] = relationship(
-    #     "Variable",
-    #     secondary="facility_variable_table",
-    #     back_populates="facilities",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
-
-    # Relationship
     facility_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
-    # facility_type: Mapped[Optional["Vocabulary"]] = relationship(
-    #     "Vocabulary", back_populates="facility", lazy="selectin", info=dto_field("read-only")
-    # )
-    # experiments: Mapped[list["Experiment"]] = relationship(
-    #     "Experiment",
-    #     secondary="experiment_to_facility_table",
-    #     back_populates="facilities",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
+    facility_type: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary", back_populates="facility", lazy=None, info=dto_field("read-only")
+    )
+    experiments: Mapped[list["Experiment"]] = relationship(
+        "Experiment",
+        secondary="experiment_to_facility_table",
+        back_populates="facilities",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
     # observation_units: Mapped[list["ObservationUnit"]] = relationship(
     #     "ObservationUnit", back_populates="facility", lazy="selectin", info=dto_field("read-only")
     # )

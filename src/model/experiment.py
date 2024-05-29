@@ -35,20 +35,20 @@ class Experiment(Base):
     map_of_exp_design: Mapped[str | None]
 
     # Relationship
-    # facilities: Mapped[list["Facility"]] = relationship(
-    #     "Facility",
-    #     secondary="experiment_to_facility_table",
-    #     back_populates="experiments",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
+    facilities: Mapped[list["Facility"]] = relationship(
+        "Facility",
+        secondary="experiment_to_facility_table",
+        back_populates="experiments",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
 
     experiment_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
-    # experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
-    #     "Vocabulary", back_populates="experiment", lazy="selectin", info=dto_field("read-only")
-    # )
+    experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary", back_populates="experiment", lazy=None, info=dto_field("read-only")
+    )
 
     study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
-    # study: Mapped[Optional["Study"]] = relationship(
-    #     "Study", back_populates="experiments", lazy="selectin", info=dto_field("read-only")
-    # )
+    study: Mapped[Optional["Study"]] = relationship(
+        "Study", back_populates="experiments", lazy=None, info=dto_field("read-only")
+    )

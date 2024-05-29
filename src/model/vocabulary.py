@@ -10,11 +10,11 @@ __all__ = ("Vocabulary",)
 
 if TYPE_CHECKING:
     from src.model.device import Device
-    from src.model.experimental_factor import ExperimentalFactor
 
     #     from src.model.event import Event
-    #     from src.model.experiment import Experiment
-    #     from src.model.facility import Facility
+    from src.model.experiment import Experiment
+    from src.model.experimental_factor import ExperimentalFactor
+    from src.model.facility import Facility
     from src.model.institution import Institution
     from src.model.method import Method
 
@@ -68,15 +68,15 @@ class Vocabulary(Base):
     #     lazy="selectin",
     #     info=dto_field("private"),
     # )
-    # facility: Mapped[list["Facility"]] = relationship(
-    #     back_populates="facility_type", lazy="selectin", info=dto_field("private")
-    # )
+    facility: Mapped[list["Facility"]] = relationship(
+        back_populates="facility_type", lazy=None, info=dto_field("private")
+    )
     institution: Mapped[list["Institution"]] = relationship(
         back_populates="institution_type", lazy=None, info=dto_field("private")
     )
-    # experiment: Mapped[list["Experiment"]] = relationship(
-    #     back_populates="experiment_type", lazy="selectin", info=dto_field("private")
-    # )
+    experiment: Mapped[list["Experiment"]] = relationship(
+        back_populates="experiment_type", lazy=None, info=dto_field("private")
+    )
     # observation_units: Mapped[list["ObservationUnit"]] = relationship(
     #     "ObservationUnit", back_populates="observation_unit_type", lazy="selectin", info=dto_field("read-only")
     # )

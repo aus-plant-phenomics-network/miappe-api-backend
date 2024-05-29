@@ -13,7 +13,7 @@ __all__ = ("Institution",)
 
 
 if TYPE_CHECKING:
-    # from src.model.facility import Facility
+    from src.model.facility import Facility
     from src.model.staff import Staff
     from src.model.vocabulary import Vocabulary
 
@@ -41,9 +41,9 @@ class Institution(Base):
         secondary="institution_staff_table",
         info=dto_field("read-only"),
     )
-    # facilities: Mapped[list["Facility"]] = relationship(
-    #     "Facility", back_populates="institution", lazy="selectin", info=dto_field("read-only")
-    # )
+    facilities: Mapped[list["Facility"]] = relationship(
+        "Facility", back_populates="institution", lazy=None, info=dto_field("read-only")
+    )
 
     children: Mapped[list["Institution"]] = relationship(
         "Institution",
