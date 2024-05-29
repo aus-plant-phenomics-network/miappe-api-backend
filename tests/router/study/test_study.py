@@ -37,8 +37,14 @@ def get_study_fixture(
     return StudyFixture(response=study_response, data=data, investigation_id=project_id, id=study_response.json()["id"])
 
 
-async def test_first_study_created(setup_study: AllStudyFixtureResponse, test_client: AsyncTestClient) -> None:
+async def test_all_studies_created(setup_study: AllStudyFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_study_fixture(setup_study.first, FIRST_STUDY)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_study_fixture(setup_study.barley, BARLEY_PROJECT_STUDY)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_study_fixture(setup_study.maize, MAIZE_PROJECT_STUDY)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
 
@@ -63,13 +69,3 @@ async def test_delete_first_project_also_delete_first_and_second_studies(
     assert response.status_code == 204
     await validate_get_not_exist(PATH, test_client, first.id)
     await validate_get_not_exist(PATH, test_client, second.id)
-
-
-async def test_barley_study_created(setup_study: AllStudyFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_study_fixture(setup_study.barley, BARLEY_PROJECT_STUDY)
-    await validate_post(PATH, fixture.data, test_client, fixture.response)
-
-
-async def test_maize_study_created(setup_study: AllStudyFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_study_fixture(setup_study.maize, MAIZE_PROJECT_STUDY)
-    await validate_post(PATH, fixture.data, test_client, fixture.response)

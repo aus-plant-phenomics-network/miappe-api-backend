@@ -38,13 +38,9 @@ def get_method_fixture(response: MethodResponse, data: Method) -> MethodFixture:
     )
 
 
-async def test_projected_shoot_area_created(
-    setup_method: AllMethodFixtureResponse, test_client: AsyncTestClient
-) -> None:
+async def test_methods_created(setup_method: AllMethodFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_method_fixture(setup_method.projected_shoot_area, PROJECTED_SHOOT_AREA_METHOD)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_days_to_anthesis_created(setup_method: AllMethodFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_method_fixture(setup_method.day_to_anthesis, DAY_TO_ANTHESIS_METHOD)
     await validate_post(PATH, fixture.data, test_client, fixture.response)

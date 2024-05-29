@@ -23,18 +23,14 @@ def get_staff_fixture(response: StaffResponse, data: Staff) -> StaffFixture:
     return StaffFixture(id=staff_response.json()["id"], response=staff_response, data=fixture)
 
 
-async def test_chris_b_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
+async def test_all_staffs_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_staff_fixture(setup_staff.chris_b, CHRIS_B)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_step_w_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(setup_staff.step_w, STEP_W)
+    fixture = get_staff_fixture(setup_staff.john_doe, JOHN_DOE)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_john_doe_created(setup_staff: AllStaffFixtureResponse, test_client: AsyncTestClient) -> None:
-    fixture = get_staff_fixture(setup_staff.john_doe, JOHN_DOE)
+    fixture = get_staff_fixture(setup_staff.step_w, STEP_W)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
 

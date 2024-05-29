@@ -32,12 +32,12 @@ def get_data_file_fixture(response: DataFileResponse, data: DataFile) -> DataFil
     )
 
 
-async def test_barley_file_created(setup_data_file: AllDataFileFixtureResponse, test_client: AsyncTestClient) -> None:
+async def test_all_data_files_created(
+    setup_data_file: AllDataFileFixtureResponse, test_client: AsyncTestClient
+) -> None:
     fixture = get_data_file_fixture(setup_data_file.barley, BARLEY_DATA_FILE)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_maize_file_created(setup_data_file: AllDataFileFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_data_file_fixture(setup_data_file.maize, MAIZE_DATA_FILE)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 

@@ -32,22 +32,18 @@ def get_institution_fixture(response: InstitutionResponse, data: Institution) ->
     return InstitutionFixture(id=institution_response.json()["id"], response=institution_response, data=fixture)
 
 
-async def test_uoa_created(setup_institutions: AllInstitutionFixtureResponse, test_client: AsyncTestClient) -> None:
+async def test_all_institutions_created(
+    setup_institutions: AllInstitutionFixtureResponse, test_client: AsyncTestClient
+) -> None:
     fixture = get_institution_fixture(setup_institutions.UOA, UOA)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_anu_created(setup_institutions: AllInstitutionFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_institution_fixture(setup_institutions.ANU, ANU)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_appn_created(setup_institutions: AllInstitutionFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_institution_fixture(setup_institutions.APPN, APPN)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
-
-async def test_tpa_created(setup_institutions: AllInstitutionFixtureResponse, test_client: AsyncTestClient) -> None:
     fixture = get_institution_fixture(setup_institutions.TPA, TPA)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 

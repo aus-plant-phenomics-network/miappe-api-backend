@@ -27,10 +27,16 @@ def get_institution_fixture(response: Response, data: Investigation) -> Investig
     return InvestigationFixture(response=response, data=data, id=response.json()["id"])
 
 
-async def test_first_project_created(
+async def test_all_projects_created(
     setup_investigation: AllInvestigationFixtureResponse, test_client: AsyncTestClient
 ) -> None:
     fixture = get_institution_fixture(setup_investigation.first, FIRST_PROJECT)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_institution_fixture(setup_investigation.maize, MAIZE_PROJECT_INVESTIGATION)
+    await validate_post(PATH, fixture.data, test_client, fixture.response)
+
+    fixture = get_institution_fixture(setup_investigation.barley, BARLEY_PROJECT_INVESTIGATION)
     await validate_post(PATH, fixture.data, test_client, fixture.response)
 
 
@@ -55,17 +61,3 @@ async def test_create_project_same_name_throws_error(
 ) -> None:
     response = await post_fixture(PATH, FIRST_PROJECT, test_client)
     assert response.status_code == 409
-
-
-async def test_barley_project_created(
-    setup_investigation: AllInvestigationFixtureResponse, test_client: AsyncTestClient
-) -> None:
-    fixture = get_institution_fixture(setup_investigation.barley, BARLEY_PROJECT_INVESTIGATION)
-    await validate_post(PATH, fixture.data, test_client, fixture.response)
-
-
-async def test_maize_project_created(
-    setup_investigation: AllInvestigationFixtureResponse, test_client: AsyncTestClient
-) -> None:
-    fixture = get_institution_fixture(setup_investigation.maize, MAIZE_PROJECT_INVESTIGATION)
-    await validate_post(PATH, fixture.data, test_client, fixture.response)
