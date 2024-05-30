@@ -142,7 +142,6 @@ async def async_main() -> None:
         INRAE_FIELD.facility_type = FIELD_CONDITION_TYPE
         INRAE_FIELD.institution = INRAE
         session.add_all([APPN_GREENHOUSE, FIELD_CONDITION_TYPE, GREENHOUSE_TYPE, INRAE_FIELD])
-        await session.commit()
 
         # Set up experiment
         MAIZE_EXPERIMENT.experiment_type = MAIZE_EXPERIMENT_TYPE
@@ -155,8 +154,11 @@ async def async_main() -> None:
         BARLEY_EXPERIMENT.study = BARLEY_PROJECT_STUDY
         session.add_all([MAIZE_EXPERIMENT, MAIZE_EXPERIMENT_TYPE, BARLEY_EXPERIMENT, BARLEY_EXPERIMENT_TYPE])
 
+        await session.commit()
+
     # for AsyncEngine created in function scope, close and
     # clean-up pooled connections
+
     await engine.dispose()
 
 
