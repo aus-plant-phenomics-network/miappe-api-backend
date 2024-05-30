@@ -17,6 +17,12 @@ from tests.router.environment.fixture import (
     MAIZE_ROOTING_MEDIUM,
     MAIZE_SOWING_DENSITY,
 )
+from tests.router.experiment.fixture import (
+    BARLEY_EXPERIMENT,
+    BARLEY_EXPERIMENT_TYPE,
+    MAIZE_EXPERIMENT,
+    MAIZE_EXPERIMENT_TYPE,
+)
 from tests.router.experimental_factor.fixture import (
     BARLEY_FUNGAL_EXPOSURE_FACTOR,
     BARLEY_FUNGAL_EXPOSURE_TYPE,
@@ -137,6 +143,17 @@ async def async_main() -> None:
         INRAE_FIELD.institution = INRAE
         session.add_all([APPN_GREENHOUSE, FIELD_CONDITION_TYPE, GREENHOUSE_TYPE, INRAE_FIELD])
         await session.commit()
+
+        # Set up experiment
+        MAIZE_EXPERIMENT.experiment_type = MAIZE_EXPERIMENT_TYPE
+        MAIZE_EXPERIMENT.staffs = [JOHN_DOE]
+        MAIZE_EXPERIMENT.facilities = [INRAE_FIELD]
+        MAIZE_EXPERIMENT.study = MAIZE_PROJECT_STUDY
+        BARLEY_EXPERIMENT.experiment_type = BARLEY_EXPERIMENT_TYPE
+        BARLEY_EXPERIMENT.staffs = [CHRIS_B, STEP_W]
+        BARLEY_EXPERIMENT.facilities = [APPN_GREENHOUSE]
+        BARLEY_EXPERIMENT.study = BARLEY_PROJECT_STUDY
+        session.add_all([MAIZE_EXPERIMENT, MAIZE_EXPERIMENT_TYPE, BARLEY_EXPERIMENT, BARLEY_EXPERIMENT_TYPE])
 
     # for AsyncEngine created in function scope, close and
     # clean-up pooled connections
