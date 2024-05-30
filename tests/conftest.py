@@ -8,6 +8,7 @@ from litestar.testing import AsyncTestClient
 
 from src.helpers import create_db_config, provide_transaction
 from src.router import (
+    BiologicalMaterialController,
     DataFileController,
     DeviceController,
     EnvironmentController,
@@ -36,6 +37,7 @@ pytest_plugins = [
     "tests.router.experimental_factor.fixture",
     "tests.router.facility.fixture",
     "tests.router.experiment.fixture",
+    "tests.router.biological_material.fixture",
 ]
 
 
@@ -58,6 +60,7 @@ async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
             ExperimentalFactorController,
             FacilityController,
             ExperimentController,
+            BiologicalMaterialController,
         ],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
