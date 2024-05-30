@@ -1,12 +1,15 @@
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast
+from typing import Any, Generic, TypeVar, cast
 from uuid import UUID
 
 from litestar import Controller, Router, delete, get, post, put
 from litestar.di import Provide
 from sqlalchemy import delete as remove
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase, selectinload
+
+from src.model.base import Base, BaseDataclass, Serialisable
 
 __all__ = (
     "BaseController",
@@ -17,12 +20,13 @@ __all__ = (
     "update_item",
 )
 
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
-
-    from src.model.base import Base
 
 T = TypeVar("T", bound=DeclarativeBase)
+V = TypeVar("V", bound=BaseDataclass)
+ORM_ATTR = str
+ORM_TABLE = type[Base]
+DATACLASS_ATTR = str
+ATTR_MAP = dict[ORM_ATTR, tuple[DATACLASS_ATTR, ORM_TABLE]]
 
 
 async def read_items_by_attrs(
@@ -81,7 +85,7 @@ async def delete_item(session: "AsyncSession", id: "UUID", table: type[Any]) -> 
 class GenericController(Controller, Generic[T]):
     model_type: type[T]
 
-    def __class_getitem__(cls, model_type: type[T]) -> type:
+    def __class_getitem__(cls, model_type: Any) -> type:
         return type(f"Controller[{model_type.__name__}]", (cls,), {"model_type": model_type})
 
     def __init__(self, owner: Router):
@@ -145,3 +149,70 @@ class BaseController(GenericController[T]):
     @delete("/{id:uuid}")
     async def delete_item(self, table: Any, transaction: "AsyncSession", id: UUID) -> None:
         await delete_item(session=transaction, id=id, table=table)
+
+
+class DataclassController(BaseController[T], Generic[T, V]):
+    attr_map: ATTR_MAP
+    dataclass: type[V]
+    selectinload_attrs: list[Any]
+
+    def __class_getitem__(cls, key: tuple[type[T], type[V]]) -> type:
+        return type(f"Controller[{key[0].__name__}]", (cls,), {"model_type": key[0], "dataclass": key[1]})
+
+    def __init__(self, owner: Router):
+        super().__init__(owner)
+        self.signature_namespace[V.__name__] = self.dataclass  # type: ignore[misc]
+
+    @get()
+    async def get_items(
+        self,
+        table: Any,
+        transaction: "AsyncSession",
+        title: str | None,
+        id: UUID | list[UUID] | None = None,
+        **kwargs: Any,
+    ) -> Sequence[V.__name__]:
+        return cast(
+            Sequence[V],
+            await read_items_by_attrs(
+                transaction, table, title=title, id=id, selectinload_attrs=self.selectinload_attrs, **kwargs
+            ),
+        )
+
+    @get("/{id:uuid}")
+    async def get_item_by_id(self, table: Any, transaction: AsyncSession, id: UUID) -> V.__name__:
+        data = await read_item_by_id(transaction, table, id, self.selectinload_attrs)
+        return cast(V, self.dataclass.from_orm(data))
+
+    @post()
+    async def create_item(self, table: Any, transaction: AsyncSession, data: V.__name__) -> V.__name__:  # type: ignore[name-defined]
+        data_dict = await self.prepare_data_dict(transaction, data)
+        table_data = table(**data_dict)
+        transaction.add(table_data)
+        await transaction.flush()
+        return cast(V, self.dataclass.from_orm(table_data))
+
+    @put("{id:uuid}")
+    async def update_item(self, table: Any, transaction: AsyncSession, data: V.__name__, id: UUID) -> V.__name__:
+        # Fetch item
+        item = cast(
+            T,
+            await read_item_by_id(session=transaction, table=table, id=id, selectinload_attrs=self.selectinload_attrs),
+        )
+        # Fetch parents
+        data_dict = await self.prepare_data_dict(transaction, data)
+        for k, v in data_dict.items():
+            setattr(item, k, v)
+        return cast(V, self.dataclass.from_orm(cast(Serialisable, item)))
+
+    async def prepare_data_dict(self, session: AsyncSession, data: V) -> dict[str, Any]:
+        data_dict = data.to_dict()
+
+        for orm_attr, (dc_attr, table) in self.attr_map.items():
+            if dc_attr in data_dict:
+                data_dict.pop(dc_attr)
+            if hasattr(data, dc_attr) and len(getattr(data, dc_attr)) > 0:
+                orm_obj = await read_items_by_attrs(session=session, table=cast(Any, table), id=getattr(data, dc_attr))
+                data_dict[orm_attr] = orm_obj
+
+        return data_dict
