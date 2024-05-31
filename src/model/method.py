@@ -31,11 +31,6 @@ class Method(Base):
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id", ondelete="SET NULL"))
     device: Mapped[Optional["Device"]] = relationship(lazy=None, info=dto_field("read-only"))
 
-    biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(
-        back_populates="preprocessing_method",
-        lazy=None,
-        info=dto_field("read-only"),
-    )
     observed_variable: Mapped[Optional["ObservedVariable"]] = relationship(
         back_populates="method", lazy=None, info=dto_field("read-only")
     )

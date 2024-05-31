@@ -9,6 +9,7 @@ __all__ = ("Vocabulary",)
 
 
 if TYPE_CHECKING:
+    from src.model.biological_material import BiologicalMaterial
     from src.model.device import Device
 
     #     from src.model.event import Event
@@ -76,6 +77,9 @@ class Vocabulary(Base):
     )
     experiment: Mapped[list["Experiment"]] = relationship(
         back_populates="experiment_type", lazy=None, info=dto_field("private")
+    )
+    organism: Mapped[list["BiologicalMaterial"]] = relationship(
+        back_populates="organism", lazy=None, info=dto_field("private")
     )
     # observation_units: Mapped[list["ObservationUnit"]] = relationship(
     #     "ObservationUnit", back_populates="observation_unit_type", lazy="selectin", info=dto_field("read-only")
