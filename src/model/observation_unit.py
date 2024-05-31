@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Optional
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Optional, cast
 from uuid import UUID
 
 from litestar.dto import dto_field
@@ -6,7 +7,7 @@ from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.model import Base
+from src.model.base import Base, BaseDataclass, Serialisable
 
 if TYPE_CHECKING:
     from src.model.biological_material import BiologicalMaterial
@@ -106,3 +107,24 @@ class ObservationUnit(Base):
         secondaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.child_id",
         primaryjoin="ObservationUnit.id == ob_unit_to_ob_unit_table.c.parent_id",
     )
+
+
+@dataclass(kw_only=True)
+class ObservationUnitDataclass(BaseDataclass):
+    title: str
+    location: str | None = field(default=None)
+    study_id: UUID | None = field(default=None)
+    facility_id: UUID | None = field(default=None)
+    observation_unit_type_id: UUID | None = field(default=None)
+    biological_material_id: UUID | None = field(default=None)
+    factor_id: UUID | None = field(default=None)
+    factor_value: str | None = field(default=None)
+    parent_id: list[UUID] = field(default_factory=list[UUID])
+
+    @classmethod
+    def from_orm(cls, data: Serialisable) -> "ObservationUnitDataclass":
+        data = cast(ObservationUnit, data)
+        data_dict = data.to_dict()
+        if len(data.parents) > 0:
+            data_dict["parent_id"] = [item.id for item in data.parents]
+        return cls(**data_dict)
