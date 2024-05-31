@@ -45,6 +45,17 @@ from tests.router.method.fixture import (
     DAY_TO_ANTHESIS_REF,
     PROJECTED_SHOOT_AREA_METHOD,
     PROJECTED_SHOOT_AREA_REF,
+    ZN_CONCENTRATION_METHOD,
+)
+from tests.router.observed_variable.fixture import (
+    ANTHESIS_TRAIT,
+    ANTHESIS_VARIABLE,
+    PROJECTED_SHOOT_AREA_TRAIT,
+    PROJECTED_SHOOT_AREA_VARIABLE,
+    REPRODUCTIVE_GROWTH_TIME_TRAIT,
+    REPRODUCTIVE_GROWTH_TIME_VARIABLE,
+    ZN_CONCENTRATION_TRAIT,
+    ZN_CONCENTRATION_VARIABLE,
 )
 from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
 from tests.router.study.fixture import BARLEY_PROJECT_STUDY, FIRST_STUDY, MAIZE_PROJECT_STUDY, SECOND_STUDY
@@ -103,7 +114,7 @@ async def async_main() -> None:
         PROJECTED_SHOOT_AREA_METHOD.method_reference = PROJECTED_SHOOT_AREA_REF
         PROJECTED_SHOOT_AREA_METHOD.device = SCANALYZER_DEVICE
         DAY_TO_ANTHESIS_METHOD.method_reference = DAY_TO_ANTHESIS_REF
-        session.add_all([PROJECTED_SHOOT_AREA_METHOD, DAY_TO_ANTHESIS_METHOD])
+        session.add_all([PROJECTED_SHOOT_AREA_METHOD, DAY_TO_ANTHESIS_METHOD, ZN_CONCENTRATION_METHOD])
 
         # Add unit
         DEGREE_DAY_UNIT.unit_reference = DEGREE_DAY_REF
@@ -176,6 +187,38 @@ async def async_main() -> None:
                 ZEA_MAYS_REFERENCE,
             ]
         )
+
+        # Setup observed variable
+        ANTHESIS_VARIABLE.trait_reference = ANTHESIS_TRAIT
+        ANTHESIS_VARIABLE.studies = [MAIZE_PROJECT_STUDY]
+        ANTHESIS_VARIABLE.method = DAY_TO_ANTHESIS_METHOD
+        ANTHESIS_VARIABLE.unit = DEGREE_DAY_UNIT
+        REPRODUCTIVE_GROWTH_TIME_VARIABLE.trait_reference = REPRODUCTIVE_GROWTH_TIME_TRAIT
+        REPRODUCTIVE_GROWTH_TIME_VARIABLE.studies = [MAIZE_PROJECT_STUDY]
+        REPRODUCTIVE_GROWTH_TIME_VARIABLE.method = DAY_TO_ANTHESIS_METHOD
+        REPRODUCTIVE_GROWTH_TIME_VARIABLE.unit = DEGREE_DAY_UNIT
+        PROJECTED_SHOOT_AREA_VARIABLE.trait_reference = PROJECTED_SHOOT_AREA_TRAIT
+        PROJECTED_SHOOT_AREA_VARIABLE.studies = [BARLEY_PROJECT_STUDY]
+        PROJECTED_SHOOT_AREA_VARIABLE.method = PROJECTED_SHOOT_AREA_METHOD
+        PROJECTED_SHOOT_AREA_VARIABLE.unit = KILO_PIXEL_UNIT
+        ZN_CONCENTRATION_VARIABLE.trait_reference = ZN_CONCENTRATION_TRAIT
+        ZN_CONCENTRATION_VARIABLE.studies = [BARLEY_PROJECT_STUDY]
+        ZN_CONCENTRATION_VARIABLE.method = ZN_CONCENTRATION_METHOD
+        ZN_CONCENTRATION_VARIABLE.unit = MICROGRAM_UNIT
+
+        session.add_all(
+            [
+                ANTHESIS_TRAIT,
+                ANTHESIS_VARIABLE,
+                PROJECTED_SHOOT_AREA_TRAIT,
+                PROJECTED_SHOOT_AREA_VARIABLE,
+                REPRODUCTIVE_GROWTH_TIME_TRAIT,
+                REPRODUCTIVE_GROWTH_TIME_VARIABLE,
+                ZN_CONCENTRATION_TRAIT,
+                ZN_CONCENTRATION_VARIABLE,
+            ]
+        )
+
         await session.commit()
 
     # for AsyncEngine created in function scope, close and

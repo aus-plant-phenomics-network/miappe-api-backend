@@ -59,8 +59,10 @@ REPRODUCTIVE_GROWTH_TIME_VARIABLE = ObservedVariable(
     description="Reproductive growth time",
     time_interval="day",
 )
-PROJECTED_SHOOT_AREA_VARIABLE = ObservedVariable(title="PSA_img_kpixels")
-ZN_CONCENTRATION_VARIABLE = ObservedVariable(title="Zn_conc")
+PROJECTED_SHOOT_AREA_VARIABLE = ObservedVariable(
+    title="PSA_img_kpixels", description="Projected Shoot Area in kilopixels"
+)
+ZN_CONCENTRATION_VARIABLE = ObservedVariable(title="Zn_conc", description="ZN concentration in microgram")
 
 
 async def get_observed_variable_fixture(
