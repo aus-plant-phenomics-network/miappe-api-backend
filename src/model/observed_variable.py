@@ -21,14 +21,6 @@ class ObservedVariable(Variable):
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
 
     title: Mapped[str] = mapped_column(nullable=False)
-    variable_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
-    variable_reference: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
-        lazy=None,
-        back_populates="variable_reference",
-        info=dto_field("read-only"),
-        foreign_keys=[variable_reference_id],
-    )
     trait_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     trait_reference: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary",
@@ -42,5 +34,4 @@ class ObservedVariable(Variable):
 @dataclass(kw_only=True)
 class ObservedVariableDataclass(VariableDataclass):
     title: str
-    variable_reference_id: UUID | None = field(default=None)
     trait_reference_id: UUID | None = field(default=None)

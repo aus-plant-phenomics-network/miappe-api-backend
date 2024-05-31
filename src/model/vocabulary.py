@@ -82,12 +82,6 @@ class Vocabulary(Base):
     organism: Mapped[list["BiologicalMaterial"]] = relationship(
         back_populates="organism", lazy=None, info=dto_field("private")
     )
-    variable_reference: Mapped[list["ObservedVariable"]] = relationship(
-        lazy=None,
-        back_populates="variable_reference",
-        info=dto_field("read-only"),
-        foreign_keys="[ObservedVariable.variable_reference_id]",
-    )
     trait_reference: Mapped[list["ObservedVariable"]] = relationship(
         lazy=None,
         back_populates="trait_reference",
