@@ -10,7 +10,7 @@ __all__ = ("Event",)
 
 
 class Event(Base):
-    __tablename__ = "event_table"  # type: ignore[assignment]
+    __tablename__ = "event_table"
     event_date: Mapped[datetime.datetime | None]
     vocabulary_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
     observation_unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("observation_unit_table.id"))

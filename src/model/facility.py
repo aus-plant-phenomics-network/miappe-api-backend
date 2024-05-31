@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class Facility(Base):
-    __tablename__ = "facility_table"  # type: ignore[assignment]
+    __tablename__ = "facility_table"
     name: Mapped[str]
     description: Mapped[str | None]
     address: Mapped[str | None]

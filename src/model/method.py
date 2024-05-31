@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class Method(Base):
-    __tablename__: str = "method_table"  # type: ignore[assignment]
+    __tablename__: str = "method_table"
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
     description: Mapped[str | None] = mapped_column(nullable=True)
 

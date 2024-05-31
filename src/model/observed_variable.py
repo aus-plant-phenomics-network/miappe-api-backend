@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class ObservedVariable(Variable):
-    __tablename__: str = "observed_variable_table"  # type: ignore[assignment]
+    __tablename__: str = "observed_variable_table"
     __mapper_args__ = {"polymorphic_identity": "observed_variable"}
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
 

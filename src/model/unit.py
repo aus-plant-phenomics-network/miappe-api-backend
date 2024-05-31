@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class Unit(Base):
-    __tablename__ = "unit_table"  # type: ignore[assignment]
+    __tablename__ = "unit_table"
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
     symbol: Mapped[str | None]
     alternative_symbol: Mapped[str | None]

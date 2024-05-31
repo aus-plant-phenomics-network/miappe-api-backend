@@ -11,7 +11,7 @@ __all__ = ("Environment",)
 
 
 class Environment(Variable):
-    __tablename__: str = "environment_table"  # type: ignore[assignment]
+    __tablename__: str = "environment_table"
 
     __mapper_args__ = {"polymorphic_identity": "environment"}
 

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class BiologicalMaterial(Variable):
-    __tablename__: str = "biological_material_table"  # type: ignore[assignment]
+    __tablename__: str = "biological_material_table"
     __mapper_args__ = {"polymorphic_identity": "biological_material"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))

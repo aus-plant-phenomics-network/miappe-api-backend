@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class Device(Base):
-    __tablename__: str = "device_table"  # type: ignore[assignment]
+    __tablename__: str = "device_table"
     name: Mapped[str] = mapped_column(nullable=False)
     brand: Mapped[str | None]
     serial_number: Mapped[str | None]

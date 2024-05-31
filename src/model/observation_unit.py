@@ -18,7 +18,7 @@ ob_unit_to_ob_unit_table = Table(
 
 
 class ObservationUnit(Base):
-    __tablename__ = "observation_unit_table"  # type: ignore[assignment]
+    __tablename__ = "observation_unit_table"
     location: Mapped[str | None]
 
     # Relationship

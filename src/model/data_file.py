@@ -25,7 +25,7 @@ study_data_file_table = Table(
 
 
 class DataFile(Base):
-    __tablename__ = "data_file_table"  # type: ignore[assignment]
+    __tablename__ = "data_file_table"
 
     data_file_description: Mapped[str] = mapped_column(nullable=False)
     data_file_version: Mapped[str] = mapped_column(nullable=False)

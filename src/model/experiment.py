@@ -34,7 +34,7 @@ experiment_to_staff_table = Table(
 
 
 class Experiment(Base):
-    __tablename__ = "experiment_table"  # type: ignore[assignment]
+    __tablename__ = "experiment_table"
     title: Mapped[str] = mapped_column(nullable=False)
     objective: Mapped[str | None]
     start_date: Mapped[datetime.datetime | None]

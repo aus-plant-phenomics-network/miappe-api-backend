@@ -16,7 +16,7 @@ __all__ = ("ExperimentalFactor",)
 
 # TODO: make experimental factor values actual table
 class ExperimentalFactor(Variable):
-    __tablename__: str = "experimental_factor_table"  # type: ignore[assignment]
+    __tablename__: str = "experimental_factor_table"
     __mapper_args__ = {"polymorphic_identity": "experimental_factor"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))

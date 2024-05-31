@@ -10,7 +10,7 @@ __all__ = ("Sample",)
 
 
 class Sample(Base):
-    __tablename__ = "sample_table"  # type: ignore[assignment]
+    __tablename__ = "sample_table"
 
     observation_unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("observation_unit_table.id"))
     plant_structural_development_stage_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class Study(Base):
-    __tablename__ = "study_table"  # type: ignore[assignment]
+    __tablename__ = "study_table"
     title: Mapped[str] = mapped_column(nullable=False)
     objective: Mapped[str] = mapped_column(nullable=False)
     start_date: Mapped[datetime.datetime] = mapped_column(nullable=False)

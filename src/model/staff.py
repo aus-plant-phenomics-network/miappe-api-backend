@@ -24,7 +24,7 @@ institution_staff_table = Table(
 
 
 class Staff(Base):
-    __tablename__ = "staff_table"  # type: ignore[assignment]
+    __tablename__ = "staff_table"
     name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str | None]
     phone: Mapped[str | None]

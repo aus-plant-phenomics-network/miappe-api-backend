@@ -26,7 +26,7 @@ institution_to_institution_table = Table(
 
 
 class Institution(Base):
-    __tablename__ = "institution_table"  # type: ignore[assignment]
+    __tablename__ = "institution_table"
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
     country: Mapped[str | None] = mapped_column(nullable=True)
 
