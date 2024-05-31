@@ -1,14 +1,22 @@
-from src.model import ObservationUnit
-from src.router.base import BaseController
+from litestar.dto import DataclassDTO, DTOConfig
+
+from src.model.observation_unit import ObservationUnit, ObservationUnitDataclass
+from src.router.base import DataclassController
 from src.router.utils.dto import DTOGenerator
 
 __all__ = ("ObservationUnitController",)
 
 
-ObservationUnitDTO = DTOGenerator[ObservationUnit]()
+class ObservationUnitDTO(DataclassDTO[ObservationUnitDataclass]):
+    config = DTOConfig(rename_strategy="camel")
 
 
-class ObservationUnitController(BaseController[ObservationUnit]):
-    path = "/observation_unit"
-    dto = ObservationUnitDTO.write_dto
-    return_dto = ObservationUnitDTO.read_dto
+ObservationUnitReturnDTO = DTOGenerator[ObservationUnit]()
+
+
+class ObservationUnitController(DataclassController[ObservationUnit, ObservationUnitDataclass]):
+    path = "/observationUnit"
+    dto = ObservationUnitDTO
+    return_dto = ObservationUnitDTO
+    attr_map = {"parents": ("parent_id", ObservationUnit)}
+    selectinload_attrs = [ObservationUnit.parents]
