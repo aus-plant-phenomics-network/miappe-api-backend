@@ -20,15 +20,16 @@ class MethodReferenceResponse:
 
 @dataclass
 class MethodResponse:
-    method_reference_response: Response
     method_response: Response
     device_response: Response | None = None
+    method_reference_response: Response | None = None
 
 
 @dataclass
 class AllMethodFixtureResponse:
     day_to_anthesis: MethodResponse
     projected_shoot_area: MethodResponse
+    zn_concentration: MethodResponse
     method_reference: MethodReferenceResponse
 
 
@@ -55,16 +56,20 @@ PROJECTED_SHOOT_AREA_METHOD = Method(
     "comprising two side views and a view from above. The imaging data was prepared using the SET method "
     "check reference for the computations.",
 )
+ZN_CONCENTRATION_METHOD = Method(
+    name="calculate zn concentration using Inductive Coupled plansma",
+    description="concentration of zinc(2+) measured by Inductively Coupled Plasma method",
+)
 
 
 async def get_method_fixture(
     data: Method,
-    reference: Response,
     test_client: AsyncTestClient,
     id: UUID | None = None,
     device: Response | None = None,
+    reference: Response | None = None,
 ) -> MethodResponse:
-    method_reference_id = reference.json()["id"]
+    method_reference_id = reference.json()["id"] if reference else None
     send_data = Method(method_reference_id=method_reference_id, **data.to_dict())
     if id is None:
         response = await post_fixture(PATH, send_data, test_client)
@@ -88,13 +93,30 @@ async def setup_method_reference(test_client: AsyncTestClient) -> AsyncGenerator
 async def setup_method(
     setup_method_reference: MethodReferenceResponse, setup_device: DeviceResponse, test_client: AsyncTestClient
 ) -> AsyncGenerator[AllMethodFixtureResponse, None]:
-    method = setup_method_reference
-    day_to_anthesis = await get_method_fixture(DAY_TO_ANTHESIS_METHOD, method.day_to_anthesis, test_client)
+    method_reference = setup_method_reference
+    day_to_anthesis = await get_method_fixture(
+        DAY_TO_ANTHESIS_METHOD,
+        test_client,
+        None,
+        None,
+        method_reference.day_to_anthesis,
+    )
     projected_shoot_area = await get_method_fixture(
-        PROJECTED_SHOOT_AREA_METHOD, method.projected_shoot_area, test_client, None, setup_device.device_response
+        PROJECTED_SHOOT_AREA_METHOD,
+        test_client,
+        None,
+        setup_device.device_response,
+        method_reference.projected_shoot_area,
+    )
+    zn_concentration = await get_method_fixture(
+        ZN_CONCENTRATION_METHOD,
+        test_client,
     )
     yield AllMethodFixtureResponse(
-        day_to_anthesis=day_to_anthesis, projected_shoot_area=projected_shoot_area, method_reference=method
+        day_to_anthesis=day_to_anthesis,
+        projected_shoot_area=projected_shoot_area,
+        method_reference=method_reference,
+        zn_concentration=zn_concentration,
     )
     await delete_fixture(PATH, day_to_anthesis.method_response.json()["id"], test_client)
     await delete_fixture(PATH, projected_shoot_area.method_response.json()["id"], test_client)
