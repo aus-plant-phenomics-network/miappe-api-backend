@@ -3,6 +3,12 @@ import asyncio
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from src.model import Base
+from tests.router.biological_material.fixture import (
+    HORDEUM_MATERIAL,
+    HORDEUM_REFERENCE,
+    ZEA_MAYS_MATERIAL,
+    ZEA_MAYS_REFERENCE,
+)
 from tests.router.data_file.fixture import BARLEY_DATA_FILE, MAIZE_DATA_FILE
 from tests.router.device.fixture import SCANALYZER_DEVICE, SCANALYZER_TYPE
 from tests.router.environment.fixture import (
@@ -154,6 +160,20 @@ async def async_main() -> None:
         BARLEY_EXPERIMENT.study = BARLEY_PROJECT_STUDY
         session.add_all([MAIZE_EXPERIMENT, MAIZE_EXPERIMENT_TYPE, BARLEY_EXPERIMENT, BARLEY_EXPERIMENT_TYPE])
 
+        # Setup biological material
+        ZEA_MAYS_MATERIAL.organism = ZEA_MAYS_REFERENCE
+        ZEA_MAYS_MATERIAL.studies = [MAIZE_PROJECT_STUDY]
+        HORDEUM_MATERIAL.organism = HORDEUM_REFERENCE
+        HORDEUM_MATERIAL.studies = [BARLEY_PROJECT_STUDY]
+
+        session.add_all(
+            [
+                HORDEUM_MATERIAL,
+                HORDEUM_REFERENCE,
+                ZEA_MAYS_MATERIAL,
+                ZEA_MAYS_REFERENCE,
+            ]
+        )
         await session.commit()
 
     # for AsyncEngine created in function scope, close and
