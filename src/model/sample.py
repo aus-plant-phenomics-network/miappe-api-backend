@@ -1,19 +1,12 @@
 import datetime
-from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
-from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.model import Base
 
 __all__ = ("Sample",)
-
-
-if TYPE_CHECKING:
-    from src.model.observation_unit import ObservationUnit
-    from src.model.vocabulary import Vocabulary
 
 
 class Sample(Base):

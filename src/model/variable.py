@@ -14,7 +14,6 @@ __all__ = ("Variable",)
 
 if TYPE_CHECKING:
     from src.model.device import Device
-    from src.model.facility import Facility
     from src.model.study import Study
 
     # from src.model.observation_unit import ObservationUnit
@@ -29,7 +28,7 @@ study_variable_table = Table(
 
 
 class Variable(Base):
-    __tablename__: str = "variable_table"  # type: ignore[assignment]
+    __tablename__: str = "variable_table"
     __mapper_args__ = {
         "polymorphic_identity": "variable",
         "polymorphic_on": "type",

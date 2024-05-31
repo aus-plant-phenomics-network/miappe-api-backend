@@ -34,44 +34,44 @@ class AllEnvironmentFixtureResponse:
 
 PATH = "environment"
 MAIZE_SOWING_DENSITY = Environment(
-    parameter="sowing density", setpoint="300 seeds per m2", description="maize expermiment environment variable"
+    parameter="sowing density", setpoint="300 seeds per m2", description="maize experiment environment variable"
 )
 MAIZE_ROOTING_MEDIUM = Environment(
     parameter="rooting medium composition",
     setpoint="50% clay plus sand",
-    description="maize expermiment environment variable",
+    description="maize experiment environment variable",
 )
-MAIZE_PH = Environment(parameter="pH", setpoint="6.5", description="maize expermiment environment variable")
+MAIZE_PH = Environment(parameter="pH", setpoint="6.5", description="maize experiment environment variable")
 BARLEY_SOWING_DENSITY = Environment(
-    parameter="sowing density", setpoint="1 plant per 150mm pots", description="barley expermiment environment variable"
+    parameter="sowing density", setpoint="1 plant per 150mm pots", description="barley experiment environment variable"
 )
 BARLEY_ROOTING_MEDIUM = Environment(
     parameter="rooting medium composition",
     setpoint="1:9 autoclaved Arboretum soil/autoclaved play sand with or without mycorrhizal inoculum",
-    description="barley expermiment environment variable",
+    description="barley experiment environment variable",
 )
 BARLEY_FERTILIZER = Environment(
     parameter="fertilizer",
     setpoint="1/2 strength Long-Ashton Zn P (given once per week at rate of approx. 20mL) once weekly",
-    description="barley expermiment environment variable",
+    description="barley experiment environment variable",
 )
 BARLEY_WATERING_EXPOSURE = Environment(
-    parameter="watering exposure", setpoint="daily", description="barley expermiment environment variable"
+    parameter="watering exposure", setpoint="daily", description="barley experiment environment variable"
 )
 BARLEY_LIGHT_INTENSITY = Environment(
     parameter="light intensity",
     setpoint="hourly light intensity measurement of the greenhouse",
-    description="barley expermiment environment variable",
+    description="barley experiment environment variable",
 )
 BARLEY_RELATIVE_HUMIDITY = Environment(
     parameter="relative humidity",
     setpoint="hourly relative humidity measurement of the greenhouse",
-    description="barley expermiment environment variable",
+    description="barley experiment environment variable",
 )
 BARLEY_TEMPERATURE = Environment(
     parameter="temperature",
     setpoint="hourly temperature measurement of the greenhouse",
-    description="barley expermiment environment variable",
+    description="barley experiment environment variable",
 )
 
 

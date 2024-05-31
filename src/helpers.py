@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.model.base import Base
 
-sqlalchemy_log._add_default_handler = lambda x: None  # Patch to avoid duplicate logging
+sqlalchemy_log._add_default_handler = lambda x: None  # type: ignore[assignment]
 
 __all__ = ("create_db_config", "provide_transaction", "set_sqlite_pragma")
 

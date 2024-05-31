@@ -73,7 +73,7 @@ BARLEY_EXPERIMENT = Experiment(
     observation_unit_level_description="Observation units consisted of individual plants in pots with 4 replicates of the 8 treatments.",
     cultural_practices="150 mm pots, Soil Custom: 1:9 autoclaved Arboretum soil/autoclaved play sand, with or without"
     "mycorrhizal inoculum, Fertilizer: 1/2 strength Long-Ashton Zn P (given once per week at rate of approx. 20mL) "
-    "once weekly, Watering frequence: daily, Water amount / pot: Water to designated"
+    "once weekly, Watering frequency: daily, Water amount / pot: Water to designated"
     "weight (TBD)",
     map_of_experimental_design="File name: Exp380_381DesignSummary.pdf",
     description_of_experimental_design="The design for each experiment is a"

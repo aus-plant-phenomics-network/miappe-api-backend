@@ -1,23 +1,13 @@
-from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
-from litestar.dto import dto_field
 from sqlalchemy import UUID as UUID_SQL
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.model import Base
 
 __all__ = ("ObservationUnit",)
 
-
-if TYPE_CHECKING:
-    from src.model.event import Event
-    from src.model.facility import Facility
-    from src.model.sample import Sample
-    from src.model.study import Study
-    from src.model.variable import Variable
-    from src.model.vocabulary import Vocabulary
 
 ob_unit_to_ob_unit_table = Table(
     "ob_unit_to_ob_unit_table",

@@ -107,7 +107,7 @@ class BaseController(GenericController[T]):
         title: str | None,
         id: UUID | list[UUID] | None = None,
         **kwargs: Any,
-    ) -> Sequence[T.__name__]:
+    ) -> Sequence[T.__name__]:  # type: ignore[name-defined]
         return cast(
             Sequence[T],
             await read_items_by_attrs(transaction, table, title=title, id=id, **kwargs),
@@ -119,7 +119,7 @@ class BaseController(GenericController[T]):
         table: Any,
         transaction: "AsyncSession",
         id: UUID,
-    ) -> T.__name__:
+    ) -> T.__name__:  # type: ignore[name-defined]
         return cast(
             T,
             await read_item_by_id(session=transaction, table=table, id=id),
@@ -171,7 +171,7 @@ class DataclassController(BaseController[T], Generic[T, V]):
         title: str | None,
         id: UUID | list[UUID] | None = None,
         **kwargs: Any,
-    ) -> Sequence[V.__name__]:
+    ) -> Sequence[V.__name__]:  # type: ignore[name-defined]
         return cast(
             Sequence[V],
             await read_items_by_attrs(
@@ -180,7 +180,7 @@ class DataclassController(BaseController[T], Generic[T, V]):
         )
 
     @get("/{id:uuid}")
-    async def get_item_by_id(self, table: Any, transaction: AsyncSession, id: UUID) -> V.__name__:
+    async def get_item_by_id(self, table: Any, transaction: AsyncSession, id: UUID) -> V.__name__:  # type: ignore[name-defined]
         data = await read_item_by_id(transaction, table, id, self.selectinload_attrs)
         return cast(V, self.dataclass.from_orm(data))
 
@@ -193,7 +193,7 @@ class DataclassController(BaseController[T], Generic[T, V]):
         return cast(V, self.dataclass.from_orm(table_data))
 
     @put("{id:uuid}")
-    async def update_item(self, table: Any, transaction: AsyncSession, data: V.__name__, id: UUID) -> V.__name__:
+    async def update_item(self, table: Any, transaction: AsyncSession, data: V.__name__, id: UUID) -> V.__name__:  # type: ignore[name-defined]
         # Fetch item
         item = cast(
             T,

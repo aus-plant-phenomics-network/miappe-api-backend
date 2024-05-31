@@ -11,7 +11,6 @@ __all__ = ("Method",)
 
 
 if TYPE_CHECKING:
-    from src.model.biological_material import BiologicalMaterial
     from src.model.device import Device
     from src.model.observed_variable import ObservedVariable
     from src.model.vocabulary import Vocabulary

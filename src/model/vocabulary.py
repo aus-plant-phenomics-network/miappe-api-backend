@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 
 class Vocabulary(Base):
-    __tablename__: str = "vocabulary_table"  # type: ignore[assignment]
+    __tablename__: str = "vocabulary_table"
     title: Mapped[str]
     # Todo: use the same terminologies as PHIS - extract, widening, narrowing?
     relationship_type: Mapped[str | None]

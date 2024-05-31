@@ -50,6 +50,8 @@ from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
 from tests.router.study.fixture import BARLEY_PROJECT_STUDY, FIRST_STUDY, MAIZE_PROJECT_STUDY, SECOND_STUDY
 from tests.router.unit.fixture import DEGREE_DAY_REF, DEGREE_DAY_UNIT, KILO_PIXEL_UNIT, MICROGRAM_UNIT
 
+__all__ = ("async_main",)
+
 
 async def async_main() -> None:
     engine = create_async_engine("sqlite+aiosqlite:///db.sqlite", echo=True)

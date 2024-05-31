@@ -13,7 +13,6 @@ __all__ = ("Facility",)
 if TYPE_CHECKING:
     from src.model.experiment import Experiment
     from src.model.institution import Institution
-    from src.model.observation_unit import ObservationUnit
     from src.model.vocabulary import Vocabulary
 
 

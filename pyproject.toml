@@ -37,7 +37,7 @@ analysis = [
 ]
 
 [tool.codespell]
-ignore-words-list = "selectin"
+ignore-words-list = "selectin,UE,ue"
 skip = 'pdm.lock,./assets/'
 
 [tool.coverage.run]
