@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from src.model.facility import Facility
     from src.model.institution import Institution
     from src.model.method import Method
+    from src.model.observed_variable import ObservedVariable
 
     #     from src.model.observation_unit import ObservationUnit
     #     from src.model.sample import Sample
@@ -80,6 +81,18 @@ class Vocabulary(Base):
     )
     organism: Mapped[list["BiologicalMaterial"]] = relationship(
         back_populates="organism", lazy=None, info=dto_field("private")
+    )
+    variable_reference: Mapped[list["ObservedVariable"]] = relationship(
+        lazy=None,
+        back_populates="variable_reference",
+        info=dto_field("read-only"),
+        foreign_keys="[ObservedVariable.variable_reference_id]",
+    )
+    trait_reference: Mapped[list["ObservedVariable"]] = relationship(
+        lazy=None,
+        back_populates="trait_reference",
+        info=dto_field("read-only"),
+        foreign_keys="[ObservedVariable.trait_reference_id]",
     )
     # observation_units: Mapped[list["ObservationUnit"]] = relationship(
     #     "ObservationUnit", back_populates="observation_unit_type", lazy="selectin", info=dto_field("read-only")

@@ -9,6 +9,6 @@ ObservedVariableDTO = DTOGenerator[ObservedVariable]()
 
 
 class ObservedVariableController(BaseController[ObservedVariable]):
-    path = "/observed_variable"
+    path = "/observedVariable"
     dto = ObservedVariableDTO.write_dto
     return_dto = ObservedVariableDTO.read_dto
