@@ -13,6 +13,7 @@ __all__ = ("Facility",)
 if TYPE_CHECKING:
     from src.model.experiment import Experiment
     from src.model.institution import Institution
+    from src.model.observation_unit import ObservationUnit
     from src.model.vocabulary import Vocabulary
 
 
@@ -46,6 +47,9 @@ class Facility(Base):
         lazy=None,
         info=dto_field("read-only"),
     )
-    # observation_units: Mapped[list["ObservationUnit"]] = relationship(
-    #     "ObservationUnit", back_populates="facility", lazy="selectin", info=dto_field("read-only")
-    # )
+    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="facility",
+        lazy=None,
+        info=dto_field("read-only"),
+    )

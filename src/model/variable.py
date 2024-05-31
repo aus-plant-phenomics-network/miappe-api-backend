@@ -15,8 +15,6 @@ __all__ = ("Variable",)
 if TYPE_CHECKING:
     from src.model.device import Device
     from src.model.study import Study
-
-    # from src.model.observation_unit import ObservationUnit
     from src.model.unit import Unit
 
 study_variable_table = Table(
@@ -50,22 +48,6 @@ class Variable(Base):
         lazy=None,
         info=dto_field("read-only"),
     )
-
-    # observation_unit_biological_materials: Mapped[list["ObservationUnit"]] = relationship(
-    #     "ObservationUnit",
-    #     back_populates="biological_material",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    #     primaryjoin="Variable.id== ObservationUnit.biological_material_id",
-    # )
-
-    # observation_unit_factors: Mapped[list["ObservationUnit"]] = relationship(
-    #     "ObservationUnit",
-    #     back_populates="factor",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    #     primaryjoin="Variable.id == ObservationUnit.factor_id",
-    # )
 
 
 @dataclass(kw_only=True)

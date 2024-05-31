@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.model.variable import Variable, VariableDataclass
 
 if TYPE_CHECKING:
+    from src.model.observation_unit import ObservationUnit
     from src.model.vocabulary import Vocabulary
 
 __all__ = ("ExperimentalFactor",)
@@ -33,6 +34,13 @@ class ExperimentalFactor(Variable):
         back_populates="factor_type",
         lazy=None,
         info=dto_field("private"),
+    )
+
+    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="biological_material",
+        lazy=None,
+        info=dto_field("read-only"),
     )
 
 

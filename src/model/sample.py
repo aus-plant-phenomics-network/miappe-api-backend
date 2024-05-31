@@ -1,10 +1,16 @@
 import datetime
+from typing import TYPE_CHECKING, Optional
 from uuid import UUID
 
+from litestar.dto import dto_field
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.model import Base
+
+if TYPE_CHECKING:
+    from src.model.observation_unit import ObservationUnit
+    from src.model.vocabulary import Vocabulary
 
 __all__ = ("Sample",)
 
@@ -18,20 +24,23 @@ class Sample(Base):
     collection_date: Mapped[datetime.datetime | None]
 
     # Relationship
-    # observation_unit: Mapped[Optional["ObservationUnit"]] = relationship(
-    #     "ObservationUnit", back_populates="sample", lazy="selectin", info=dto_field("read-only")
-    # )
-    # plant_structural_development_stage: Mapped[Optional["Vocabulary"]] = relationship(
-    #     "Vocabulary",
-    #     foreign_keys=[plant_structural_development_stage_id],
-    #     back_populates="sample_plant_structural_development_stage",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
-    # plant_anatomical_entity: Mapped[Optional["Vocabulary"]] = relationship(
-    #     "Vocabulary",
-    #     foreign_keys=[plant_anatomical_entity_id],
-    #     back_populates="sample_plant_anatomical_entity",
-    #     lazy="selectin",
-    #     info=dto_field("read-only"),
-    # )
+    observation_unit: Mapped[Optional["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="sample",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
+    plant_structural_development_stage: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary",
+        foreign_keys=[plant_structural_development_stage_id],
+        back_populates="sample_plant_structural_development_stage",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
+    plant_anatomical_entity: Mapped[Optional["Vocabulary"]] = relationship(
+        "Vocabulary",
+        foreign_keys=[plant_anatomical_entity_id],
+        back_populates="sample_plant_anatomical_entity",
+        lazy=None,
+        info=dto_field("read-only"),
+    )

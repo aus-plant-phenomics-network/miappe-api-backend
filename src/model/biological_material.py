@@ -12,6 +12,7 @@ __all__ = ("BiologicalMaterial",)
 
 
 if TYPE_CHECKING:
+    from src.model.observation_unit import ObservationUnit
     from src.model.vocabulary import Vocabulary
 
 
@@ -41,6 +42,13 @@ class BiologicalMaterial(Variable):
     material_source_altitude: Mapped[str | None]
     material_source_coordinates_uncertainty: Mapped[str | None]
     material_source_description: Mapped[str | None]
+
+    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
+        "ObservationUnit",
+        back_populates="biological_material",
+        lazy=None,
+        info=dto_field("read-only"),
+    )
 
 
 @dataclass(kw_only=True)
