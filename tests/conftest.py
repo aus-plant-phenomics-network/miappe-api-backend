@@ -18,6 +18,7 @@ from src.router import (
     InstitutionController,
     InvestigationController,
     MethodController,
+    ObservationUnitController,
     ObservedVariableController,
     StaffController,
     StudyController,
@@ -40,6 +41,7 @@ pytest_plugins = [
     "tests.router.experiment.fixture",
     "tests.router.biological_material.fixture",
     "tests.router.observed_variable.fixture",
+    "tests.router.observation_unit.fixture",
 ]
 
 
@@ -64,6 +66,7 @@ async def test_client() -> AsyncGenerator[AsyncTestClient[Litestar], None]:
             ExperimentController,
             BiologicalMaterialController,
             ObservedVariableController,
+            ObservationUnitController,
         ],
         dependencies={"transaction": provide_transaction},
         plugins=[SQLAlchemyPlugin(db_config)],
