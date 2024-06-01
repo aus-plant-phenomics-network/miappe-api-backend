@@ -50,5 +50,9 @@ class Study(Base):
         "Experiment", back_populates="study", lazy=None, info=dto_field("read-only")
     )
     observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit", back_populates="study", lazy=None, info=dto_field("read-only")
+        "ObservationUnit",
+        secondary="ob_unit_to_study_table",
+        back_populates="studies",
+        lazy=None,
+        info=dto_field("read-only"),
     )
