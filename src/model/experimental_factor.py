@@ -21,7 +21,7 @@ class ExperimentalFactor(Variable):
     __mapper_args__ = {"polymorphic_identity": "experimental_factor"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
-    factor_values: Mapped[str]
+    factor_value: Mapped[str]
     factor_description: Mapped[str]
     factor_type_id: Mapped[UUID | None] = mapped_column(
         ForeignKey(
@@ -36,9 +36,10 @@ class ExperimentalFactor(Variable):
         info=dto_field("private"),
     )
 
-    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
         "ObservationUnit",
-        back_populates="biological_material",
+        secondary="ob_unit_to_exp_factor_table",
+        back_populates="experimental_factors",
         lazy=None,
         info=dto_field("read-only"),
     )
@@ -46,6 +47,6 @@ class ExperimentalFactor(Variable):
 
 @dataclass(kw_only=True)
 class ExperimentalFactorDataclass(VariableDataclass):
-    factor_values: str | None = field(default=None)
+    factor_value: str
     factor_description: str | None = field(default=None)
     factor_type_id: UUID | None = field(default=None)
