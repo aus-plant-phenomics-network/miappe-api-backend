@@ -28,9 +28,14 @@ class ExperimentalFactorResponse:
 
 @dataclass
 class AllExperimentalFactorFixtureResponse:
-    maize_watering: ExperimentalFactorResponse
-    barley_fungal_exposure: ExperimentalFactorResponse
-    barley_zn_exposure: ExperimentalFactorResponse
+    maize_watering_watered: ExperimentalFactorResponse
+    maize_watering_unwatered: ExperimentalFactorResponse
+    barley_fungal_exposure_plus: ExperimentalFactorResponse
+    barley_fungal_exposure_minus: ExperimentalFactorResponse
+    barley_zn_exposure_0: ExperimentalFactorResponse
+    barley_zn_exposure_10: ExperimentalFactorResponse
+    barley_zn_exposure_40: ExperimentalFactorResponse
+    barley_zn_exposure_90: ExperimentalFactorResponse
     study_response: AllStudyFixtureResponse
 
 
@@ -40,21 +45,47 @@ BARLEY_FUNGAL_EXPOSURE_TYPE = Vocabulary(
     title="arbuscular mycorrhizal fungal exposure", accession_number="PECO_0001059"
 )
 BARLEY_ZN_EXPOSURE_TYPE = Vocabulary(title="zinc nutrient exposure", accession_number="PECO:0007309")
-MAIZE_WATERING_FACTOR = ExperimentalFactor(
-    description="maize experiment factor",
+MAIZE_WATERING_FACTOR_WATERED = ExperimentalFactor(
+    description="Watering - Watered",
     factor_description="Daily watering 1 L per plant.",
-    factor_values="Watered; Unwatered",
+    factor_value="Watered",
 )
-BARLEY_FUNGAL_EXPOSURE_FACTOR = ExperimentalFactor(
-    description="barley experiment factor",
+MAIZE_WATERING_FACTOR_UNWATERED = ExperimentalFactor(
+    description="Watering - Unwatered",
+    factor_description="Daily watering 1 L per plant.",
+    factor_value="Unwatered",
+)
+BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS = ExperimentalFactor(
+    description="Mycorrhizal inoculation - plus",
     factor_description="Mycorrhizal-inoculation (Rhizophagus irregularis). The are two micorrhizal"
     "inoculation treatments (no micorrhizal inoculation (-) and micorrhizal inoculation(+))",
-    factor_values="plus; minus",
+    factor_value="Plus",
 )
-BARLEY_ZN_EXPOSURE_FACTOR = ExperimentalFactor(
-    description="barley experiment factor",
+BARLEY_FUNGAL_EXPOSURE_FACTOR_MINUS = ExperimentalFactor(
+    description="Mycorrhizal inoculation - minus",
+    factor_description="Mycorrhizal-inoculation (Rhizophagus irregularis). The are two micorrhizal"
+    "inoculation treatments (no micorrhizal inoculation (-) and micorrhizal inoculation(+))",
+    factor_value="Minus",
+)
+BARLEY_ZN_EXPOSURE_FACTOR_0 = ExperimentalFactor(
+    description="Zn addition - 0",
     factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
-    factor_values="0, 10, 40, 90",
+    factor_value="0",
+)
+BARLEY_ZN_EXPOSURE_FACTOR_10 = ExperimentalFactor(
+    description="Zn addition - 10",
+    factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
+    factor_value="10",
+)
+BARLEY_ZN_EXPOSURE_FACTOR_40 = ExperimentalFactor(
+    description="Zn addition - 40",
+    factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
+    factor_value="40",
+)
+BARLEY_ZN_EXPOSURE_FACTOR_90 = ExperimentalFactor(
+    description="Zn addition - 90",
+    factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
+    factor_value="90",
 )
 
 
@@ -105,36 +136,81 @@ async def setup_experimental_factor(
     barley_zn_exposure_type = setup_factor_type.barley_zn_exposure
     barley_fungal_exposure_type = setup_factor_type.barley_fungal_exposure
 
-    maize_watering_response = await get_experimental_factor_fixture(
-        MAIZE_WATERING_FACTOR,
+    maize_watering_watered = await get_experimental_factor_fixture(
+        MAIZE_WATERING_FACTOR_WATERED,
         [maize_study, barley_study],
         test_client,
         None,
         factor_type=maize_watering_type,
     )
-    barley_fungal_exposure_response = await get_experimental_factor_fixture(
-        BARLEY_FUNGAL_EXPOSURE_FACTOR,
+    maize_watering_unwatered = await get_experimental_factor_fixture(
+        MAIZE_WATERING_FACTOR_UNWATERED,
+        [maize_study],
+        test_client,
+        None,
+        factor_type=maize_watering_type,
+    )
+    barley_fungal_exposure_plus = await get_experimental_factor_fixture(
+        BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS,
         [barley_study],
         test_client,
         None,
         factor_type=barley_fungal_exposure_type,
     )
-    barley_zn_exposure_response = await get_experimental_factor_fixture(
-        BARLEY_ZN_EXPOSURE_FACTOR,
+    barley_fungal_exposure_minus = await get_experimental_factor_fixture(
+        BARLEY_FUNGAL_EXPOSURE_FACTOR_MINUS,
+        [barley_study],
+        test_client,
+        None,
+        factor_type=barley_fungal_exposure_type,
+    )
+    barley_zn_exposure_0 = await get_experimental_factor_fixture(
+        BARLEY_ZN_EXPOSURE_FACTOR_0,
+        [barley_study],
+        test_client,
+        None,
+        factor_type=barley_zn_exposure_type,
+    )
+    barley_zn_exposure_10 = await get_experimental_factor_fixture(
+        BARLEY_ZN_EXPOSURE_FACTOR_10,
+        [barley_study],
+        test_client,
+        None,
+        factor_type=barley_zn_exposure_type,
+    )
+    barley_zn_exposure_40 = await get_experimental_factor_fixture(
+        BARLEY_ZN_EXPOSURE_FACTOR_40,
+        [barley_study],
+        test_client,
+        None,
+        factor_type=barley_zn_exposure_type,
+    )
+    barley_zn_exposure_90 = await get_experimental_factor_fixture(
+        BARLEY_ZN_EXPOSURE_FACTOR_90,
         [barley_study],
         test_client,
         None,
         factor_type=barley_zn_exposure_type,
     )
     yield AllExperimentalFactorFixtureResponse(
-        maize_watering=maize_watering_response,
-        barley_fungal_exposure=barley_fungal_exposure_response,
-        barley_zn_exposure=barley_zn_exposure_response,
+        maize_watering_watered=maize_watering_watered,
+        maize_watering_unwatered=maize_watering_unwatered,
+        barley_fungal_exposure_plus=barley_fungal_exposure_plus,
+        barley_fungal_exposure_minus=barley_fungal_exposure_minus,
+        barley_zn_exposure_0=barley_zn_exposure_0,
+        barley_zn_exposure_10=barley_zn_exposure_10,
+        barley_zn_exposure_40=barley_zn_exposure_40,
+        barley_zn_exposure_90=barley_zn_exposure_90,
         study_response=setup_study,
     )
-    await delete_fixture(PATH, maize_watering_response.factor_response.json()["id"], test_client)
-    await delete_fixture(PATH, barley_fungal_exposure_response.factor_response.json()["id"], test_client)
-    await delete_fixture(PATH, barley_zn_exposure_response.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, maize_watering_watered.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, maize_watering_unwatered.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_fungal_exposure_plus.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_fungal_exposure_minus.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_zn_exposure_0.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_zn_exposure_10.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_zn_exposure_40.factor_response.json()["id"], test_client)
+    await delete_fixture(PATH, barley_zn_exposure_90.factor_response.json()["id"], test_client)
 
 
 @pytest.fixture(scope="function")
@@ -143,12 +219,12 @@ async def update_experimental_factor(
 ) -> AsyncGenerator[AllExperimentalFactorFixtureResponse, None]:
     all_responses = setup_experimental_factor
     maize_study = all_responses.study_response.maize.study_response
-    maize_watering_factor = all_responses.maize_watering
+    maize_watering_factor = all_responses.maize_watering_watered
     response = await get_experimental_factor_fixture(
-        MAIZE_WATERING_FACTOR,
+        MAIZE_WATERING_FACTOR_WATERED,
         [maize_study],
         test_client,
         maize_watering_factor.factor_response.json()["id"],
     )
-    all_responses.maize_watering = response
+    all_responses.maize_watering_watered = response
     yield all_responses
