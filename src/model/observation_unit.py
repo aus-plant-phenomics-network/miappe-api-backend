@@ -101,8 +101,9 @@ class ObservationUnit(Base):
         info=dto_field("read-only"),
     )
 
-    event: Mapped[list["Event"]] = relationship(
+    events: Mapped[list["Event"]] = relationship(
         "Event",
+        secondary="event_to_ob_unit_table",
         back_populates="observation_unit",
         lazy=None,
         info=dto_field("read-only"),
