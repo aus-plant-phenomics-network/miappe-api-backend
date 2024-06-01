@@ -18,9 +18,15 @@ __all__ = ("Sample",)
 class Sample(Base):
     __tablename__ = "sample_table"
 
-    observation_unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("observation_unit_table.id"))
-    plant_structural_development_stage_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
-    plant_anatomical_entity_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    observation_unit_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("observation_unit_table.id", ondelete="SET NULL")
+    )
+    plant_structural_development_stage_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("vocabulary_table.id", ondelete="SET NULL")
+    )
+    plant_anatomical_entity_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("vocabulary_table.id", ondelete="SET NULL")
+    )
     collection_date: Mapped[datetime.datetime | None]
 
     # Relationship

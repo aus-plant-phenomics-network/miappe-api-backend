@@ -31,12 +31,12 @@ class Facility(Base):
     altitude: Mapped[str | None]
 
     # relationship
-    institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id"))
+    institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id", ondelete="SET NULL"))
     institution: Mapped[Optional["Institution"]] = relationship(
         "Institution", back_populates="facilities", lazy=None, info=dto_field("read-only")
     )
 
-    facility_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    facility_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     facility_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="facility", lazy=None, info=dto_field("read-only")
     )

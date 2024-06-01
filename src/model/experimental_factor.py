@@ -20,7 +20,9 @@ class ExperimentalFactor(Variable):
     __tablename__: str = "experimental_factor_table"
     __mapper_args__ = {"polymorphic_identity": "experimental_factor"}
 
-    id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
+    id: Mapped[UUID] = mapped_column(
+        ForeignKey("variable_table.id", ondelete="cascade"), primary_key=True, info=dto_field("read-only")
+    )
     title: Mapped[str]
     factor_value: Mapped[str]
     factor_description: Mapped[str]

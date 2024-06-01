@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 class ObservedVariable(Variable):
     __tablename__: str = "observed_variable_table"
     __mapper_args__ = {"polymorphic_identity": "observed_variable"}
-    id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
+    id: Mapped[UUID] = mapped_column(
+        ForeignKey("variable_table.id", ondelete="cascade"), primary_key=True, info=dto_field("read-only")
+    )
 
     title: Mapped[str] = mapped_column(nullable=False)
     method_id: Mapped[UUID | None] = mapped_column(ForeignKey("method_table.id", ondelete="SET NULL"))

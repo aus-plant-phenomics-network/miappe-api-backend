@@ -61,12 +61,19 @@ class Experiment(Base):
         info=dto_field("read-only"),
     )
 
-    experiment_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    experiment_type_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("vocabulary_table.id", ondelete="SET NULL"),
+    )
     experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary", back_populates="experiment", lazy=None, info=dto_field("read-only")
     )
 
-    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
+    study_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey(
+            "study_table.id",
+            ondelete="SET NULL",
+        )
+    )
     study: Mapped[Optional["Study"]] = relationship(
         "Study", back_populates="experiments", lazy=None, info=dto_field("read-only")
     )

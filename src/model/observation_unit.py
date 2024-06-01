@@ -24,22 +24,31 @@ __all__ = ("ObservationUnit",)
 ob_unit_to_ob_unit_table = Table(
     "ob_unit_to_ob_unit_table",
     Base.metadata,
-    Column("parent_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
-    Column("child_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
+    Column("parent_id", UUID_SQL, ForeignKey("observation_unit_table.id", ondelete="cascade"), primary_key=True),
+    Column("child_id", UUID_SQL, ForeignKey("observation_unit_table.id", ondelete="cascade"), primary_key=True),
 )
 
 ob_unit_to_study_table = Table(
     "ob_unit_to_study_table",
     Base.metadata,
-    Column("observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
-    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
+    Column(
+        "observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id", ondelete="cascade"), primary_key=True
+    ),
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id", ondelete="cascade"), primary_key=True),
 )
 
 ob_unit_to_exp_factor_table = Table(
     "ob_unit_to_exp_factor_table",
     Base.metadata,
-    Column("observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
-    Column("experimental_factor_id", UUID_SQL, ForeignKey("experimental_factor_table.id"), primary_key=True),
+    Column(
+        "observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id", ondelete="cascade"), primary_key=True
+    ),
+    Column(
+        "experimental_factor_id",
+        UUID_SQL,
+        ForeignKey("experimental_factor_table.id", ondelete="cascade"),
+        primary_key=True,
+    ),
 )
 
 
@@ -56,7 +65,7 @@ class ObservationUnit(Base):
         back_populates="observation_unit",
     )
 
-    facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id"))
+    facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id", ondelete="SET NULL"))
     facility: Mapped[Optional["Facility"]] = relationship(
         "Facility",
         back_populates="observation_unit",
@@ -64,7 +73,9 @@ class ObservationUnit(Base):
         info=dto_field("read-only"),
     )
 
-    observation_unit_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id"))
+    observation_unit_type_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("vocabulary_table.id", ondelete="SET NULL")
+    )
     observation_unit_type: Mapped[Optional["Vocabulary"]] = relationship(
         "Vocabulary",
         back_populates="observation_unit",
@@ -72,7 +83,9 @@ class ObservationUnit(Base):
         info=dto_field("read-only"),
     )
 
-    biological_material_id: Mapped[UUID | None] = mapped_column(ForeignKey("biological_material_table.id"))
+    biological_material_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("biological_material_table.id", ondelete="SET NULL")
+    )
     biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(
         "BiologicalMaterial",
         back_populates="observation_unit",
