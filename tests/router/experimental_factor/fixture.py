@@ -46,44 +46,44 @@ BARLEY_FUNGAL_EXPOSURE_TYPE = Vocabulary(
 )
 BARLEY_ZN_EXPOSURE_TYPE = Vocabulary(title="zinc nutrient exposure", accession_number="PECO:0007309")
 MAIZE_WATERING_FACTOR_WATERED = ExperimentalFactor(
-    description="Watering - Watered",
+    title="Watering - Watered",
     factor_description="Daily watering 1 L per plant.",
     factor_value="Watered",
 )
 MAIZE_WATERING_FACTOR_UNWATERED = ExperimentalFactor(
-    description="Watering - Unwatered",
+    title="Watering - Unwatered",
     factor_description="Daily watering 1 L per plant.",
     factor_value="Unwatered",
 )
 BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS = ExperimentalFactor(
-    description="Mycorrhizal inoculation - plus",
+    title="Mycorrhizal inoculation - plus",
     factor_description="Mycorrhizal-inoculation (Rhizophagus irregularis). The are two micorrhizal"
     "inoculation treatments (no micorrhizal inoculation (-) and micorrhizal inoculation(+))",
     factor_value="Plus",
 )
 BARLEY_FUNGAL_EXPOSURE_FACTOR_MINUS = ExperimentalFactor(
-    description="Mycorrhizal inoculation - minus",
+    title="Mycorrhizal inoculation - minus",
     factor_description="Mycorrhizal-inoculation (Rhizophagus irregularis). The are two micorrhizal"
     "inoculation treatments (no micorrhizal inoculation (-) and micorrhizal inoculation(+))",
     factor_value="Minus",
 )
 BARLEY_ZN_EXPOSURE_FACTOR_0 = ExperimentalFactor(
-    description="Zn addition - 0",
+    title="Zn addition - 0",
     factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
     factor_value="0",
 )
 BARLEY_ZN_EXPOSURE_FACTOR_10 = ExperimentalFactor(
-    description="Zn addition - 10",
+    title="Zn addition - 10",
     factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
     factor_value="10",
 )
 BARLEY_ZN_EXPOSURE_FACTOR_40 = ExperimentalFactor(
-    description="Zn addition - 40",
+    title="Zn addition - 40",
     factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
     factor_value="40",
 )
 BARLEY_ZN_EXPOSURE_FACTOR_90 = ExperimentalFactor(
-    description="Zn addition - 90",
+    title="Zn addition - 90",
     factor_description="Soil Zn additions: 0, 10, 40, 90 mg/kg soil",
     factor_value="90",
 )

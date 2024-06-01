@@ -21,6 +21,7 @@ class ExperimentalFactor(Variable):
     __mapper_args__ = {"polymorphic_identity": "experimental_factor"}
 
     id: Mapped[UUID] = mapped_column(ForeignKey("variable_table.id"), primary_key=True, info=dto_field("read-only"))
+    title: Mapped[str]
     factor_value: Mapped[str]
     factor_description: Mapped[str]
     factor_type_id: Mapped[UUID | None] = mapped_column(
@@ -47,6 +48,7 @@ class ExperimentalFactor(Variable):
 
 @dataclass(kw_only=True)
 class ExperimentalFactorDataclass(VariableDataclass):
+    title: str
     factor_value: str
     factor_description: str | None = field(default=None)
     factor_type_id: UUID | None = field(default=None)
