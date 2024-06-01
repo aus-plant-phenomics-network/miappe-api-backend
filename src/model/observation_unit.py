@@ -28,15 +28,29 @@ ob_unit_to_ob_unit_table = Table(
     Column("child_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
 )
 
+ob_unit_to_study_table = Table(
+    "ob_unit_to_study_table",
+    Base.metadata,
+    Column("observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
+    Column("study_id", UUID_SQL, ForeignKey("study_table.id"), primary_key=True),
+)
+
+ob_unit_to_exp_factor_table = Table(
+    "ob_unit_to_exp_factor_table",
+    Base.metadata,
+    Column("observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id"), primary_key=True),
+    Column("experimental_factor_id", UUID_SQL, ForeignKey("experimental_factor_table.id"), primary_key=True),
+)
+
 
 class ObservationUnit(Base):
     __tablename__ = "observation_unit_table"
     title: Mapped[str] = mapped_column(nullable=False)
     location: Mapped[str | None]
     # Relationship
-    study_id: Mapped[UUID | None] = mapped_column(ForeignKey("study_table.id"))
-    study: Mapped[Optional["Study"]] = relationship(
+    studies: Mapped[list["Study"]] = relationship(
         "Study",
+        secondary="ob_unit_to_study_table",
         lazy=None,
         info=dto_field("read-only"),
         back_populates="observation_unit",
@@ -66,14 +80,13 @@ class ObservationUnit(Base):
         info=dto_field("read-only"),
     )
 
-    factor_id: Mapped[UUID | None] = mapped_column(ForeignKey("experimental_factor_table.id"))
-    factor: Mapped[Optional["ExperimentalFactor"]] = relationship(
+    experimental_factors: Mapped[list["ExperimentalFactor"]] = relationship(
         "ExperimentalFactor",
-        back_populates="observation_unit",
+        secondary="ob_unit_to_exp_factor_table",
+        back_populates="observation_units",
         lazy=None,
         info=dto_field("read-only"),
     )
-    factor_value: Mapped[str | None]
 
     event: Mapped[list["Event"]] = relationship(
         "Event",
@@ -113,18 +126,21 @@ class ObservationUnit(Base):
 class ObservationUnitDataclass(BaseDataclass):
     title: str
     location: str | None = field(default=None)
-    study_id: UUID | None = field(default=None)
     facility_id: UUID | None = field(default=None)
     observation_unit_type_id: UUID | None = field(default=None)
     biological_material_id: UUID | None = field(default=None)
-    factor_id: UUID | None = field(default=None)
-    factor_value: str | None = field(default=None)
+    experimental_factor_id: list[UUID] = field(default_factory=list[UUID])
+    study_id: list[UUID] = field(default_factory=list[UUID])
     parent_id: list[UUID] = field(default_factory=list[UUID])
 
     @classmethod
     def from_orm(cls, data: Serialisable) -> "ObservationUnitDataclass":
         data = cast(ObservationUnit, data)
         data_dict = data.to_dict()
+        if len(data.experimental_factors) > 0:
+            data_dict["experimental_factor_id"] = [item.id for item in data.experimental_factors]
         if len(data.parents) > 0:
             data_dict["parent_id"] = [item.id for item in data.parents]
+        if len(data.studies) > 0:
+            data_dict["study_id"] = [item.id for item in data.studies]
         return cls(**data_dict)
