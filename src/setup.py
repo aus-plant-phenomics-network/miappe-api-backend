@@ -52,6 +52,7 @@ from tests.router.method.fixture import (
     PROJECTED_SHOOT_AREA_REF,
     ZN_CONCENTRATION_METHOD,
 )
+from tests.router.observation_unit.fixture import PLANT_061439, PLANT_061440, PLANT_TYPE, PLOT_894, PLOT_TYPE
 from tests.router.observed_variable.fixture import (
     ANTHESIS_TRAIT,
     ANTHESIS_VARIABLE,
@@ -250,6 +251,27 @@ async def async_main() -> None:
                 ZN_CONCENTRATION_VARIABLE,
             ]
         )
+
+        # Setup observation unit
+        PLOT_894.observation_unit_type = PLOT_TYPE
+        PLOT_894.studies = [MAIZE_PROJECT_STUDY]
+        PLOT_894.facility = INRAE_FIELD
+        PLOT_894.biological_material = ZEA_MAYS_MATERIAL
+        PLOT_894.experimental_factors = [MAIZE_WATERING_FACTOR_WATERED]
+
+        PLANT_061439.observation_unit_type = PLANT_TYPE
+        PLANT_061439.studies = [BARLEY_PROJECT_STUDY]
+        PLANT_061439.facility = APPN_GREENHOUSE
+        PLANT_061439.biological_material = HORDEUM_MATERIAL
+        PLANT_061439.experimental_factors = [BARLEY_ZN_EXPOSURE_FACTOR_90, BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS]
+
+        PLANT_061440.observation_unit_type = PLANT_TYPE
+        PLANT_061440.studies = [BARLEY_PROJECT_STUDY]
+        PLANT_061440.facility = APPN_GREENHOUSE
+        PLANT_061440.biological_material = HORDEUM_MATERIAL
+        PLANT_061440.experimental_factors = [BARLEY_ZN_EXPOSURE_FACTOR_0, BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS]
+
+        session.add_all([PLANT_061439, PLANT_061440, PLANT_TYPE, PLOT_894, PLOT_TYPE])
 
         await session.commit()
 
