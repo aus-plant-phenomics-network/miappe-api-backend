@@ -19,6 +19,7 @@
     "Scanalyzer",
     "selectin",
     "setpoint",
-    "sqlalchemy"
+    "sqlalchemy",
+    "unwatered"
   ]
 }
