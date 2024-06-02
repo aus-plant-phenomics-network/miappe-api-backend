@@ -37,6 +37,8 @@ event_to_study_table = Table(
 
 class Event(Base):
     __tablename__ = "event_table"
+    title: Mapped[str]
+    description: Mapped[str | None]
     event_date: Mapped[datetime.datetime | None]
     event_type_id: Mapped[UUID | None] = mapped_column(
         ForeignKey(
@@ -67,10 +69,12 @@ class Event(Base):
 
 @dataclass(kw_only=True)
 class EventDataclass(BaseDataclass):
+    title: str
+    description: str | None = field(default=None)
     event_date: datetime.datetime | None = field(default=None)
     event_type_id: UUID | None = field(default=None)
     observation_unit_id: list[UUID] = field(default_factory=list[UUID])
-    studies: list[UUID] = field(default_factory=list[UUID])
+    study_id: list[UUID] = field(default_factory=list[UUID])
 
     @classmethod
     def from_orm(cls, data: Serialisable) -> "BaseDataclass":
