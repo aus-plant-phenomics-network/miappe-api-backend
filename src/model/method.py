@@ -32,7 +32,5 @@ class Method(Base):
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id", ondelete="SET NULL"))
     device: Mapped[Optional["Device"]] = relationship(lazy=None, info=dto_field("read-only"))
     observed_variable: Mapped[Optional["ObservedVariable"]] = relationship(
-        "ObservedVariable",
-        lazy=None,
-        info=dto_field("read-only"),
+        lazy=None, info=dto_field("read-only"), back_populates="method"
     )

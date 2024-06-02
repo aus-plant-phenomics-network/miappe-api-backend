@@ -58,7 +58,6 @@ class ObservationUnit(Base):
     location: Mapped[str | None]
     # Relationship
     studies: Mapped[list["Study"]] = relationship(
-        "Study",
         secondary="ob_unit_to_study_table",
         lazy=None,
         info=dto_field("read-only"),
@@ -67,8 +66,7 @@ class ObservationUnit(Base):
 
     facility_id: Mapped[UUID | None] = mapped_column(ForeignKey("facility_table.id", ondelete="SET NULL"))
     facility: Mapped[Optional["Facility"]] = relationship(
-        "Facility",
-        back_populates="observation_unit",
+        back_populates="observation_units",
         lazy=None,
         info=dto_field("read-only"),
     )
@@ -77,7 +75,6 @@ class ObservationUnit(Base):
         ForeignKey("vocabulary_table.id", ondelete="SET NULL")
     )
     observation_unit_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
         back_populates="observation_unit",
         lazy=None,
         info=dto_field("read-only"),
@@ -87,14 +84,12 @@ class ObservationUnit(Base):
         ForeignKey("biological_material_table.id", ondelete="SET NULL")
     )
     biological_material: Mapped[Optional["BiologicalMaterial"]] = relationship(
-        "BiologicalMaterial",
-        back_populates="observation_unit",
+        back_populates="observation_units",
         lazy=None,
         info=dto_field("read-only"),
     )
 
     experimental_factors: Mapped[list["ExperimentalFactor"]] = relationship(
-        "ExperimentalFactor",
         secondary="ob_unit_to_exp_factor_table",
         back_populates="observation_units",
         lazy=None,
@@ -102,21 +97,18 @@ class ObservationUnit(Base):
     )
 
     events: Mapped[list["Event"]] = relationship(
-        "Event",
         secondary="event_to_ob_unit_table",
-        back_populates="observation_unit",
+        back_populates="observation_units",
         lazy=None,
         info=dto_field("read-only"),
     )
-    sample: Mapped[list["Sample"]] = relationship(
-        "Sample",
+    samples: Mapped[list["Sample"]] = relationship(
         back_populates="observation_unit",
         lazy=None,
         info=dto_field("read-only"),
     )
 
     parents: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
         secondary="ob_unit_to_ob_unit_table",
         back_populates="children",
         lazy=None,
@@ -126,7 +118,6 @@ class ObservationUnit(Base):
     )
 
     children: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
         secondary="ob_unit_to_ob_unit_table",
         back_populates="parents",
         lazy=None,

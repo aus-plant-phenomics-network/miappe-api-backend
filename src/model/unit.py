@@ -22,5 +22,7 @@ class Unit(Base):
     # Relationships:
     unit_reference_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     unit_reference: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary", back_populates="unit", lazy=None, info=dto_field("read-only")
+        back_populates="unit",
+        lazy=None,
+        info=dto_field("read-only"),
     )

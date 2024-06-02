@@ -36,13 +36,18 @@ class Variable(Base):
     time_interval: Mapped[str | None]
     sample_interval: Mapped[str | None]
     device_id: Mapped[UUID | None] = mapped_column(ForeignKey("device_table.id", ondelete="SET NULL"))
-    device: Mapped[Optional["Device"]] = relationship(lazy=None, info=dto_field("read-only"))
+    device: Mapped[Optional["Device"]] = relationship(
+        lazy=None,
+        info=dto_field("read-only"),
+    )
     unit_id: Mapped[UUID | None] = mapped_column(ForeignKey("unit_table.id", ondelete="SET NULL"))
-    unit: Mapped[Optional["Unit"]] = relationship(lazy=None, info=dto_field("read-only"))
+    unit: Mapped[Optional["Unit"]] = relationship(
+        lazy=None,
+        info=dto_field("read-only"),
+    )
 
     # Variable to study relationship
     studies: Mapped[list["Study"]] = relationship(
-        "Study",
         secondary="study_variable_table",
         back_populates="variables",
         lazy=None,

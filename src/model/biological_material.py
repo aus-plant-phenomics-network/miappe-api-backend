@@ -26,9 +26,16 @@ class BiologicalMaterial(Variable):
         info=dto_field("read-only"),
     )
     title: Mapped[str] = mapped_column(nullable=False)
-    organism_id: Mapped[UUID] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
+    organism_id: Mapped[UUID] = mapped_column(
+        ForeignKey(
+            "vocabulary_table.id",
+            ondelete="SET NULL",
+        ),
+    )
     organism: Mapped["Vocabulary"] = relationship(
-        "Vocabulary", lazy=None, info=dto_field("read-only"), back_populates="organism"
+        lazy=None,
+        info=dto_field("read-only"),
+        back_populates="organism",
     )
     genus: Mapped[str | None]
     species: Mapped[str | None]
@@ -47,11 +54,10 @@ class BiologicalMaterial(Variable):
     material_source_coordinates_uncertainty: Mapped[str | None]
     material_source_description: Mapped[str | None]
 
-    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
-        back_populates="biological_material",
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="biological_material",
     )
 
 

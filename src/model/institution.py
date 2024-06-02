@@ -33,20 +33,23 @@ class Institution(Base):
     # Relationship
     institution_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     institution_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary", back_populates="institution", lazy=None, info=dto_field("read-only")
+        back_populates="institution",
+        lazy=None,
+        info=dto_field("read-only"),
     )
     staffs: Mapped[list["Staff"]] = relationship(
-        "Staff",
         lazy=None,
         secondary="institution_staff_table",
         info=dto_field("read-only"),
+        back_populates="institutions",
     )
     facilities: Mapped[list["Facility"]] = relationship(
-        "Facility", back_populates="institution", lazy=None, info=dto_field("read-only")
+        back_populates="institution",
+        lazy=None,
+        info=dto_field("read-only"),
     )
 
     children: Mapped[list["Institution"]] = relationship(
-        "Institution",
         secondary="institution_to_institution_table",
         back_populates="parents",
         lazy=None,
@@ -57,7 +60,6 @@ class Institution(Base):
     )
 
     parents: Mapped[list["Institution"]] = relationship(
-        "Institution",
         secondary="institution_to_institution_table",
         back_populates="children",
         lazy=None,

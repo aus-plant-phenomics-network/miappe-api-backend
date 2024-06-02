@@ -33,11 +33,10 @@ class DataFile(Base):
 
     # Relationship
     studies: Mapped[list["Study"]] = relationship(
-        "Study",
         secondary="study_data_file_table",
-        back_populates="data_files",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="data_files",
     )
 
 

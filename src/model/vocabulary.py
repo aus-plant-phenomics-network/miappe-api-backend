@@ -99,7 +99,6 @@ class Vocabulary(Base):
         foreign_keys="[ObservedVariable.trait_reference_id]",
     )
     observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
         back_populates="observation_unit_type",
         lazy=None,
         info=dto_field("read-only"),

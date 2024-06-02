@@ -12,6 +12,7 @@ __all__ = ("Study",)
 
 if TYPE_CHECKING:
     from src.model.data_file import DataFile
+    from src.model.event import Event
     from src.model.experiment import Experiment
     from src.model.investigation import Investigation
     from src.model.observation_unit import ObservationUnit
@@ -28,31 +29,36 @@ class Study(Base):
     # Relationship
     investigation_id: Mapped[UUID] = mapped_column(ForeignKey("investigation_table.id", ondelete="cascade"))
     investigation: Mapped[Optional["Investigation"]] = relationship(
-        "Investigation",
         lazy=None,
         info=dto_field("read-only"),
         back_populates="studies",
     )
     variables: Mapped[list["Variable"]] = relationship(
-        "Variable",
         secondary="study_variable_table",
-        back_populates="studies",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="studies",
     )
     data_files: Mapped[list["DataFile"]] = relationship(
-        "DataFile",
         secondary="study_data_file_table",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="studies",
     )
     experiments: Mapped[list["Experiment"]] = relationship(
-        "Experiment", back_populates="study", lazy=None, info=dto_field("read-only")
-    )
-    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
-        secondary="ob_unit_to_study_table",
-        back_populates="studies",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="study",
+    )
+    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
+        secondary="ob_unit_to_study_table",
+        lazy=None,
+        info=dto_field("read-only"),
+        back_populates="studies",
+    )
+    events: Mapped[list["Event"]] = relationship(
+        secondary="event_to_study_table",
+        lazy=None,
+        info=dto_field("read-only"),
+        back_populates="studies",
     )

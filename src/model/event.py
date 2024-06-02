@@ -11,6 +11,7 @@ from src.model import Base
 
 if TYPE_CHECKING:
     from src.model.observation_unit import ObservationUnit
+    from src.model.study import Study
     from src.model.vocabulary import Vocabulary
 
 __all__ = ("Event",)
@@ -19,9 +20,23 @@ __all__ = ("Event",)
 event_to_ob_unit_table = Table(
     "event_to_ob_unit_table",
     Base.metadata,
-    Column("event_id", UUID_SQL, ForeignKey("event_table.id", ondelete="cascade"), primary_key=True),
     Column(
-        "observation_unit_id", UUID_SQL, ForeignKey("observation_unit_table.id", ondelete="cascade"), primary_key=True
+        "event_id",
+        UUID_SQL,
+        ForeignKey(
+            "event_table.id",
+            ondelete="cascade",
+        ),
+        primary_key=True,
+    ),
+    Column(
+        "observation_unit_id",
+        UUID_SQL,
+        ForeignKey(
+            "observation_unit_table.id",
+            ondelete="cascade",
+        ),
+        primary_key=True,
     ),
 )
 
@@ -36,19 +51,28 @@ event_to_study_table = Table(
 class Event(Base):
     __tablename__ = "event_table"
     event_date: Mapped[datetime.datetime | None]
-    event_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
+    event_type_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey(
+            "vocabulary_table.id",
+            ondelete="SET NULL",
+        ),
+    )
 
     # Relationship
     event_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
+        lazy=None,
+        info=dto_field("read-only"),
         back_populates="event",
-        lazy=None,
-        info=dto_field("read-only"),
     )
-    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
         secondary="event_to_ob_unit_table",
-        back_populates="events",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="events",
+    )
+    studies: Mapped[list["Study"]] = relationship(
+        secondary="event_to_study_table",
+        lazy=None,
+        info=dto_field("read-only"),
+        back_populates="events",
     )

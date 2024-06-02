@@ -15,13 +15,14 @@ if TYPE_CHECKING:
 __all__ = ("ExperimentalFactor",)
 
 
-# TODO: make experimental factor values actual table
 class ExperimentalFactor(Variable):
     __tablename__: str = "experimental_factor_table"
     __mapper_args__ = {"polymorphic_identity": "experimental_factor"}
 
     id: Mapped[UUID] = mapped_column(
-        ForeignKey("variable_table.id", ondelete="cascade"), primary_key=True, info=dto_field("read-only")
+        ForeignKey("variable_table.id", ondelete="cascade"),
+        primary_key=True,
+        info=dto_field("read-only"),
     )
     title: Mapped[str]
     factor_value: Mapped[str]
@@ -33,14 +34,12 @@ class ExperimentalFactor(Variable):
         )
     )
     factor_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
         back_populates="factor_type",
         lazy=None,
         info=dto_field("private"),
     )
 
     observation_units: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
         secondary="ob_unit_to_exp_factor_table",
         back_populates="experimental_factors",
         lazy=None,

@@ -31,20 +31,17 @@ class Sample(Base):
 
     # Relationship
     observation_unit: Mapped[Optional["ObservationUnit"]] = relationship(
-        "ObservationUnit",
-        back_populates="sample",
+        back_populates="samples",
         lazy=None,
         info=dto_field("read-only"),
     )
     plant_structural_development_stage: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
         foreign_keys=[plant_structural_development_stage_id],
         back_populates="sample_plant_structural_development_stage",
         lazy=None,
         info=dto_field("read-only"),
     )
     plant_anatomical_entity: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary",
         foreign_keys=[plant_anatomical_entity_id],
         back_populates="sample_plant_anatomical_entity",
         lazy=None,

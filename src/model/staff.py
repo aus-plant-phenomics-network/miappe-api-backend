@@ -33,14 +33,12 @@ class Staff(Base):
 
     # Relationship
     institutions: Mapped[list["Institution"]] = relationship(
-        "Institution",
         secondary="institution_staff_table",
         back_populates="staffs",
         lazy=None,
         info=dto_field("read-only"),
     )
     experiments: Mapped[list["Experiment"]] = relationship(
-        "Experiment",
         secondary="experiment_to_staff_table",
         back_populates="staffs",
         lazy=None,

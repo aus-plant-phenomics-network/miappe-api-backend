@@ -47,25 +47,25 @@ class Experiment(Base):
 
     # Relationship
     facilities: Mapped[list["Facility"]] = relationship(
-        "Facility",
         secondary="experiment_to_facility_table",
-        back_populates="experiments",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="experiments",
     )
     staffs: Mapped[list["Staff"]] = relationship(
-        "Staff",
         secondary="experiment_to_staff_table",
-        back_populates="experiments",
         lazy=None,
         info=dto_field("read-only"),
+        back_populates="experiments",
     )
 
     experiment_type_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("vocabulary_table.id", ondelete="SET NULL"),
     )
     experiment_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary", back_populates="experiment", lazy=None, info=dto_field("read-only")
+        back_populates="experiment",
+        lazy=None,
+        info=dto_field("read-only"),
     )
 
     study_id: Mapped[UUID | None] = mapped_column(
@@ -75,7 +75,9 @@ class Experiment(Base):
         )
     )
     study: Mapped[Optional["Study"]] = relationship(
-        "Study", back_populates="experiments", lazy=None, info=dto_field("read-only")
+        back_populates="experiments",
+        lazy=None,
+        info=dto_field("read-only"),
     )
 
 

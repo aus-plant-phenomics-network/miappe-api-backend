@@ -33,22 +33,24 @@ class Facility(Base):
     # relationship
     institution_id: Mapped[UUID | None] = mapped_column(ForeignKey("institution_table.id", ondelete="SET NULL"))
     institution: Mapped[Optional["Institution"]] = relationship(
-        "Institution", back_populates="facilities", lazy=None, info=dto_field("read-only")
+        back_populates="facilities",
+        lazy=None,
+        info=dto_field("read-only"),
     )
 
     facility_type_id: Mapped[UUID | None] = mapped_column(ForeignKey("vocabulary_table.id", ondelete="SET NULL"))
     facility_type: Mapped[Optional["Vocabulary"]] = relationship(
-        "Vocabulary", back_populates="facility", lazy=None, info=dto_field("read-only")
+        back_populates="facility",
+        lazy=None,
+        info=dto_field("read-only"),
     )
     experiments: Mapped[list["Experiment"]] = relationship(
-        "Experiment",
         secondary="experiment_to_facility_table",
         back_populates="facilities",
         lazy=None,
         info=dto_field("read-only"),
     )
-    observation_unit: Mapped[list["ObservationUnit"]] = relationship(
-        "ObservationUnit",
+    observation_units: Mapped[list["ObservationUnit"]] = relationship(
         back_populates="facility",
         lazy=None,
         info=dto_field("read-only"),
