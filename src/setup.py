@@ -63,6 +63,15 @@ from tests.router.observed_variable.fixture import (
     ZN_CONCENTRATION_TRAIT,
     ZN_CONCENTRATION_VARIABLE,
 )
+from tests.router.sample.fixture import (
+    CEA_BE00034067,
+    LEAFDISC_061439,
+    LEAFDISC_061440,
+    PO_0006001,
+    PO_0007010,
+    PO_0025094,
+    PO_0025161,
+)
 from tests.router.staff.fixture import CHRIS_B, JOHN_DOE, STEP_W
 from tests.router.study.fixture import BARLEY_PROJECT_STUDY, FIRST_STUDY, MAIZE_PROJECT_STUDY, SECOND_STUDY
 from tests.router.unit.fixture import DEGREE_DAY_REF, DEGREE_DAY_UNIT, KILO_PIXEL_UNIT, MICROGRAM_UNIT
@@ -273,6 +282,28 @@ async def async_main() -> None:
 
         session.add_all([PLANT_061439, PLANT_061440, PLANT_TYPE, PLOT_894, PLOT_TYPE])
 
+        # Add sample
+        CEA_BE00034067.plant_anatomical_entity = PO_0025161
+        CEA_BE00034067.observation_unit = PLOT_894
+        CEA_BE00034067.plant_structural_development_stage = PO_0025094
+        LEAFDISC_061439.plant_anatomical_entity = PO_0006001
+        LEAFDISC_061439.observation_unit = PLANT_061439
+        LEAFDISC_061439.plant_structural_development_stage = PO_0007010
+        LEAFDISC_061440.plant_anatomical_entity = PO_0006001
+        LEAFDISC_061440.observation_unit = PLANT_061440
+        LEAFDISC_061440.plant_structural_development_stage = PO_0007010
+
+        session.add_all(
+            [
+                PO_0006001,
+                PO_0007010,
+                PO_0025094,
+                PO_0025161,
+                CEA_BE00034067,
+                LEAFDISC_061440,
+                LEAFDISC_061439,
+            ]
+        )
         await session.commit()
 
     # for AsyncEngine created in function scope, close and

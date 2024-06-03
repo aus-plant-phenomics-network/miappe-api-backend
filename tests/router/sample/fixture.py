@@ -45,12 +45,11 @@ class AllSampleFixtureResponse:
     observation_unit_response: AllObservationUnitFixtureResponse
 
 
-PO_0025094 = Vocabulary(title="PO:0025094", accession_number="PO:0025094")
-BBCH_17 = Vocabulary(title="BBCH-17", accession_number="BBCH-17")
 PO_0007010 = Vocabulary(title="PO_0007010", accession_number="PO_0007010")
-PO_0000003 = Vocabulary(title="PO:0000003", accession_number="PO:0000003")
+PO_0025094 = Vocabulary(title="PO:0025094", accession_number="PO:0025094")
 PO_0025161 = Vocabulary(title="PO:0025161", accession_number="PO:0025161")
 PO_0006001 = Vocabulary(title="PO_0006001", accession_number="PO_0006001")
+
 
 LEAFDISC_061439 = Sample(
     title="leafdisc_061439",
@@ -89,7 +88,6 @@ async def get_sample_fixture(
         **data.to_dict(),
     )
     if id is None:
-        send_data.updated_at = None
         response = await post_fixture(PATH, send_data, test_client)
     else:
         response = await put_fixture(PATH, send_data, test_client, id)
@@ -162,6 +160,6 @@ async def setup_sample(
         anatomical_entity_response=setup_anatomical_entity,
         observation_unit_response=setup_observation_units,
     )
-    await delete_fixture(PATH, cea_be.sample_response, test_client)
-    await delete_fixture(PATH, leafdisc_061439.sample_response, test_client)
-    await delete_fixture(PATH, leafdisc_061440.sample_response, test_client)
+    await delete_fixture(PATH, cea_be.sample_response.json()["id"], test_client)
+    await delete_fixture(PATH, leafdisc_061439.sample_response.json()["id"], test_client)
+    await delete_fixture(PATH, leafdisc_061440.sample_response.json()["id"], test_client)
