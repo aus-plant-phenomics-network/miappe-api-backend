@@ -18,6 +18,7 @@ __all__ = ("Sample",)
 class Sample(Base):
     __tablename__ = "sample_table"
     title: Mapped[str]
+    description: Mapped[str | None]
     observation_unit_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("observation_unit_table.id", ondelete="SET NULL")
     )
