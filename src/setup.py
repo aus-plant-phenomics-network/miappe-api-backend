@@ -23,6 +23,14 @@ from tests.router.environment.fixture import (
     MAIZE_ROOTING_MEDIUM,
     MAIZE_SOWING_DENSITY,
 )
+from tests.router.event.fixture import (
+    FERTILIZING_EVENT,
+    FERTILIZING_TYPE,
+    PLANTING_EVENT,
+    PLANTING_TYPE,
+    WATERING_EVENT,
+    WATERING_TYPE,
+)
 from tests.router.experiment.fixture import (
     BARLEY_EXPERIMENT,
     BARLEY_EXPERIMENT_TYPE,
@@ -281,6 +289,20 @@ async def async_main() -> None:
         PLANT_061440.experimental_factors = [BARLEY_ZN_EXPOSURE_FACTOR_0, BARLEY_FUNGAL_EXPOSURE_FACTOR_PLUS]
 
         session.add_all([PLANT_061439, PLANT_061440, PLANT_TYPE, PLOT_894, PLOT_TYPE])
+
+        # Add event
+        FERTILIZING_EVENT.event_type = FERTILIZING_TYPE
+        FERTILIZING_EVENT.studies = [MAIZE_PROJECT_STUDY]
+        FERTILIZING_EVENT.observation_units = [PLOT_894]
+        PLANTING_EVENT.event_type = PLANT_TYPE
+        PLANTING_EVENT.studies = [MAIZE_PROJECT_STUDY]
+        PLANTING_EVENT.observation_units = [PLOT_894]
+        WATERING_EVENT.event_type = WATERING_TYPE
+        WATERING_EVENT.studies = [BARLEY_PROJECT_STUDY]
+        WATERING_EVENT.observation_units = [PLANT_061439, PLANT_061440]
+        session.add_all(
+            [FERTILIZING_EVENT, FERTILIZING_TYPE, WATERING_EVENT, WATERING_TYPE, PLANTING_EVENT, PLANTING_TYPE]
+        )
 
         # Add sample
         CEA_BE00034067.plant_anatomical_entity = PO_0025161
