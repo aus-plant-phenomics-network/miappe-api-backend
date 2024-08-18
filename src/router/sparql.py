@@ -4,6 +4,8 @@ from litestar import Controller, get
 
 from src.services.sparql import QUERY_RESULT, SPARQLService
 
+__all__ = ("SPARQLController", )
+
 
 class SPARQLController(Controller):
     path: str = "/sparql"

@@ -3,6 +3,9 @@ from typing import Any, Literal, cast
 
 from SPARQLWrapper import JSON, SPARQLWrapper
 
+__all__ = ("QueryFactory", "SPARQLService", )
+
+
 URL = "https://demo.vocabs.ardc.edu.au/repository/api/sparql/appf_appf-test-project-2_appf-test-project-2-v0-1"
 
 SKOS_CONCEPT_PROPERTY = Literal[
