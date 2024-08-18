@@ -12,6 +12,7 @@ dependencies = [
     "pydantic>=2.7.1",
     "litestar[standard]>=2.8.3",
     "advanced-alchemy>=0.11.0",
+    "sparqlwrapper>=2.0.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
