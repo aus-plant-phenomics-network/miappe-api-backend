@@ -13,6 +13,7 @@ from src.router.method import MethodController
 from src.router.observation_unit import ObservationUnitController
 from src.router.observed_variable import ObservedVariableController
 from src.router.sample import SampleController
+from src.router.sparql import SPARQLController
 from src.router.staff import StaffController
 from src.router.study import StudyController
 from src.router.unit import UnitController
@@ -39,4 +40,5 @@ __all__ = [
     "SampleController",
     "StudyController",
     "StaffController",
+    "SPARQLController",
 ]

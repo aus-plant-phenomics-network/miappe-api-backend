@@ -37,6 +37,24 @@ ALL_PROPERTIES = [
     "relatedMatch",
 ]
 
+QUERY_RESULT = Mapping[SKOS_CONCEPT_PROPERTY, Any]
+
+QUERY_LEAF = """
+PREFIX dcterms:<http://purl.org/dc/terms/>
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+
+SELECT *
+
+WHERE {{
+    OPTIONAL{{?concept skos:narrower ?narrower}}
+    FILTER(!BOUND(?narrower)) .
+    ?concept skos:prefLabel ?prefLabel .
+    ?concept skos:inScheme ?scheme .
+    ?scheme dcterms:title ?schemeTitle .
+    FILTER(REGEX(?schemeTitle, "Trait", "i" )) .
+}}
+"""
+
 
 class QueryFactory:
     @staticmethod
@@ -57,12 +75,7 @@ class QueryFactory:
 
     @staticmethod
     def all_leaf_concepts(scheme: str, limit: int | None = None, offset: int | None = None) -> str:
-        return QueryFactory.leaf_concept(
-            *ALL_PROPERTIES,  # type: ignore[arg-type]
-            scheme=scheme,
-            limit=limit,
-            offset=offset,
-        )
+        return QueryFactory.leaf_concept(scheme=scheme, limit=limit, offset=offset)
 
     @staticmethod
     def leaf_concept(
@@ -79,8 +92,6 @@ class QueryFactory:
         stmt += "WHERE {{\n"
         for prop in properties:
             stmt += f"    OPTIONAL{{?concept skos:{prop} ?{prop}}} .\n"
-        stmt += "    OPTIONAL{{?concept skos:narrower ?narrower}}\n"
-        stmt += "    FILTER(!BOUND(?narrower)) .\n"
         stmt += "    ?concept skos:prefLabel ?prefLabel .\n"
         if pref_label:
             stmt += f'    FILTER(REGEX(?prefLabel, "{pref_label}", "i" )) .\n'
@@ -106,7 +117,7 @@ class SPARQLService:
     def last_stmt(self) -> str:
         return self._last_stmt
 
-    def _execute_query(self, query: str) -> Sequence[Mapping[SKOS_CONCEPT_PROPERTY, Any]]:
+    def _execute_query(self, query: str) -> Sequence[QUERY_RESULT]:
         self._service.setQuery(query)
         self._last_stmt = query
         try:
@@ -119,17 +130,27 @@ class SPARQLService:
             raise e
 
     def get_leaf_concepts(
-        self, scheme: str, limit: int | None = None, offset: int | None = None, props: list[SKOS_CONCEPT_PROPERTY] = []
-    ) -> Sequence[Mapping[SKOS_CONCEPT_PROPERTY, Any]]:
-        stmt = QueryFactory.all_leaf_concepts(*props, scheme=scheme, limit=limit, offset=offset)  # type: ignore
+        self, scheme: str, limit: int | None = None, offset: int | None = None
+    ) -> Sequence[QUERY_RESULT]:
+        stmt = QueryFactory.all_leaf_concepts(scheme=scheme, limit=limit, offset=offset)
         return self._execute_query(stmt)
 
-    def get_concept_by_id(self, uri: str) -> Sequence[Mapping[SKOS_CONCEPT_PROPERTY, Any]]:
+    def get_concept_by_id(self, uri: str) -> QUERY_RESULT | None:
         stmt = QueryFactory.concept_by_uri(uri)
-        return self._execute_query(stmt)
+        result = self._execute_query(stmt)
+        return result[0] if result else None
 
     def get_concept_by_pref_label(
-        self, scheme: str, label: str, limit: int | None = None, offset: int | None = None
-    ) -> Sequence[Mapping[SKOS_CONCEPT_PROPERTY, Any]]:
-        stmt = QueryFactory.leaf_concept(scheme=scheme, pref_label=label, limit=limit, offset=offset)
+        self,
+        scheme: str,
+        label: str,
+        limit: int | None = None,
+        offset: int | None = None,
+    ) -> Sequence[QUERY_RESULT]:
+        stmt = QueryFactory.leaf_concept(
+            scheme=scheme,
+            pref_label=label,
+            limit=limit,
+            offset=offset,
+        )
         return self._execute_query(stmt)
