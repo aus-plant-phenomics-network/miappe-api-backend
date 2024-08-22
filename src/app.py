@@ -1,6 +1,7 @@
 from litestar import Litestar
 from litestar.config.cors import CORSConfig
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyPlugin
+from litestar.openapi import OpenAPIConfig
 
 from src.helpers import create_db_config, provide_transaction
 from src.router import (
@@ -52,4 +53,5 @@ app = Litestar(
     dependencies={"transaction": provide_transaction},
     plugins=[SQLAlchemyPlugin(db_config)],
     cors_config=cors_config,
+    openapi_config=OpenAPIConfig(title="miappe_schema", version="1.0.0"),
 )
