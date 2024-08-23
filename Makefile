@@ -177,3 +177,8 @@ app-dev:											## Start the application - debug mode
 	@$(PDM) run python -m src.setup
 	@echo "=>Running application developer mode"
 	@$(PDM) run litestar --app src.app:app run --debug --reload
+
+.PHONE: app-prod 
+app-prod: 
+	@echo "=>Running application with uvicorn"
+	@$(PDM) run uvicorn src.app:app --host 0.0.0.0 --port 8000
